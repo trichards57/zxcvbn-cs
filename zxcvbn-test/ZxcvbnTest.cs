@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Zxcvbn;
 
 namespace zxcvbn_test
 {
@@ -189,9 +190,18 @@ namespace zxcvbn_test
         public void TimeDisplayStrings()
         {
             // Note that the time strings should be + 1
-            Assert.AreEqual("11 minutes", Zxcvbn.Utility.DisplayTime(60 * 10));
-            Assert.AreEqual("2 days", Zxcvbn.Utility.DisplayTime(60 * 60 * 24));
-            Assert.AreEqual("17 years", Zxcvbn.Utility.DisplayTime(60 * 60 * 24 * 365 * 15.4));
+            Assert.AreEqual("11 minutes", Zxcvbn.Utility.DisplayTime(60 * 10, Translation.English));
+            Assert.AreEqual("2 days", Zxcvbn.Utility.DisplayTime(60 * 60 * 24, Translation.English));
+            Assert.AreEqual("17 years", Zxcvbn.Utility.DisplayTime(60 * 60 * 24 * 365 * 15.4, Translation.English));
+        }
+
+        [TestMethod]
+        public void TimeDisplayStringsGerman()
+        {
+            // Note that the time strings should be + 1
+            Assert.AreEqual("11 Minuten", Zxcvbn.Utility.DisplayTime(60 * 10, Translation.German));
+            Assert.AreEqual("2 Tage", Zxcvbn.Utility.DisplayTime(60 * 60 * 24, Translation.German));
+            Assert.AreEqual("17 Jahre", Zxcvbn.Utility.DisplayTime(60 * 60 * 24 * 365 * 15.4, Translation.German));
         }
 
         [TestMethod]

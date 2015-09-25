@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Reflection;
@@ -18,18 +19,131 @@ namespace Zxcvbn
         /// this is probably to avoid ever needing to deal with plurals
         /// </summary>
         /// <param name="seconds">The time in seconds</param>
+        /// <param name="translation">The language in which the string is returned</param>
         /// <returns>A human-friendly time string</returns>
-        public static string DisplayTime(double seconds)
+        public static string DisplayTime(double seconds, Translation translation = Translation.English)
         {
             long minute = 60, hour = minute * 60, day = hour * 24, month = day * 31, year = month * 12, century = year * 100;
 
-            if (seconds < minute) return "instant";
-            else if (seconds < hour) return "{0} minutes".F(1 + Math.Ceiling(seconds / minute));
-            else if (seconds < day) return "{0} hours".F(1 + Math.Ceiling(seconds / hour));
-            else if (seconds < month) return "{0} days".F(1 + Math.Ceiling(seconds / day));
-            else if (seconds < year) return "{0} months".F(1 + Math.Ceiling(seconds / month));
-            else if (seconds < century) return "{0} years".F(1 + Math.Ceiling(seconds / year));
-            else return "centuries";
+            if (seconds < minute) return GetTranslation("instant", translation);
+            else if (seconds < hour) return string.Format("{0} " + GetTranslation("minutes", translation), (1 + Math.Ceiling(seconds / minute)));
+            else if (seconds < day) return string.Format("{0} " + GetTranslation("hours", translation), (1 + Math.Ceiling(seconds / hour)));
+            else if (seconds < month) return string.Format("{0} " + GetTranslation("days", translation), (1 + Math.Ceiling(seconds / day)));
+            else if (seconds < year) return string.Format("{0} " + GetTranslation("months", translation), (1 + Math.Ceiling(seconds / month)));
+            else if (seconds < century) return string.Format("{0} " + GetTranslation("years", translation), (1 + Math.Ceiling(seconds / year)));
+            else return GetTranslation("centuries", translation);
+        }
+
+        private static string GetTranslation(string matcher, Translation translation)
+        {
+            string translated;
+
+            switch (matcher)
+            {
+                case "instant":
+                    switch (translation)
+                    {
+                        case Translation.German:
+                            translated = "unmittelbar";
+                            break;
+                        case Translation.France:
+                            translated = "instantané";
+                            break;
+                        default:
+                            translated = "instant";
+                            break;
+                    }
+                    break;
+                case "minutes":
+                    switch (translation)
+                    {
+                        case Translation.German:
+                            translated = "Minuten";
+                            break;
+                        case Translation.France:
+                            translated = "Minutes";
+                            break;
+                        default:
+                            translated = "minutes";
+                            break;
+                    }
+                    break;
+                case "hours":
+                    switch (translation)
+                    {
+                        case Translation.German:
+                            translated = "Stunden";
+                            break;
+                        case Translation.France:
+                            translated = "Heures";
+                            break;
+                        default:
+                            translated = "hours";
+                            break;
+                    }
+                    break;
+                case "days":
+                    switch (translation)
+                    {
+                        case Translation.German:
+                            translated = "Tage";
+                            break;
+                        case Translation.France:
+                            translated = "Journées";
+                            break;
+                        default:
+                            translated = "days";
+                            break;
+                    }
+                    break;
+                case "months":
+                    switch (translation)
+                    {
+                        case Translation.German:
+                            translated = "Monate";
+                            break;
+                        case Translation.France:
+                            translated = "Mois";
+                            break;
+                        default:
+                            translated = "months";
+                            break;
+                    }
+                    break;
+                case "years":
+                    switch (translation)
+                    {
+                        case Translation.German:
+                            translated = "Jahre";
+                            break;
+                        case Translation.France:
+                            translated = "Ans";
+                            break;
+                        default:
+                            translated = "years";
+                            break;
+                    }
+                    break;
+                case "centuries":
+                    switch (translation)
+                    {
+                        case Translation.German:
+                            translated = "Jahrhunderte";
+                            break;
+                        case Translation.France:
+                            translated = "Siècles";
+                            break;
+                        default:
+                            translated = "centuries";
+                            break;
+                    }
+                    break;
+                default:
+                    translated = matcher;
+                    break;
+            }
+
+            return translated;
         }
 
         /// <summary>

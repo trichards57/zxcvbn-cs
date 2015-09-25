@@ -23,14 +23,15 @@ namespace Zxcvbn
         private const string BruteforcePattern = "bruteforce";
 
         private IMatcherFactory matcherFactory;
-
+        private readonly Translation translation;
 
         /// <summary>
         /// Create a new instance of Zxcvbn that uses the default matchers.
         /// </summary>
-        public Zxcvbn()
+        public Zxcvbn(Translation translation = Translation.English)
             : this(new DefaultMatcherFactory())
         {
+            this.translation = translation;
         }
 
         /// <summary>
@@ -38,9 +39,11 @@ namespace Zxcvbn
         /// to find password weakness.
         /// </summary>
         /// <param name="matcherFactory">The factory used to create the pattern matchers used</param>
-        public Zxcvbn(IMatcherFactory matcherFactory)
+        /// <param name="translation">The language in which the strings are returned</param>
+        public Zxcvbn(IMatcherFactory matcherFactory, Translation translation = Translation.English)
         {
             this.matcherFactory = matcherFactory;
+            this.translation = translation;
         }
 
         /// <summary>
@@ -173,7 +176,7 @@ namespace Zxcvbn
             result.Entropy = Math.Round(minEntropy, 3);
             result.MatchSequence = matchSequence;
             result.CrackTime = Math.Round(crackTime, 3);
-            result.CrackTimeDisplay = Utility.DisplayTime(crackTime);
+            result.CrackTimeDisplay = Utility.DisplayTime(crackTime, this.translation);
             result.Score = PasswordScoring.CrackTimeToScore(crackTime);
 
             return result;
