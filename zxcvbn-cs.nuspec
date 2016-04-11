@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>zxcvbn-cs</title>
+    <authors>Michael Ford</authors>
+    <owners>Michael Ford</owners>
+    <licenseUrl>https://github.com/mickford/zxcvbn-cs/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/mickford/zxcvbn-cs</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>C#/.NET port of Dan Wheeler/DropBox's Zxcvbn JS password strength estimation library</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2016</copyright>
+    <tags>zxcvbn password</tags>
+  </metadata>
+</package>

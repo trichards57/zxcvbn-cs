@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zxcvbn-cs", "zxcvbn-cs.csproj", "{E80F559C-B5EB-4F14-9E3F-686A9C0237BF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zxcvbn-test", "zxcvbn-test\zxcvbn-test.csproj", "{64B83E87-A0D6-4614-939A-4AE0EA663DA9}"

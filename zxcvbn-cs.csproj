@@ -61,8 +61,8 @@
     <Compile Include="Zxcvbn.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Dictionaries\Readme.txt" />
-    <Content Include="TODO-Global.txt" />
+    <None Include="Dictionaries\Readme.txt" />
+    <None Include="TODO-Global.txt" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Dictionaries\english.lst" />
