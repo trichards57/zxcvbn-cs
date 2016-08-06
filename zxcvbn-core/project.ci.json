@@ -12,8 +12,13 @@
     "summary": "This is a port of the Zxcvbn JavaScript password strength estimation library at https://github.com/lowe/zxcvbn to .NET, written in C#.",
     "projectUrl": "https://github.com/trichards57/zxcvbn-cs"
   },
+  "buildOptions": {
+    "embed": {
+      "include": "Dictionaries/*.lst"
+    }
+  },
   "frameworks": {
-    "net45": {
+    "net451": {
     },
     "netstandard1.5": {
       "dependencies": {
