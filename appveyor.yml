@@ -1,0 +1,39 @@
+version: 1.0.{build}
+skip_tags: true
+configuration:
+- Release
+assembly_info:
+  patch: true
+  file: '**\AssemblyInfo.*'
+  assembly_version: '{version}'
+  assembly_file_version: '{version}'
+  assembly_informational_version: '{version}'
+nuget:
+  account_feed: true
+  project_feed: true
+before_build:
+- ps: .\prebuild.ps1
+build:
+  verbosity: minimal
+after_build:
+- ps: .\postbuild.ps1
+artifacts:
+- path: '**\*.nupkg'
+deploy:
+- provider: NuGet
+  on:
+    branch: master
+  api_key:
+    secure: 5mSnG9xdZ10yKDFhtI0w8p6aaj0m5ULQvVwlSGuzR2/D6LjQftisSQo3J6DYvZfw
+  skip_symbols: false
+  artifact: /.*\.nupkg/
+- provider: GitHub
+  release: zxcvbn-cs-v$(appveyor_build_version)
+  description: $(appveyor_repo_commit_message)
+  auth_token:
+    secure: jtEqWpP0mI7h+Bapo8DhdJDSQxUV60pDwfQqLdFZqpHV4LqcCEmrcTmNMf6pu9bl
+  artifact: /.*\.nupkg/
+  draft: false
+  prerelease: false
+  on:
+    branch: master

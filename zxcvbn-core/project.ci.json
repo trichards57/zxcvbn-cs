@@ -1,5 +1,5 @@
 ﻿{
-  "version": "1.0.0-*",
+  "version": "$version$",
   "description": "C#/.NET port of Dan Wheeler/DropBox's Zxcvbn JS password strength estimation library.  Updated for .Net Core.",
   "authors": [ "mickford", "Tony Richards (trichards57)", "Dan Wheeler", "DropBox" ],
   "packOptions": {
