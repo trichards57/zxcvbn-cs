@@ -19,7 +19,6 @@ after_build:
 - ps: .\postbuild.ps1
 test_script:
 - ps: .\test.ps1
-test: off
 artifacts:
 - path: '**\*.nupkg'
 deploy:
