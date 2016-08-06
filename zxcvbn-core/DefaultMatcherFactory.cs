@@ -1,23 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Zxcvbn.Matcher;
 
 namespace Zxcvbn
 {
     /// <summary>
     /// <para>This matcher factory will use all of the default password matchers.</para>
-    /// 
+    ///
     /// <para>Default dictionary matchers use the built-in word lists: passwords, english, male_names, female_names, surnames</para>
     /// <para>Also matching against: user data, all dictionaries with l33t substitutions</para>
     /// <para>Other default matchers: repeats, sequences, digits, years, dates, spatial</para>
-    /// 
+    ///
     /// <para>See <see cref="IMatcher"/> and the classes that implement it for more information on each kind of pattern matcher.</para>
     /// </summary>
-    class DefaultMatcherFactory : IMatcherFactory
+    internal class DefaultMatcherFactory : IMatcherFactory
     {
-        List<IMatcher> matchers;
+        private List<IMatcher> matchers;
 
         /// <summary>
         /// Create a matcher factory that uses the default list of pattern matchers

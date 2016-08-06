@@ -1,10 +1,55 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Zxcvbn.Matcher
 {
+    /// <summary>
+    /// L33tMatcher results are like dictionary match results with some extra information that pertains to the extra entropy that
+    /// is garnered by using substitutions.
+    /// </summary>
+    public class L33tDictionaryMatch : DictionaryMatch
+    {
+        /// <summary>
+        /// Create a new l33t match from a dictionary match
+        /// </summary>
+        /// <param name="dm">The dictionary match to initialise the l33t match from</param>
+        public L33tDictionaryMatch(DictionaryMatch dm)
+        {
+            BaseEntropy = dm.BaseEntropy;
+            Cardinality = dm.Cardinality;
+            DictionaryName = dm.DictionaryName;
+            Entropy = dm.Entropy;
+            i = dm.i;
+            j = dm.j;
+            MatchedWord = dm.MatchedWord;
+            Pattern = dm.Pattern;
+            Rank = dm.Rank;
+            Token = dm.Token;
+            UppercaseEntropy = dm.UppercaseEntropy;
+
+            Subs = new Dictionary<char, char>();
+        }
+
+        /// <summary>
+        /// Create an empty l33t match
+        /// </summary>
+        public L33tDictionaryMatch()
+        {
+            Subs = new Dictionary<char, char>();
+        }
+
+        /// <summary>
+        /// The extra entropy from using l33t substitutions
+        /// </summary>
+        public double L33tEntropy { get; set; }
+
+        /// <summary>
+        /// The character mappings that are in use for this match
+        /// </summary>
+        public Dictionary<char, char> Subs { get; set; }
+    }
+
     /// <summary>
     /// This matcher applies some known l33t character substitutions and then attempts to match against passed in dictionary matchers.
     /// This detects passwords like 4pple which has a '4' substituted for an 'a'
@@ -33,7 +78,7 @@ namespace Zxcvbn.Matcher
         }
 
         /// <summary>
-        /// Apply applicable l33t transformations and check <paramref name="password"/> against the dictionaries. 
+        /// Apply applicable l33t transformations and check <paramref name="password"/> against the dictionaries.
         /// </summary>
         /// <param name="password">The password to check</param>
         /// <returns>A list of match objects where l33t substitutions match dictionary words</returns>
@@ -43,21 +88,42 @@ namespace Zxcvbn.Matcher
             var subs = EnumerateSubtitutions(GetRelevantSubstitutions(password));
 
             var matches = (from subDict in subs
-                          let sub_password = TranslateString(subDict, password)
-                          from matcher in dictionaryMatchers
-                          from match in matcher.MatchPassword(sub_password).OfType<DictionaryMatch>()
-                          let token = password.Substring(match.i, match.j - match.i + 1)
-                          let usedSubs = subDict.Where(kv => token.Contains(kv.Key)) // Count subs ised in matched token
-                          where usedSubs.Count() > 0 // Only want matches where substitutions were used
-                          select new L33tDictionaryMatch(match)
-                          {
-                              Token = token,
-                              Subs = usedSubs.ToDictionary(kv => kv.Key, kv => kv.Value)
-                          }).ToList();
+                           let sub_password = TranslateString(subDict, password)
+                           from matcher in dictionaryMatchers
+                           from match in matcher.MatchPassword(sub_password).OfType<DictionaryMatch>()
+                           let token = password.Substring(match.i, match.j - match.i + 1)
+                           let usedSubs = subDict.Where(kv => token.Contains(kv.Key)) // Count subs ised in matched token
+                           where usedSubs.Count() > 0 // Only want matches where substitutions were used
+                           select new L33tDictionaryMatch(match)
+                           {
+                               Token = token,
+                               Subs = usedSubs.ToDictionary(kv => kv.Key, kv => kv.Value)
+                           }).ToList();
 
             foreach (var match in matches) CalulateL33tEntropy(match);
 
             return matches;
+        }
+
+        private Dictionary<char, string> BuildSubstitutionsMap()
+        {
+            // Is there an easier way of building this table?
+            var subs = new Dictionary<char, string>();
+
+            subs['a'] = "4@";
+            subs['b'] = "8";
+            subs['c'] = "({[<";
+            subs['e'] = "3";
+            subs['g'] = "69";
+            subs['i'] = "1!|";
+            subs['l'] = "1|7";
+            subs['o'] = "0";
+            subs['s'] = "$5";
+            subs['t'] = "+7";
+            subs['x'] = "%";
+            subs['z'] = "2";
+
+            return subs;
         }
 
         private void CalulateL33tEntropy(L33tDictionaryMatch match)
@@ -86,27 +152,13 @@ namespace Zxcvbn.Matcher
             match.Entropy += match.UppercaseEntropy;
         }
 
-        private string TranslateString(Dictionary<char, char> charMap, string str)
-        {
-            // Make substitutions from the character map wherever possible
-            return new String(str.Select(c => charMap.ContainsKey(c) ? charMap[c] : c).ToArray());
-        }
-
-        private Dictionary<char, string> GetRelevantSubstitutions(string password)
-        {
-            // Return a map of only the useful substitutions, i.e. only characters that the password
-            //   contains a substituted form of
-            return substitutions.Where(kv => kv.Value.Any(lc => password.Contains(lc)))
-                                .ToDictionary(kv => kv.Key, kv => new String(kv.Value.Where(lc => password.Contains(lc)).ToArray()));
-        }
-
         private List<Dictionary<char, char>> EnumerateSubtitutions(Dictionary<char, string> table)
         {
             // Produce a list of maps from l33t character to normal character. Some substitutions can be more than one normal character though,
             //  so we have to produce an entry that maps from the l33t char to both possibilities
 
             //XXX: This function produces different combinations to the original in zxcvbn. It may require some more work to get identical.
-            
+
             //XXX: The function is also limited in that it only ever considers one substitution for each l33t character (e.g. ||ke could feasibly
             //     match 'like' but this method would never show this). My understanding is that this is also a limitation in zxcvbn and so I
             //     feel no need to correct it here.
@@ -146,71 +198,18 @@ namespace Zxcvbn.Matcher
             return subs;
         }
 
-        private Dictionary<char, string> BuildSubstitutionsMap()
+        private Dictionary<char, string> GetRelevantSubstitutions(string password)
         {
-            // Is there an easier way of building this table?
-            var subs = new Dictionary<char, string>();
-
-            subs['a'] = "4@";
-            subs['b'] = "8";
-            subs['c'] = "({[<";
-            subs['e'] = "3";
-            subs['g'] = "69";
-            subs['i'] = "1!|";
-            subs['l'] = "1|7";
-            subs['o'] = "0";
-            subs['s'] = "$5";
-            subs['t'] = "+7";
-            subs['x'] = "%";
-            subs['z'] = "2";
-
-            return subs;
-        }
-    }
-
-    /// <summary>
-    /// L33tMatcher results are like dictionary match results with some extra information that pertains to the extra entropy that
-    /// is garnered by using substitutions.
-    /// </summary>
-    public class L33tDictionaryMatch : DictionaryMatch
-    {
-        /// <summary>
-        /// The extra entropy from using l33t substitutions
-        /// </summary>
-        public double L33tEntropy { get; set; }
-
-        /// <summary>
-        /// The character mappings that are in use for this match
-        /// </summary>
-        public Dictionary<char, char> Subs { get; set; }
-
-        /// <summary>
-        /// Create a new l33t match from a dictionary match
-        /// </summary>
-        /// <param name="dm">The dictionary match to initialise the l33t match from</param>
-        public L33tDictionaryMatch(DictionaryMatch dm)
-        {
-            this.BaseEntropy = dm.BaseEntropy;
-            this.Cardinality = dm.Cardinality;
-            this.DictionaryName = dm.DictionaryName;
-            this.Entropy = dm.Entropy;
-            this.i = dm.i;
-            this.j = dm.j;
-            this.MatchedWord = dm.MatchedWord;
-            this.Pattern = dm.Pattern;
-            this.Rank = dm.Rank;
-            this.Token = dm.Token;
-            this.UppercaseEntropy = dm.UppercaseEntropy;
-
-            Subs = new Dictionary<char, char>();
+            // Return a map of only the useful substitutions, i.e. only characters that the password
+            //   contains a substituted form of
+            return substitutions.Where(kv => kv.Value.Any(lc => password.Contains(lc)))
+                                .ToDictionary(kv => kv.Key, kv => new string(kv.Value.Where(lc => password.Contains(lc)).ToArray()));
         }
 
-        /// <summary>
-        /// Create an empty l33t match
-        /// </summary>
-        public L33tDictionaryMatch()
+        private string TranslateString(Dictionary<char, char> charMap, string str)
         {
-            Subs = new Dictionary<char, char>();
+            // Make substitutions from the character map wherever possible
+            return new string(str.Select(c => charMap.ContainsKey(c) ? charMap[c] : c).ToArray());
         }
     }
 }

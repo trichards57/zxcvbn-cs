@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Zxcvbn.Matcher;
 
 namespace Zxcvbn
@@ -14,7 +11,7 @@ namespace Zxcvbn
     {
         /// <summary>
         /// <para>Create the matchers to be used by an instance of Zxcvbn. </para>
-        /// 
+        ///
         /// <para>This function will be called once per each password being evaluated, to give the opportunity to provide
         /// different user inputs for each password. Matchers that are not dependent on user inputs should ideally be created
         /// once and cached so that processing (e.g. dictionary loading) will only have to be performed once, these cached

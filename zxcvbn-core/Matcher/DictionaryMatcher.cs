@@ -1,31 +1,60 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
-using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace Zxcvbn.Matcher
 {
     /// <summary>
+    /// Matches found by the dictionary matcher contain some additional information about the matched word.
+    /// </summary>
+    public class DictionaryMatch : Match
+    {
+        /// <summary>
+        /// The base entropy of the match, calculated from frequency rank
+        /// </summary>
+        public double BaseEntropy { get; set; }
+
+        /// <summary>
+        /// The name of the dictionary the matched word was found in
+        /// </summary>
+        public string DictionaryName { get; set; }
+
+        /// <summary>
+        /// The dictionary word matched
+        /// </summary>
+        public string MatchedWord { get; set; }
+
+        /// <summary>
+        /// The rank of the matched word in the dictionary (i.e. 1 is most frequent, and larger numbers are less common words)
+        /// </summary>
+        public int Rank { get; set; }
+
+        /// <summary>
+        /// Additional entropy for this match from the use of mixed case
+        /// </summary>
+        public double UppercaseEntropy { get; set; }
+    }
+
+    /// <summary>
     /// <para>This matcher reads in a list of words (in frequency order) and matches substrings of the password against that dictionary.</para>
-    /// 
+    ///
     /// <para>The dictionary to be used can be specified directly by passing an enumerable of strings through the constructor (e.g. for
     /// matching agains user inputs). Most dictionaries will be in word list files.</para>
-    /// 
+    ///
     /// <para>Using external files is a departure from the JS version of Zxcvbn which bakes in the word lists, so the default dictionaries
     /// have been included in the Zxcvbn assembly as embedded resources (to remove the external dependency). Thus when a word list is specified
     /// by name, it is first checked to see if it matches and embedded resource and if not is assumed to be an external file. </para>
-    /// 
+    ///
     /// <para>Thus custom dictionaries can be included by providing the name of an external text file, but the built-in dictionaries (english.lst,
     /// female_names.lst, male_names.lst, passwords.lst, surnames.lst) can be used without concern about locating a dictionary file in an accessible
     /// place.</para>
-    /// 
+    ///
     /// <para>Dictionary word lists must be in decreasing frequency order and contain one word per line with no additional information.</para>
     /// </summary>
     public class DictionaryMatcher : IMatcher
     {
-        const string DictionaryPattern = "dictionary";
+        private const string DictionaryPattern = "dictionary";
 
         private string dictionaryName;
         private Lazy<Dictionary<string, int>> rankedDictionary;
@@ -65,35 +94,25 @@ namespace Zxcvbn.Matcher
             var passwordLower = password.ToLower();
 
             var matches = (from i in Enumerable.Range(0, password.Length)
-                          from j in Enumerable.Range(i, password.Length - i)
-                          let psub = passwordLower.Substring(i, j - i + 1)
-                          where rankedDictionary.Value.ContainsKey(psub)
-                          select new DictionaryMatch()
-                          {
-                              Pattern = DictionaryPattern,
-                              i = i,
-                              j = j,
-                              Token = password.Substring(i, j - i + 1), // Could have different case so pull from password
-                              MatchedWord = psub,
-                              Rank = rankedDictionary.Value[psub],
-                              DictionaryName = dictionaryName,
-                              Cardinality = rankedDictionary.Value.Count
-                          }).ToList();
+                           from j in Enumerable.Range(i, password.Length - i)
+                           let psub = passwordLower.Substring(i, j - i + 1)
+                           where rankedDictionary.Value.ContainsKey(psub)
+                           select new DictionaryMatch()
+                           {
+                               Pattern = DictionaryPattern,
+                               i = i,
+                               j = j,
+                               Token = password.Substring(i, j - i + 1), // Could have different case so pull from password
+                               MatchedWord = psub,
+                               Rank = rankedDictionary.Value[psub],
+                               DictionaryName = dictionaryName,
+                               Cardinality = rankedDictionary.Value.Count
+                           }).ToList();
 
             foreach (var match in matches) CalculateEntropyForMatch(match);
 
             return matches;
         }
-
-        private void CalculateEntropyForMatch(DictionaryMatch match)
-        {
-            match.BaseEntropy = Math.Log(match.Rank, 2);
-            match.UppercaseEntropy = PasswordScoring.CalculateUppercaseEntropy(match.Token);
-            
-            match.Entropy = match.BaseEntropy + match.UppercaseEntropy;
-        }
-
-        
 
         private Dictionary<string, int> BuildRankedDictionary(string wordListFile)
         {
@@ -117,37 +136,13 @@ namespace Zxcvbn.Matcher
 
             return dict;
         }
-    }
 
-    /// <summary>
-    /// Matches found by the dictionary matcher contain some additional information about the matched word.
-    /// </summary>
-    public class DictionaryMatch : Match
-    {
-        /// <summary>
-        /// The dictionary word matched
-        /// </summary>
-        public string MatchedWord { get; set; }
+        private void CalculateEntropyForMatch(DictionaryMatch match)
+        {
+            match.BaseEntropy = Math.Log(match.Rank, 2);
+            match.UppercaseEntropy = PasswordScoring.CalculateUppercaseEntropy(match.Token);
 
-        /// <summary>
-        /// The rank of the matched word in the dictionary (i.e. 1 is most frequent, and larger numbers are less common words)
-        /// </summary>
-        public int Rank { get; set; }
-        
-        /// <summary>
-        /// The name of the dictionary the matched word was found in
-        /// </summary>
-        public string DictionaryName { get; set; }
-
-
-        /// <summary>
-        /// The base entropy of the match, calculated from frequency rank
-        /// </summary>
-        public double BaseEntropy { get; set; }
-
-        /// <summary>
-        /// Additional entropy for this match from the use of mixed case
-        /// </summary>
-        public double UppercaseEntropy { get; set; }
+            match.Entropy = match.BaseEntropy + match.UppercaseEntropy;
+        }
     }
 }

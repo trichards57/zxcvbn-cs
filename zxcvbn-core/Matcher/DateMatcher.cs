@@ -1,14 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Zxcvbn.Matcher
 {
     /// <summary>
+    /// A match found by the date matcher
+    /// </summary>
+    public class DateMatch : Match
+    {
+        /// <summary>
+        /// The detected day
+        /// </summary>
+        public int Day { get; set; }
+
+        /// <summary>
+        /// The detected month
+        /// </summary>
+        public int Month { get; set; }
+
+        /// <summary>
+        /// Where a date with separators is matched, this will contain the separator that was used (e.g. '/', '-')
+        /// </summary>
+        public string Separator { get; set; }
+
+        /// <summary>
+        /// The detected year
+        /// </summary>
+        public int Year { get; set; }
+    }
+
+    /// <summary>
     /// <para>This matcher attempts to guess dates, with and without date separators. e.g. 1197 (could be 1/1/97) through to 18/12/2015.</para>
-    /// 
+    ///
     /// <para>The format for matching dates is quite particular, and only detected years in the range 00-99 and 1900-2019 are considered by
     /// this matcher.</para>
     /// </summary>
@@ -16,22 +40,20 @@ namespace Zxcvbn.Matcher
     {
         // TODO: This whole matcher is a rather messy but works (just), could do with a touching up. In particular it does not provide matched date details for dates without separators
 
+        private const string DatePattern = "date";
 
-        const string DatePattern = "date";
-
-
-        // The two regexes for matching dates with slashes is lifted directly from zxcvbn (matching.coffee about :400)
-        const string DateWithSlashesSuffixPattern = @"  ( \d{1,2} )                         # day or month
-  ( \s | - | / | \\ | _ | \. )        # separator
-  ( \d{1,2} )                         # month or day
-  \2                                  # same separator
-  ( 19\d{2} | 200\d | 201\d | \d{2} ) # year";
-
-        const string DateWithSlashesPrefixPattern = @"  ( 19\d{2} | 200\d | 201\d | \d{2} ) # year
+        private const string DateWithSlashesPrefixPattern = @"  ( 19\d{2} | 200\d | 201\d | \d{2} ) # year
   ( \s | - | / | \\ | _ | \. )        # separator
   ( \d{1,2} )                         # day or month
   \2                                  # same separator
   ( \d{1,2} )                         # month or day";
+
+        // The two regexes for matching dates with slashes is lifted directly from zxcvbn (matching.coffee about :400)
+        private const string DateWithSlashesSuffixPattern = @"  ( \d{1,2} )                         # day or month
+  ( \s | - | / | \\ | _ | \. )        # separator
+  ( \d{1,2} )                         # month or day
+  \2                                  # same separator
+  ( 19\d{2} | 200\d | 201\d | \d{2} ) # year";
 
         /// <summary>
         /// Find date matches in <paramref name="password"/>
@@ -40,7 +62,7 @@ namespace Zxcvbn.Matcher
         /// <returns>An enumerable of date matches</returns>
         /// <seealso cref="DateMatch"/>
         public IEnumerable<Match> MatchPassword(string password)
-        {           
+        {
             var matches = new List<Match>();
 
             var possibleDates = Regex.Matches(password, "\\d{4,8}"); // Slashless dates
@@ -112,7 +134,7 @@ namespace Zxcvbn.Matcher
             // The entropy calculation is pretty straightforward
 
             // This is a slight departure from the zxcvbn case where the match has the actual year so the two-year vs four-year
-            //   can always be known rather than guessed for strings without separators. 
+            //   can always be known rather than guessed for strings without separators.
             if (!year.HasValue)
             {
                 // Guess year length from string length
@@ -131,12 +153,12 @@ namespace Zxcvbn.Matcher
         /// <summary>
         /// Determine whether a string resembles a date (year first or year last)
         /// </summary>
-        private Boolean IsDate(string match)
+        private bool IsDate(string match)
         {
             bool isValid = false;
-            
+
             // Try year length depending on match length. Length six should try both two and four digits
-            
+
             if (match.Length <= 6)
             {
                 // Try a two digit year, suffix and prefix
@@ -153,7 +175,12 @@ namespace Zxcvbn.Matcher
             return isValid;
         }
 
-        private Boolean IsDateWithYearType(string match, bool suffix, int yearLen)
+        private bool IsDateInRange(int year, int month, int day)
+        {
+            return IsYearInRange(year) && IsMonthDayInRange(month, day);
+        }
+
+        private bool IsDateWithYearType(string match, bool suffix, int yearLen)
         {
             int year = 0;
             if (suffix) match.IntParseSubstring(match.Length - yearLen, yearLen, out year);
@@ -166,10 +193,10 @@ namespace Zxcvbn.Matcher
         /// <summary>
         /// Determines whether a substring of a date string resembles a day and month (day-month or month-day)
         /// </summary>
-        private Boolean IsDayMonthString(string match)
+        private bool IsDayMonthString(string match)
         {
             int p1 = 0, p2 = 0;
-            
+
             // Parse the day/month string into two parts
             if (match.Length == 2)
             {
@@ -202,48 +229,16 @@ namespace Zxcvbn.Matcher
             return IsMonthDayInRange(p1, p2) || IsMonthDayInRange(p2, p1);
         }
 
-        private Boolean IsDateInRange(int year, int month, int day)
-        {
-            return IsYearInRange(year) && IsMonthDayInRange(month, day);
-        }
-
-        // Two-digit years are allowed, otherwise in 1900-2019
-        private Boolean IsYearInRange(int year)
-        {
-            return (1900 <= year && year <= 2019) || (0 < year && year <= 99);
-        }
-
         // Assume all months have 31 days, we only care that things look like dates not that they're completely valid
-        private Boolean IsMonthDayInRange(int month, int day)
+        private bool IsMonthDayInRange(int month, int day)
         {
             return 1 <= month && month <= 12 && 1 <= day && day <= 31;
         }
+
+        // Two-digit years are allowed, otherwise in 1900-2019
+        private bool IsYearInRange(int year)
+        {
+            return (1900 <= year && year <= 2019) || (0 < year && year <= 99);
+        }
     }
-
-    /// <summary>
-    /// A match found by the date matcher
-    /// </summary>
-    public class DateMatch : Match
-    {
-        /// <summary>
-        /// The detected year
-        /// </summary>
-        public int Year { get; set; }
-
-        /// <summary>
-        /// The detected month
-        /// </summary>
-        public int Month { get; set; }
-
-        /// <summary>
-        /// The detected day
-        /// </summary>
-        public int Day { get; set; }
-
-        /// <summary>
-        /// Where a date with separators is matched, this will contain the separator that was used (e.g. '/', '-')
-        /// </summary>
-        public string Separator { get; set; }
-    }
-
 }

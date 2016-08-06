@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Zxcvbn
 {
     /// <summary>
     /// Useful shared Linq extensions
     /// </summary>
-    static class LinqExtensions
+    internal static class LinqExtensions
     {
         /// <summary>
         /// Used to group elements by a key function, but only where elements are adjacent
@@ -63,8 +62,31 @@ namespace Zxcvbn
         /// </summary>
         /// <typeparam name="TElement">Type of grouped elements</typeparam>
         /// <typeparam name="TKey">Type of key used for grouping</typeparam>
-        public class AdjacentGrouping<TKey, TElement> :  IGrouping<TKey, TElement>, IEnumerable<TElement>
+        public class AdjacentGrouping<TKey, TElement> : IGrouping<TKey, TElement>, IEnumerable<TElement>
         {
+            private IEnumerable<TElement> m_groupItems;
+
+            internal AdjacentGrouping(TKey key, IEnumerable<TElement> groupItems, int startIndex, int endIndex)
+            {
+                Key = key;
+                StartIndex = startIndex;
+                EndIndex = endIndex;
+                m_groupItems = groupItems;
+            }
+
+            private AdjacentGrouping()
+            {
+            }
+
+            /// <summary>
+            /// The end index in the enumerable for this group (i.e. the index of the last element)
+            /// </summary>
+            public int EndIndex
+            {
+                get;
+                private set;
+            }
+
             /// <summary>
             /// The key value for this grouping
             /// </summary>
@@ -82,27 +104,6 @@ namespace Zxcvbn
                 get;
                 private set;
             }
-
-            /// <summary>
-            /// The end index in the enumerable for this group (i.e. the index of the last element)
-            /// </summary>
-            public int EndIndex
-            {
-                get;
-                private set;
-            }
-
-            private IEnumerable<TElement> m_groupItems;
-
-            internal AdjacentGrouping(TKey key, IEnumerable<TElement> groupItems, int startIndex, int endIndex)
-            {
-                this.Key = key;
-                this.StartIndex = startIndex;
-                this.EndIndex = endIndex;
-                m_groupItems = groupItems;
-            }
-
-            private AdjacentGrouping() { }
 
             IEnumerator<TElement> IEnumerable<TElement>.GetEnumerator()
             {
