@@ -1,0 +1,1 @@
+dotnet test zxcvbn-core-test
