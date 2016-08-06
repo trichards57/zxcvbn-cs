@@ -1,1 +1,1 @@
-dotnet test zxcvbn-core-test
+dotnet test zxcvbn-core-test -appveyor
