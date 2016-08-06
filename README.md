@@ -2,7 +2,8 @@ Zxcvbn C#/.NET
 ==============
 
 This is a port of the `Zxcvbn` JavaScript password strength estimation library at
-https://github.com/lowe/zxcvbn to .NET, written in C#.
+https://github.com/lowe/zxcvbn to .NET, written in C#.  This fork moves the library
+to support .Net Core.
 
 From the `Zxcvbn` readme:
 

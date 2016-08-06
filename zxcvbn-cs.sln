@@ -7,6 +7,14 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "zxcvbn-core", "zxcvbn-core\
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "zxcvbn-core-test", "zxcvbn-core-test\zxcvbn-core-test.xproj", "{65B256F9-4874-4D6F-9A46-D881FAB0215B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{71211407-F148-4CD8-A83E-2E0399B8D97D}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		LICENSE = LICENSE
+		README.md = README.md
+		TODO-Global.txt = TODO-Global.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
