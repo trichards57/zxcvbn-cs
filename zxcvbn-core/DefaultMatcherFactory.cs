@@ -28,6 +28,7 @@ namespace Zxcvbn
                 new DictionaryMatcher("male_names", "male_names.lst"),
                 new DictionaryMatcher("female_names", "female_names.lst"),
                 new DictionaryMatcher("surnames", "surnames.lst"),
+                new DictionaryMatcher("us_tv_and_film", "us_tv_and_film.lst"),
             };
 
             matchers = new List<IMatcher> {

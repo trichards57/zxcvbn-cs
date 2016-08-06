@@ -47,7 +47,7 @@ namespace Zxcvbn.Matcher
     /// by name, it is first checked to see if it matches and embedded resource and if not is assumed to be an external file. </para>
     ///
     /// <para>Thus custom dictionaries can be included by providing the name of an external text file, but the built-in dictionaries (english.lst,
-    /// female_names.lst, male_names.lst, passwords.lst, surnames.lst) can be used without concern about locating a dictionary file in an accessible
+    /// female_names.lst, male_names.lst, passwords.lst, us_tv_and_film.lst, surnames.lst) can be used without concern about locating a dictionary file in an accessible
     /// place.</para>
     ///
     /// <para>Dictionary word lists must be in decreasing frequency order and contain one word per line with no additional information.</para>
