@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +11,14 @@ namespace Zxcvbn
     /// </summary>
     static class PasswordScoring
     {
+        public const string StartUpper = "^[A-Z][^A-Z]+$";
+
+        public const string EndUpper = "^[^A-Z]+[A-Z]$";
+
+        public const string AllUpper = "^[^a-z]+$";
+
+        public const string AllLower = "^[^A-Z]+$";
+
         /// <summary>
         /// Calculate the cardinality of the minimal character sets necessary to brute force the password (roughly)
         /// (e.g. lowercase = 26, numbers = 10, lowercase + numbers = 36)
@@ -89,10 +97,6 @@ namespace Zxcvbn
         /// <returns>An estimation of the entropy gained from casing in <paramref name="word"/></returns>
         public static double CalculateUppercaseEntropy(string word)
         {
-            const string StartUpper = "^[A-Z][^A-Z]+$";
-            const string EndUpper = "^[^A-Z]+[A-Z]$";
-            const string AllUpper = "^[^a-z]+$";
-            const string AllLower = "^[^A-Z]+$";
 
             if (Regex.IsMatch(word, AllLower)) return 0;
 
