@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Zxcvbn.Matcher;
+using System.Text.RegularExpressions;
 
 namespace Zxcvbn
 {
@@ -179,9 +180,163 @@ namespace Zxcvbn
             result.CrackTimeDisplay = Utility.DisplayTime(crackTime, this.translation);
             result.Score = PasswordScoring.CrackTimeToScore(crackTime);
 
+
+            //starting feedback
+            if ((matchSequence == null) || (matchSequence.Count() == 0))
+            {
+                result.warning = Warning.Default;
+                result.suggestions.Clear();
+                result.suggestions.Add(Suggestion.Default);
+            }
+            else
+            {
+                //no Feedback if score is good or great
+                if (result.Score > 2)
+                {
+                    result.warning = Warning.Empty;
+                    result.suggestions.Clear();
+                    result.suggestions.Add(Suggestion.Empty);
+                }
+                else
+                {
+                    //tie feedback to the longest match for longer sequences                   
+                    Match longestMatch = GetLongestMatch(matchSequence);
+                    GetMatchFeedback(longestMatch, matchSequence.Count() == 1, result);
+                    result.suggestions.Insert(0,Suggestion.AddAnotherWordOrTwo);
+                }
+
+
+            }
             return result;
         }
-        
+
+        private Match GetLongestMatch(List<Match> matchSequence)
+        {
+            Match longestMatch;
+
+            if ((matchSequence != null) && (matchSequence.Count() > 0))
+            {
+                longestMatch = matchSequence[0];
+                foreach (Match match in matchSequence)
+                {
+                    if (match.Token.Length > longestMatch.Token.Length)
+                        longestMatch = match;
+                }
+            }
+            else
+                longestMatch = new Match();
+
+            return longestMatch;
+        }
+
+        private void GetMatchFeedback(Match match, bool isSoleMatch, Result result)
+        {
+            switch (match.Pattern)
+            {
+                case "dictionary":
+                    GetDictionaryMatchFeedback((DictionaryMatch)match, isSoleMatch, result);
+                break;
+
+                case "spatial":
+                    SpatialMatch spatialMatch = (SpatialMatch) match;
+
+                    if (spatialMatch.Turns == 1)
+                        result.warning = Warning.StraightRow;
+                    else
+                        result.warning = Warning.ShortKeyboardPatterns;
+
+                    result.suggestions.Clear();
+                    result.suggestions.Add(Suggestion.UseLongerKeyboardPattern);
+                    break;
+
+                case "repeat":
+                    //todo: add support for repeated sequences longer than 1 char
+                  //  if(match.Token.Length == 1)
+                        result.warning = Warning.RepeatsLikeAaaEasy;
+                  //  else
+                 //       result.warning = Warning.RepeatsLikeAbcSlighterHarder;
+
+                    result.suggestions.Clear();
+                    result.suggestions.Add(Suggestion.AvoidRepeatedWordsAndChars);
+                    break;
+
+                case "sequence":
+                    result.warning = Warning.SequenceAbcEasy;
+
+                    result.suggestions.Clear();
+                    result.suggestions.Add(Suggestion.AvoidSequences);
+                    break;
+
+                //todo: add support for recent_year, however not example exist on https://dl.dropboxusercontent.com/u/209/zxcvbn/test/index.html
+
+
+                case "date":
+                    result.warning = Warning.DatesEasy;
+
+                    result.suggestions.Clear();
+                    result.suggestions.Add(Suggestion.AvoidDatesYearsAssociatedYou);
+                    break;
+            }
+        }
+
+        private void GetDictionaryMatchFeedback(DictionaryMatch match, bool isSoleMatch, Result result)
+        {
+            if (match.DictionaryName.Equals("passwords"))
+            {
+                //todo: add support for reversed words
+                if (isSoleMatch == true && !(match is L33tDictionaryMatch))
+                {
+                        if (match.Rank <= 10)
+                            result.warning = Warning.Top10Passwords;
+                        else if (match.Rank <= 100)
+                            result.warning = Warning.Top100Passwords;
+                        else
+                            result.warning = Warning.CommonPasswords;
+                }
+                else if (PasswordScoring.CrackTimeToScore(PasswordScoring.EntropyToCrackTime(match.Entropy)) <= 1)
+                {
+                    result.warning = Warning.SimilarCommonPasswords;
+                }
+            }
+            else if (match.DictionaryName.Equals("english"))
+            {
+                if (isSoleMatch == true)
+                    result.warning = Warning.WordEasy;
+            }
+            else if (match.DictionaryName.Equals("surnames") ||
+                     match.DictionaryName.Equals("male_names") ||
+                     match.DictionaryName.Equals("female_names"))
+            {
+                if (isSoleMatch == true)
+                    result.warning = Warning.NameSurnamesEasy;
+                else
+                    result.warning = Warning.CommonNameSurnamesEasy;
+            }
+            else
+            {
+                result.warning = Warning.Empty;
+            }
+
+            string word = match.Token;
+            if (Regex.IsMatch(word, PasswordScoring.StartUpper))
+            {
+                result.suggestions.Add(Suggestion.CapsDontHelp);
+            }
+            else if (Regex.IsMatch(word, PasswordScoring.AllUpper) && !word.Equals(word.ToLowerInvariant()))
+            {
+                result.suggestions.Add(Suggestion.AllCapsEasy);
+            }
+
+            //todo: add support for reversed words
+            //if match.reversed and match.token.length >= 4
+            //    suggestions.push "Reversed words aren't much harder to guess"
+
+            if (match is L33tDictionaryMatch)
+            {
+                result.suggestions.Add(Suggestion.PredictableSubstitutionsEasy);
+            }
+        }
+
         /// <summary>
         /// <para>A static function to match a password against the default matchers without having to create
         /// an instance of Zxcvbn yourself, with supplied user data. </para>
