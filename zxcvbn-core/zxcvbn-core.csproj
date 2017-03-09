@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>C#/.NET port of Dan Wheeler/DropBox's Zxcvbn JS password strength estimation library.  Updated for .Net Core.</Description>
+    <Authors>mickford;Tony Richards (trichards57);Dan Wheeler;DropBox</Authors>
+    <TargetFramework>netstandard1.3</TargetFramework>
+    <AssemblyName>zxcvbn-core</AssemblyName>
+    <PackageId>zxcvbn-core</PackageId>
+    <PackageTags>password;strength;validation;zxcvbn</PackageTags>
+    <PackageProjectUrl>https://github.com/trichards57/zxcvbn-cs</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/trichards57/zxcvbn-cs/blob/master/LICENSE</PackageLicenseUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/trichards57/zxcvbn-cs.git</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Dictionaries\*.lst" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>exe</OutputType>
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net462</TargetFramework>
+    <RuntimeIdentifier>win7-x86</RuntimeIdentifier>
+    <OutputTypeEx>exe</OutputTypeEx>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\zxcvbn-core\zxcvbn-core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
+    <PackageReference Include="xunit" Version="2.2.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
+  </ItemGroup>
+
+</Project>
