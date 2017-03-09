@@ -108,21 +108,21 @@ namespace Zxcvbn.Matcher
         private Dictionary<char, string> BuildSubstitutionsMap()
         {
             // Is there an easier way of building this table?
-            var subs = new Dictionary<char, string>();
-
-            subs['a'] = "4@";
-            subs['b'] = "8";
-            subs['c'] = "({[<";
-            subs['e'] = "3";
-            subs['g'] = "69";
-            subs['i'] = "1!|";
-            subs['l'] = "1|7";
-            subs['o'] = "0";
-            subs['s'] = "$5";
-            subs['t'] = "+7";
-            subs['x'] = "%";
-            subs['z'] = "2";
-
+            var subs = new Dictionary<char, string>
+            {
+                ['a'] = "4@",
+                ['b'] = "8",
+                ['c'] = "({[<",
+                ['e'] = "3",
+                ['g'] = "69",
+                ['i'] = "1!|",
+                ['l'] = "1|7",
+                ['o'] = "0",
+                ['s'] = "$5",
+                ['t'] = "+7",
+                ['x'] = "%",
+                ['z'] = "2"
+            };
             return subs;
         }
 
@@ -163,9 +163,10 @@ namespace Zxcvbn.Matcher
             //     match 'like' but this method would never show this). My understanding is that this is also a limitation in zxcvbn and so I
             //     feel no need to correct it here.
 
-            var subs = new List<Dictionary<char, char>>();
-            subs.Add(new Dictionary<char, char>()); // Must be at least one mapping dictionary to work
-
+            var subs = new List<Dictionary<char, char>>
+            {
+                new Dictionary<char, char>() // Must be at least one mapping dictionary to work
+            };
             foreach (var mapPair in table)
             {
                 var normalChar = mapPair.Key;
@@ -181,8 +182,7 @@ namespace Zxcvbn.Matcher
                         {
                             // This mapping already contains a corresponding normal character for this character, so keep the existing one as is
                             //   but add a duplicate with the mappring replaced with this normal character
-                            var newSub = new Dictionary<char, char>(subDict);
-                            newSub[l33tChar] = normalChar;
+                            var newSub = new Dictionary<char, char>(subDict) { [l33tChar] = normalChar };
                             addedSubs.Add(newSub);
                         }
                         else

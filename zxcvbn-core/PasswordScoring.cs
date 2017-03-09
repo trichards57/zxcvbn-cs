@@ -22,7 +22,7 @@ namespace Zxcvbn
             if (k == 0) return 1;
 
             long r = 1;
-            for (int d = 1; d <= k; ++d)
+            for (var d = 1; d <= k; ++d)
             {
                 r *= n;
                 r /= d;

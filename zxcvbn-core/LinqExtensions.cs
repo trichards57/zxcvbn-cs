@@ -35,8 +35,10 @@ namespace Zxcvbn
                         yield return new AdjacentGrouping<TKey, TSource>(key, itemsList, prevStartIndex, i - 1);
 
                         prevKey = key;
-                        itemsList = new List<TSource>();
-                        itemsList.Add(item);
+                        itemsList = new List<TSource>
+                        {
+                            item
+                        };
                         prevStartIndex = i;
                     }
                     else

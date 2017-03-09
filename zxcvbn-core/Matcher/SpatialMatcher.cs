@@ -107,8 +107,7 @@ namespace Zxcvbn.Matcher
                 var j = i + 1;
                 for (; j < password.Length; ++j)
                 {
-                    bool shifted;
-                    var foundDirection = graph.GetAdjacentCharDirection(password[j - 1], password[j], out shifted);
+                    var foundDirection = graph.GetAdjacentCharDirection(password[j - 1], password[j], out var shifted);
 
                     if (foundDirection != -1)
                     {
@@ -242,7 +241,7 @@ namespace Zxcvbn.Matcher
                 // Put the characters in each keyboard cell into the map agains t their coordinates
                 var positionTable = new Dictionary<Point, string>();
                 var lines = layout.Split("\n".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
-                for (int y = 0; y < lines.Length; ++y)
+                for (var y = 0; y < lines.Length; ++y)
                 {
                     var line = lines[y];
                     var slant = slanted ? y - 1 : 0;
@@ -280,16 +279,16 @@ namespace Zxcvbn.Matcher
 
             private Point[] GetAlignedAdjacent(Point c)
             {
-                int x = c.x;
-                int y = c.y;
+                var x = c.x;
+                var y = c.y;
 
                 return new Point[] { new Point(x - 1, y), new Point(x - 1, y - 1), new Point(x, y - 1), new Point(x + 1, y - 1), new Point(x + 1, y), new Point(x + 1, y + 1), new Point(x, y + 1), new Point(x - 1, y + 1) };
             }
 
             private Point[] GetSlantedAdjacent(Point c)
             {
-                int x = c.x;
-                int y = c.y;
+                var x = c.x;
+                var y = c.y;
 
                 return new Point[] { new Point(x - 1, y), new Point(x, y - 1), new Point(x + 1, y - 1), new Point(x + 1, y), new Point(x, y + 1), new Point(x - 1, y + 1) };
             }

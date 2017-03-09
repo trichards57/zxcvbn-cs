@@ -97,8 +97,7 @@ namespace Zxcvbn
         /// <returns>Parsed int or zero</returns>
         public static int ToInt(this string str)
         {
-            int r = 0;
-            int.TryParse(str, out r);
+            int.TryParse(str, out var r);
             return r;
         }
 

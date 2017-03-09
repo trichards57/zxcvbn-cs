@@ -1,24 +1,27 @@
-version: 1.1.{build}
+version: 2.0.{build}
+image: Visual Studio 2017 RC
+init:
+  - git config --global core.autocrlf true
 skip_tags: true
 configuration:
 - Release
-assembly_info:
-  patch: true
-  file: '**\AssemblyInfo.*'
-  assembly_version: '{version}'
-  assembly_file_version: '{version}'
-  assembly_informational_version: '{version}'
-nuget:
-  account_feed: true
-  project_feed: true
 before_build:
-- ps: .\prebuild.ps1
+  - cmd: dotnet restore
+  - ps: .\prebuild.ps1
 build:
   verbosity: minimal
-after_build:
-- ps: .\postbuild.ps1
+before_test:
+  - cmd: mkdir %APPVEYOR_BUILD_FOLDER%\reports\coverage\history
+  - cmd: cd %APPVEYOR_BUILD_FOLDER% && nuget install OpenCover -ExcludeVersion -OutputDirectory tools
+  - cmd: cd %APPVEYOR_BUILD_FOLDER% && nuget install xunit.runner.console -ExcludeVersion -OutputDirectory tools
 test_script:
-- ps: .\test.ps1
+  - cmd: cd %APPVEYOR_BUILD_FOLDER% && set APPVEYOR_API_URL= && tools\OpenCover\tools\OpenCover.Console.exe -target:"tools\xunit.runner.console\tools\xunit.console.x86.exe" -targetargs:"zxcvbn-core-test\bin\Debug\net462\win7-x86\zxcvbn-core-test.exe -noShadow -xml test-results.xml" -register:user -output:"reports\coverage\coverage.xml" -skipautoprops -filter:"+[zxcvbn-core*]* -[zxcvbn-core-test]*"  -excludebyattribute:*.ExcludeFromCodeCoverage* -mergebyhash -returntargetcode
+after_test:
+  - ps: .\upload-results.ps1
+  - cmd: tools\coveralls.io\tools\coveralls.net.exe --autodetect reports\coverage\coverage.xml reports\karma-typescript-results\cobertura\coverage.xml
+environment:
+  COVERALLS_REPO_TOKEN:
+    secure: iSoNwLqIwwMN/WHRx1cV7varflDclJFbg9SGrPrBzGYHJrMTXuk+h8hWfHajvaH/
 artifacts:
 - path: '**\*.nupkg'
 deploy:
