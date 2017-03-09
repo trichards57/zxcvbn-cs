@@ -81,5 +81,30 @@ namespace Zxcvbn.Tests
             match.Month.Should().Be(2);
             match.Day.Should().Be(13);
         }
+
+        [Theory, InlineData("a", ""), InlineData("ab", ""), InlineData("", "!"),
+            InlineData("a", "!"), InlineData("ab", "!")]
+        public void DateMatcherMatchesDateWithPrefixAndOrSuffix(string prefix, string suffix)
+        {
+            var password = $"{prefix}1/1/91{suffix}";
+
+            var matcher = new DateMatcher();
+
+            var matches = matcher.MatchPassword(password);
+
+            matches.Count().Should().BeGreaterOrEqualTo(1);
+            matches.Count(m => m is DateMatch).Should().BeGreaterOrEqualTo(1);
+            matches.OfType<DateMatch>().Count(m => m.Year == 91).Should().Be(1);
+
+            var match = matches.OfType<DateMatch>().Single(m => m.Year == 91);
+            match.Pattern.Should().Be("date");
+            match.Token.Should().Be("1/1/91");
+            match.i.Should().Be(prefix.Length);
+            match.j.Should().Be(password.Length - 1 - suffix.Length);
+            match.Separator.Should().Be("/");
+            match.Year.Should().Be(91);
+            match.Month.Should().Be(1);
+            match.Day.Should().Be(1);
+        }
     }
 }
