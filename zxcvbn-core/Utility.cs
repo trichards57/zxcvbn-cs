@@ -33,17 +33,6 @@ namespace Zxcvbn
         }
 
         /// <summary>
-        /// Shortcut for string.Format
-        /// </summary>
-        /// <param name="args">Format args</param>
-        /// <param name="str">Format string</param>
-        /// <returns>Formatted string</returns>
-        public static string F(this string str, params object[] args)
-        {
-            return string.Format(str, args);
-        }
-
-        /// <summary>
         /// Returns a list of the lines of text from an embedded resource in the assembly.
         /// </summary>
         /// <param name="resourceName">The name of the resource to get the contents of</param>

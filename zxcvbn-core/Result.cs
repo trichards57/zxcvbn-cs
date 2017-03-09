@@ -45,10 +45,6 @@ namespace Zxcvbn
         /// The portion of the password that was matched
         /// </summary>
         public string Token { get; set; }
-
-        // Start Index
-
-        // End Index
     }
 
     /// <summary>
