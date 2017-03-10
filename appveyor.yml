@@ -18,7 +18,7 @@ test_script:
   - cmd: cd %APPVEYOR_BUILD_FOLDER% && set APPVEYOR_API_URL= && tools\OpenCover\tools\OpenCover.Console.exe -target:"tools\xunit.runner.console\tools\xunit.console.x86.exe" -targetargs:"zxcvbn-core-test\bin\Release\net462\zxcvbn-core-test.exe -noShadow -xml test-results.xml" -register:user -output:"reports\coverage\coverage.xml" -skipautoprops -filter:"+[zxcvbn-core*]* -[zxcvbn-core-test]*"  -excludebyattribute:*.ExcludeFromCodeCoverage* -mergebyhash -returntargetcode
 after_test:
   - ps: .\upload-results.ps1
-  - cmd: tools\coveralls.io\tools\coveralls.net.exe --autodetect reports\coverage\coverage.xml reports\karma-typescript-results\cobertura\coverage.xml
+  - cmd: tools\coveralls.io\tools\coveralls.net.exe --autodetect reports\coverage\coverage.xml
 environment:
   COVERALLS_REPO_TOKEN:
     secure: iSoNwLqIwwMN/WHRx1cV7varflDclJFbg9SGrPrBzGYHJrMTXuk+h8hWfHajvaH/

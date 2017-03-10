@@ -252,5 +252,7 @@ paket-files/
 .idea/
 *.sln.iml
 /reports/coverage
-/tools
+/tools/OpenCover
+/tools/ReportGenerator
+/tools/xunit.runner.console
 /test-results.xml

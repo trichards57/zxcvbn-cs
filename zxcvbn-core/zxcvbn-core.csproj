@@ -13,7 +13,7 @@
     <RepositoryUrl>https://github.com/trichards57/zxcvbn-cs.git</RepositoryUrl>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+  <PropertyGroup>
     <DebugType>full</DebugType>
     <DebugSymbols>True</DebugSymbols>
   </PropertyGroup>

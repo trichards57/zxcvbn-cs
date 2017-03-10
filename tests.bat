@@ -7,7 +7,7 @@ nuget install ReportGenerator -ExcludeVersion -OutputDirectory tools
 
 dotnet build
 
-tools\OpenCover\tools\OpenCover.Console.exe -target:"tools\xunit.runner.console\tools\xunit.console.x86.exe" -targetargs:"zxcvbn-core-test\bin\Debug\net462\win7-x86\zxcvbn-core-test.exe -noShadow -xml test-results.xml" -register:user -output:"reports\coverage\coverage.xml" -skipautoprops -filter:"+[zxcvbn-core*]* -[zxcvbn-core-test]*" -coverbytest:*test.exe -excludebyattribute:*.ExcludeFromCodeCoverage* -mergebyhash -returntargetcode
+tools\OpenCover\tools\OpenCover.Console.exe -target:"tools\xunit.runner.console\tools\xunit.console.x86.exe" -targetargs:"zxcvbn-core-test\bin\Release\net462\win7-x86\zxcvbn-core-test.exe -noShadow -xml test-results.xml" -register:user -output:"reports\coverage\coverage.xml" -skipautoprops -filter:"+[zxcvbn-core*]* -[zxcvbn-core-test]*" -coverbytest:*test.exe -excludebyattribute:*.ExcludeFromCodeCoverage* -mergebyhash -returntargetcode
 
 tools\ReportGenerator\tools\ReportGenerator.exe -reports:reports\coverage\coverage.xml -targetdir:reports\coverage -historydir:reports\coverage\history
 
