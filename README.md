@@ -1,6 +1,9 @@
 Zxcvbn C#/.NET
 ==============
 
+[![Build status](https://ci.appveyor.com/api/projects/status/ji4rr97d6rbxycw4?svg=true)](https://ci.appveyor.com/project/trichards57/zxcvbn-cs)
+[![Coverage Status](https://coveralls.io/repos/github/trichards57/zxcvbn-cs/badge.svg?branch=new%2Fnetstandard10)](https://coveralls.io/github/trichards57/zxcvbn-cs)
+
 This is a port of the `Zxcvbn` JavaScript password strength estimation library at
 https://github.com/lowe/zxcvbn to .NET, written in C#.  This fork moves the library
 to support .Net Core.
