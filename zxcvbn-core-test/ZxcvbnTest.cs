@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Xunit;
 using Zxcvbn;
 
@@ -7,52 +6,6 @@ namespace zxcvbn_test
 {
     public class ZxcvbnTest
     {
-        //[Fact]
-        public void DigitsRegexMatcher()
-        {
-            var re = new Zxcvbn.Matcher.RegexMatcher("\\d{3,}", 10);
-
-            var res = re.MatchPassword("abc123def");
-            Assert.Equal(1, res.Count());
-            var m1 = res.First();
-            Assert.Equal(3, m1.i);
-            Assert.Equal(5, m1.j);
-            Assert.Equal("123", m1.Token);
-
-            res = re.MatchPassword("123456789a12345b1234567");
-            Assert.Equal(3, res.Count());
-            var m3 = res.ElementAt(2);
-            Assert.Equal("1234567", m3.Token);
-
-            res = re.MatchPassword("12");
-            Assert.Equal(0, res.Count());
-
-            res = re.MatchPassword("dfsdfdfhgjkdfngjl");
-            Assert.Equal(0, res.Count());
-        }
-
-        //[Fact]
-        public void RepeatMatcher()
-        {
-            var repeat = new Zxcvbn.Matcher.RepeatMatcher();
-
-            var res = repeat.MatchPassword("aaasdffff");
-            Assert.Equal(2, res.Count());
-
-            var m1 = res.ElementAt(0);
-            Assert.Equal(0, m1.i);
-            Assert.Equal(2, m1.j);
-            Assert.Equal("aaa", m1.Token);
-
-            var m2 = res.ElementAt(1);
-            Assert.Equal(5, m2.i);
-            Assert.Equal(8, m2.j);
-            Assert.Equal("ffff", m2.Token);
-
-            res = repeat.MatchPassword("asdf");
-            Assert.Equal(0, res.Count());
-        }
-
         //[Fact]
         public void SequenceMatcher()
         {
