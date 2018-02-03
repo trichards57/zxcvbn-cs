@@ -20,6 +20,7 @@
     <AssemblyVersion>1.0.0</AssemblyVersion>
     <FileVersion>1.0.0</FileVersion>
     <PackageReleaseNotes>$commitMsg</PackageReleaseNotes>
+    <RootNamespace>Zxcvbn</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
