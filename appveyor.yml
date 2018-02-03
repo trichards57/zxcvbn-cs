@@ -10,6 +10,8 @@ before_build:
   - ps: .\prebuild.ps1
 build:
   verbosity: minimal
+after_build:
+  - cmd: dotnet pack
 before_test:
   - cmd: mkdir %APPVEYOR_BUILD_FOLDER%\reports\coverage\history
   - cmd: cd %APPVEYOR_BUILD_FOLDER% && nuget install OpenCover -ExcludeVersion -OutputDirectory tools
