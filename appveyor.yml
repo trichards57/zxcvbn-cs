@@ -17,7 +17,7 @@ before_test:
 test_script:
   - cmd: cd %APPVEYOR_BUILD_FOLDER%\zxcvbn-core-test && set APPVEYOR_API_URL= && ..\tools\OpenCover\tools\OpenCover.Console.exe -target:"%programfiles%\dotnet\dotnet.exe" -targetargs:"xunit -noShadow -xml test-results.xml" -register:user -output:"..\reports\coverage\coverage.xml" -skipautoprops -filter:"+[zxcvbn-core*]* -[zxcvbn-core-test]*"  -excludebyattribute:*.ExcludeFromCodeCoverage* -mergebyhash -returntargetcode -oldStyle
 after_test:
-  - ps: cd %APPVEYOR_BUILD_FOLDER%
+  - cmd: cd %APPVEYOR_BUILD_FOLDER%
   - ps: .\upload-results.ps1
   - cmd: cd %APPVEYOR_BUILD_FOLDER% && tools\coveralls.io\tools\coveralls.net.exe --autodetect reports\coverage\coverage.xml
 environment:
