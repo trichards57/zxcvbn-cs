@@ -39,7 +39,7 @@ deploy:
   release: zxcvbn-cs-v$(appveyor_build_version)
   description: $(appveyor_repo_commit_message)
   auth_token:
-    secure: jtEqWpP0mI7h+Bapo8DhdJDSQxUV60pDwfQqLdFZqpHV4LqcCEmrcTmNMf6pu9bl
+    secure: 5/IIxheO9SNZUikjDvyOW5gFRc2qiLjctTfJe2IBR0H7vGXeHqXiGqHN6n+/H+AK
   artifact: /.*\.nupkg/
   draft: false
   prerelease: false
