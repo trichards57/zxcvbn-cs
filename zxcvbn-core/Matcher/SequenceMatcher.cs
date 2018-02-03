@@ -77,8 +77,8 @@ namespace Zxcvbn.Matcher
                         var match = password.Substring(i, j - i);
                         matches.Add(new SequenceMatch
                         {
-                            I = i,
-                            J = j - 1,
+                            i = i,
+                            j = j - 1,
                             Token = match,
                             Pattern = SequencePattern,
                             Entropy = CalculateEntropy(match, ascending),

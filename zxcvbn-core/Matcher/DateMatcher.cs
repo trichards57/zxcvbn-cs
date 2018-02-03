@@ -119,8 +119,8 @@ namespace Zxcvbn.Matcher
                     {
                         Pattern = DatePattern,
                         Token = dateMatch.Value,
-                        I = i,
-                        J = j + i - 1,
+                        i = i,
+                        j = j + i - 1,
                         Separator = "",
                         Year = bestCandidate.Year,
                         Month = bestCandidate.Month,
@@ -152,8 +152,8 @@ namespace Zxcvbn.Matcher
                     {
                         Pattern = DatePattern,
                         Token = token,
-                        I = i,
-                        J = j + i - 1,
+                        i = i,
+                        j = j + i - 1,
                         Separator = match.Groups[2].Value,
                         Year = date.Value.Year,
                         Month = date.Value.Month,
@@ -171,7 +171,7 @@ namespace Zxcvbn.Matcher
                 {
                     if (m == n)
                         continue;
-                    if (n.I <= m.I && n.J >= m.J)
+                    if (n.i <= m.i && n.j >= m.j)
                         return false;
                 }
 

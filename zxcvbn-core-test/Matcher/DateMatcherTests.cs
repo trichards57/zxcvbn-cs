@@ -28,8 +28,8 @@ namespace Zxcvbn.Tests.Matcher
             var match = matches.OfType<DateMatch>().Single();
             match.Pattern.Should().Be("date");
             match.Token.Should().Be(password);
-            match.I.Should().Be(0);
-            match.J.Should().Be(password.Length - 1);
+            match.i.Should().Be(0);
+            match.j.Should().Be(password.Length - 1);
             match.Separator.Should().Be("");
             match.Year.Should().Be(year);
             match.Month.Should().Be(month);
@@ -53,8 +53,8 @@ namespace Zxcvbn.Tests.Matcher
             var match = matches.OfType<DateMatch>().Single();
             match.Pattern.Should().Be("date");
             match.Token.Should().Be(password);
-            match.I.Should().Be(0);
-            match.J.Should().Be(password.Length - 1);
+            match.i.Should().Be(0);
+            match.j.Should().Be(password.Length - 1);
             match.Separator.Should().Be(seperator);
             match.Year.Should().Be(1921);
             match.Month.Should().Be(2);
@@ -77,8 +77,8 @@ namespace Zxcvbn.Tests.Matcher
             var match = matches.OfType<DateMatch>().Single();
             match.Pattern.Should().Be("date");
             match.Token.Should().Be("1/1/91");
-            match.I.Should().Be(prefix.Length);
-            match.J.Should().Be(password.Length - 1 - suffix.Length);
+            match.i.Should().Be(prefix.Length);
+            match.j.Should().Be(password.Length - 1 - suffix.Length);
             match.Separator.Should().Be("/");
             match.Year.Should().Be(1991);
             match.Month.Should().Be(1);
@@ -101,8 +101,8 @@ namespace Zxcvbn.Tests.Matcher
             var slashMatch = matches.OfType<DateMatch>().Single(m => m.Separator == "/");
             slashMatch.Pattern.Should().Be("date");
             slashMatch.Token.Should().Be("12/20/1991");
-            slashMatch.I.Should().Be(0);
-            slashMatch.J.Should().Be(9);
+            slashMatch.i.Should().Be(0);
+            slashMatch.j.Should().Be(9);
             slashMatch.Separator.Should().Be("/");
             slashMatch.Year.Should().Be(1991);
             slashMatch.Month.Should().Be(12);
@@ -111,8 +111,8 @@ namespace Zxcvbn.Tests.Matcher
             var dotMatch = matches.OfType<DateMatch>().Single(m => m.Separator == ".");
             dotMatch.Pattern.Should().Be("date");
             dotMatch.Token.Should().Be("1991.12.20");
-            dotMatch.I.Should().Be(6);
-            dotMatch.J.Should().Be(15);
+            dotMatch.i.Should().Be(6);
+            dotMatch.j.Should().Be(15);
             dotMatch.Separator.Should().Be(".");
             dotMatch.Year.Should().Be(1991);
             dotMatch.Month.Should().Be(12);

@@ -37,8 +37,8 @@ namespace Zxcvbn.Matcher
             {
                 Pattern = RepeatPattern,
                 Token = password.Substring(g.StartIndex, g.EndIndex - g.StartIndex + 1),
-                I = g.StartIndex,
-                J = g.EndIndex,
+                i = g.StartIndex,
+                j = g.EndIndex,
                 Entropy = CalculateEntropy(password.Substring(g.StartIndex, g.EndIndex - g.StartIndex + 1)),
                 RepeatChar = g.Key
             });

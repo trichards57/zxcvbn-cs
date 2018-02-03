@@ -109,8 +109,8 @@ namespace Zxcvbn.Matcher
                     matches.Add(new SpatialMatch()
                     {
                         Pattern = SpatialPattern,
-                        I = i,
-                        J = j - 1,
+                        i = i,
+                        j = j - 1,
                         Token = password.Substring(i, j - i),
                         Graph = graph.Name,
                         Entropy = graph.CalculateEntropy(j - i, turns, shiftedCount),
