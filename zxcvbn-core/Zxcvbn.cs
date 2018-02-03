@@ -110,9 +110,9 @@ namespace Zxcvbn
                 minimumEntropyToIndex[k] = (k == 0 ? 0 : minimumEntropyToIndex[k - 1]) + Math.Log(bruteforce_cardinality, 2);
 
                 // All matches that end at the current character, test to see if the entropy is less
-                foreach (var match in matches.Where(m => m.J == k))
+                foreach (var match in matches.Where(m => m.j == k))
                 {
-                    var candidate_entropy = (match.I <= 0 ? 0 : minimumEntropyToIndex[match.I - 1]) + match.Entropy;
+                    var candidate_entropy = (match.i <= 0 ? 0 : minimumEntropyToIndex[match.i - 1]) + match.Entropy;
                     if (candidate_entropy < minimumEntropyToIndex[k])
                     {
                         minimumEntropyToIndex[k] = candidate_entropy;
@@ -128,7 +128,7 @@ namespace Zxcvbn
                 if (bestMatchForIndex[k] != null)
                 {
                     matchSequence.Add(bestMatchForIndex[k]);
-                    k = bestMatchForIndex[k].I; // Jump back to start of match
+                    k = bestMatchForIndex[k].i; // Jump back to start of match
                 }
             }
             matchSequence.Reverse();
@@ -140,8 +140,8 @@ namespace Zxcvbn
                 // To make things easy, we'll separate out the case where there are no matches so everything is bruteforced
                 matchSequence.Add(new Match()
                 {
-                    I = 0,
-                    J = password.Length,
+                    i = 0,
+                    j = password.Length,
                     Token = password,
                     Cardinality = bruteforce_cardinality,
                     Pattern = BruteforcePattern,
@@ -155,18 +155,18 @@ namespace Zxcvbn
                 for (var k = 0; k < matchSequence.Count; k++)
                 {
                     var m1 = matchSequence[k];
-                    var m2 = (k < matchSequence.Count - 1 ? matchSequence[k + 1] : new Match() { I = password.Length }); // Next match, or a match past the end of the password
+                    var m2 = (k < matchSequence.Count - 1 ? matchSequence[k + 1] : new Match() { i = password.Length }); // Next match, or a match past the end of the password
 
                     matchSequenceCopy.Add(m1);
-                    if (m1.J < m2.I - 1)
+                    if (m1.j < m2.i - 1)
                     {
                         // Fill in gap
-                        var ns = m1.J + 1;
-                        var ne = m2.I - 1;
+                        var ns = m1.j + 1;
+                        var ne = m2.i - 1;
                         matchSequenceCopy.Add(new Match()
                         {
-                            I = ns,
-                            J = ne,
+                            i = ns,
+                            j = ne,
                             Token = password.Substring(ns, ne - ns + 1),
                             Cardinality = bruteforce_cardinality,
                             Pattern = BruteforcePattern,
