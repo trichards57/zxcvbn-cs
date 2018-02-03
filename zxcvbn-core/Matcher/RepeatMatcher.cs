@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace Zxcvbn.Matcher
 {
+    /// <inheritdoc />
     /// <summary>
     /// A match found with the RepeatMatcher
     /// </summary>

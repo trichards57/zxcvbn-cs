@@ -9,6 +9,11 @@ namespace Zxcvbn
     /// </summary>
     internal static class PasswordScoring
     {
+        public const string AllLower = "^[^A-Z]+$";
+        public const string AllUpper = "^[^a-z]+$";
+        public const string EndUpper = "^[^A-Z]+[A-Z]$";
+        public const string StartUpper = "^[A-Z][^A-Z]+$";
+
         /// <summary>
         /// Caclulate binomial coefficient (i.e. nCk)
         /// Uses same algorithm as zxcvbn (cf. scoring.coffee), from http://blog.plover.com/math/choose.html
@@ -40,15 +45,10 @@ namespace Zxcvbn
         /// <returns>An estimation of the entropy gained from casing in <paramref name="word"/></returns>
         public static double CalculateUppercaseEntropy(string word)
         {
-            const string startUpper = "^[A-Z][^A-Z]+$";
-            const string endUpper = "^[^A-Z]+[A-Z]$";
-            const string allUpper = "^[^a-z]+$";
-            const string allLower = "^[^A-Z]+$";
-
-            if (Regex.IsMatch(word, allLower)) return 0;
+            if (Regex.IsMatch(word, AllLower)) return 0;
 
             // If the word is all uppercase add's only one bit of entropy, add only one bit for initial/end single cap only
-            if (new[] { startUpper, endUpper, allUpper }.Any(re => Regex.IsMatch(word, re))) return 1;
+            if (new[] { StartUpper, EndUpper, AllUpper }.Any(re => Regex.IsMatch(word, re))) return 1;
 
             var lowers = word.Count(c => 'a' <= c && c <= 'z');
             var uppers = word.Count(c => 'A' <= c && c <= 'Z');

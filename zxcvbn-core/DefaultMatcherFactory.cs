@@ -43,6 +43,7 @@ namespace Zxcvbn
             _matchers.Add(new L33tMatcher(dictionaryMatchers));
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Get instances of pattern matchers, adding in per-password matchers on userInputs (and userInputs with l33t substitutions)
         /// </summary>

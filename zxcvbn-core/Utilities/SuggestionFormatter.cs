@@ -27,9 +27,11 @@ namespace Zxcvbn.Utilities
                         case Translation.German:
                             translated = "";
                             break;
+
                         case Translation.France:
                             translated = "";
                             break;
+
                         default:
                             translated = "Add another word or two. Uncommon words are better.";
                             break;
@@ -42,9 +44,11 @@ namespace Zxcvbn.Utilities
                         case Translation.German:
                             translated = "";
                             break;
+
                         case Translation.France:
                             translated = "";
                             break;
+
                         default:
                             translated = "Use a longer keyboard pattern with more turns";
                             break;
@@ -57,9 +61,11 @@ namespace Zxcvbn.Utilities
                         case Translation.German:
                             translated = "";
                             break;
+
                         case Translation.France:
                             translated = "";
                             break;
+
                         default:
                             translated = "Avoid repeated words and characters";
                             break;
@@ -72,93 +78,113 @@ namespace Zxcvbn.Utilities
                         case Translation.German:
                             translated = "";
                             break;
+
                         case Translation.France:
                             translated = "";
                             break;
+
                         default:
                             translated = "Avoid sequences";
                             break;
                     }
                     break;
+
                 case Suggestion.AvoidYearsAssociatedYou:
                     switch (translation)
                     {
                         case Translation.German:
                             translated = "";
                             break;
+
                         case Translation.France:
                             translated = "";
                             break;
+
                         default:
                             translated = "Avoid recent years \n Avoid years that are associated with you";
                             break;
                     }
                     break;
+
                 case Suggestion.AvoidDatesYearsAssociatedYou:
                     switch (translation)
                     {
                         case Translation.German:
                             translated = "";
                             break;
+
                         case Translation.France:
                             translated = "";
                             break;
+
                         default:
                             translated = "Avoid dates and years that are associated with you";
                             break;
                     }
                     break;
+
                 case Suggestion.CapsDontHelp:
                     switch (translation)
                     {
                         case Translation.German:
                             translated = "";
                             break;
+
                         case Translation.France:
                             translated = "";
                             break;
+
                         default:
                             translated = "Capitalization doesn't help very much";
                             break;
                     }
                     break;
+
                 case Suggestion.AllCapsEasy:
                     switch (translation)
                     {
                         case Translation.German:
                             translated = "";
                             break;
+
                         case Translation.France:
                             translated = "";
                             break;
+
                         default:
                             translated = "All-uppercase is almost as easy to guess as all-lowercase";
                             break;
                     }
                     break;
+
                 case Suggestion.ReversedWordEasy:
                     switch (translation)
                     {
                         case Translation.German:
                             translated = "";
                             break;
+
                         case Translation.France:
                             translated = "";
                             break;
+
                         default:
                             translated = "Reversed words aren't much harder to guess";
                             break;
                     }
                     break;
+
                 case Suggestion.PredictableSubstitutionsEasy:
                     switch (translation)
                     {
                         case Translation.German:
                             translated = "";
                             break;
+
                         case Translation.France:
                             translated = "";
                             break;
+
                         default:
                             translated = "Predictable substitutions like '@' instead of 'a' don't help very much";
                             break;
@@ -171,14 +197,17 @@ namespace Zxcvbn.Utilities
                         case Translation.German:
                             translated = "";
                             break;
+
                         case Translation.France:
                             translated = "";
                             break;
+
                         default:
                             translated = "";
                             break;
                     }
                     break;
+
                 default:
                     translated = "Use a few words, avoid common phrases \n No need for symbols, digits, or uppercase letters";
                     break;

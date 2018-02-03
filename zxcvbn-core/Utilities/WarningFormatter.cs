@@ -27,9 +27,11 @@ namespace Zxcvbn.Utilities
                         case Translation.German:
                             translated = "";
                             break;
+
                         case Translation.France:
                             translated = "";
                             break;
+
                         default:
                             translated = "Straight rows of keys are easy to guess";
                             break;
@@ -42,9 +44,11 @@ namespace Zxcvbn.Utilities
                         case Translation.German:
                             translated = "";
                             break;
+
                         case Translation.France:
                             translated = "";
                             break;
+
                         default:
                             translated = "Short keyboard patterns are easy to guess";
                             break;
@@ -57,9 +61,11 @@ namespace Zxcvbn.Utilities
                         case Translation.German:
                             translated = "";
                             break;
+
                         case Translation.France:
                             translated = "";
                             break;
+
                         default:
                             translated = "Repeats like \"aaa\" are easy to guess";
                             break;
@@ -72,149 +78,181 @@ namespace Zxcvbn.Utilities
                         case Translation.German:
                             translated = "";
                             break;
+
                         case Translation.France:
                             translated = "";
                             break;
+
                         default:
                             translated = "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"";
                             break;
                     }
                     break;
+
                 case Warning.SequenceAbcEasy:
                     switch (translation)
                     {
                         case Translation.German:
                             translated = "";
                             break;
+
                         case Translation.France:
                             translated = "";
                             break;
+
                         default:
                             translated = "Sequences like abc or 6543 are easy to guess";
                             break;
                     }
                     break;
+
                 case Warning.RecentYearsEasy:
                     switch (translation)
                     {
                         case Translation.German:
                             translated = "";
                             break;
+
                         case Translation.France:
                             translated = "";
                             break;
+
                         default:
                             translated = "Recent years are easy to guess";
                             break;
                     }
                     break;
+
                 case Warning.DatesEasy:
                     switch (translation)
                     {
                         case Translation.German:
                             translated = "";
                             break;
+
                         case Translation.France:
                             translated = "";
                             break;
+
                         default:
                             translated = "Dates are often easy to guess";
                             break;
                     }
                     break;
+
                 case Warning.Top10Passwords:
                     switch (translation)
                     {
                         case Translation.German:
                             translated = "";
                             break;
+
                         case Translation.France:
                             translated = "";
                             break;
+
                         default:
                             translated = "This is a top-10 common password";
                             break;
                     }
                     break;
+
                 case Warning.Top100Passwords:
                     switch (translation)
                     {
                         case Translation.German:
                             translated = "";
                             break;
+
                         case Translation.France:
                             translated = "";
                             break;
+
                         default:
                             translated = "This is a top-100 common password";
                             break;
                     }
                     break;
+
                 case Warning.CommonPasswords:
                     switch (translation)
                     {
                         case Translation.German:
                             translated = "";
                             break;
+
                         case Translation.France:
                             translated = "";
                             break;
+
                         default:
                             translated = "This is a very common password";
                             break;
                     }
                     break;
+
                 case Warning.SimilarCommonPasswords:
                     switch (translation)
                     {
                         case Translation.German:
                             translated = "";
                             break;
+
                         case Translation.France:
                             translated = "";
                             break;
+
                         default:
                             translated = "This is similar to a commonly used password";
                             break;
                     }
                     break;
+
                 case Warning.WordEasy:
                     switch (translation)
                     {
                         case Translation.German:
                             translated = "";
                             break;
+
                         case Translation.France:
                             translated = "";
                             break;
+
                         default:
                             translated = "A word by itself is easy to guess";
                             break;
                     }
                     break;
+
                 case Warning.NameSurnamesEasy:
                     switch (translation)
                     {
                         case Translation.German:
                             translated = "";
                             break;
+
                         case Translation.France:
                             translated = "";
                             break;
+
                         default:
                             translated = "Names and surnames by themselves are easy to guess";
                             break;
                     }
                     break;
+
                 case Warning.CommonNameSurnamesEasy:
                     switch (translation)
                     {
                         case Translation.German:
                             translated = "";
                             break;
+
                         case Translation.France:
                             translated = "";
                             break;
+
                         default:
                             translated = "Common names and surnames are easy to guess";
                             break;
@@ -227,9 +265,11 @@ namespace Zxcvbn.Utilities
                         case Translation.German:
                             translated = "";
                             break;
+
                         case Translation.France:
                             translated = "";
                             break;
+
                         default:
                             translated = "";
                             break;
