@@ -15,8 +15,8 @@ namespace Zxcvbn.Tests.Matcher
             var res = re.MatchPassword("abc123def").ToList();
             res.Count.Should().Be(1);
 
-            res[0].i.Should().Be(3);
-            res[0].j.Should().Be(5);
+            res[0].I.Should().Be(3);
+            res[0].J.Should().Be(5);
             res[0].Token.Should().Be("123");
         }
 
@@ -28,8 +28,8 @@ namespace Zxcvbn.Tests.Matcher
             var res = re.MatchPassword("123456789a12345b1234567").ToList();
             res.Count.Should().Be(3);
 
-            res[2].i.Should().Be(16);
-            res[2].j.Should().Be(22);
+            res[2].I.Should().Be(16);
+            res[2].J.Should().Be(22);
             res[2].Token.Should().Be("1234567");
         }
 

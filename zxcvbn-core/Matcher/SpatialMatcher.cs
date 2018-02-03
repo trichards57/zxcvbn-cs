@@ -4,27 +4,7 @@ using System.Linq;
 
 namespace Zxcvbn.Matcher
 {
-    /// <summary>
-    /// A match made with the <see cref="SpatialMatcher"/>. Contains additional information specific to spatial matches.
-    /// </summary>
-    public class SpatialMatch : Match
-    {
-        /// <summary>
-        /// The name of the keyboard layout used to make the spatial match
-        /// </summary>
-        public string Graph { get; set; }
-
-        /// <summary>
-        /// The number of shifted characters matched in the pattern (adds to entropy)
-        /// </summary>
-        public int ShiftedCount { get; set; }
-
-        /// <summary>
-        /// The number of turns made (i.e. when diretion of adjacent keys changes)
-        /// </summary>
-        public int Turns { get; set; }
-    }
-
+    /// <inheritdoc />
     /// <summary>
     /// <para>A matcher that checks for keyboard layout patterns (e.g. 78523 on a keypad, or plkmn on a QWERTY keyboard).</para>
     /// <para>Has patterns for QWERTY, DVORAK, numeric keybad and mac numeric keypad</para>
@@ -34,17 +14,18 @@ namespace Zxcvbn.Matcher
     {
         private const string SpatialPattern = "spatial";
 
-        private Lazy<List<SpatialGraph>> spatialGraphs = new Lazy<List<SpatialGraph>>(() => GenerateSpatialGraphs());
+        private readonly Lazy<List<SpatialGraph>> _spatialGraphs = new Lazy<List<SpatialGraph>>(GenerateSpatialGraphs);
 
+        /// <inheritdoc />
         /// <summary>
         /// Match the password against the known keyboard layouts
         /// </summary>
         /// <param name="password">Password to match</param>
         /// <returns>List of matching patterns</returns>
-        /// <seealso cref="SpatialMatch"/>
+        /// <seealso cref="M:Zxcvbn.Matcher.SpatialMatcher.SpatialMatch(Zxcvbn.Matcher.SpatialMatcher.SpatialGraph,System.String)" />
         public IEnumerable<Match> MatchPassword(string password)
         {
-            return spatialGraphs.Value.SelectMany((g) => SpatialMatch(g, password)).ToList();
+            return _spatialGraphs.Value.SelectMany((g) => SpatialMatch(g, password)).ToList();
         }
 
         // In the JS version these are precomputed, but for now we'll generate them here when they are first needed.
@@ -73,7 +54,7 @@ namespace Zxcvbn.Matcher
   0 .
 ";
 
-            const string mac_keypad = @"
+            const string macKeypad = @"
   = / *
 7 8 9 -
 4 5 6 +
@@ -84,7 +65,7 @@ namespace Zxcvbn.Matcher
             return new List<SpatialGraph> { new SpatialGraph("qwerty", qwerty, true),
                     new SpatialGraph("dvorak", dvorak, true),
                     new SpatialGraph("keypad", keypad, false),
-                    new SpatialGraph("mac_keypad", mac_keypad, false)
+                    new SpatialGraph("mac_keypad", macKeypad, false)
                 };
         }
 
@@ -94,7 +75,7 @@ namespace Zxcvbn.Matcher
         /// <param name="graph">Adjacency graph for this key layout</param>
         /// <param name="password">Password to match</param>
         /// <returns>List of matching patterns</returns>
-        private List<Match> SpatialMatch(SpatialGraph graph, string password)
+        private static IEnumerable<Match> SpatialMatch(SpatialGraph graph, string password)
         {
             var matches = new List<Match>();
 
@@ -128,8 +109,8 @@ namespace Zxcvbn.Matcher
                     matches.Add(new SpatialMatch()
                     {
                         Pattern = SpatialPattern,
-                        i = i,
-                        j = j - 1,
+                        I = i,
+                        J = j - 1,
                         Token = password.Substring(i, j - i),
                         Graph = graph.Name,
                         Entropy = graph.CalculateEntropy(j - i, turns, shiftedCount),
@@ -147,18 +128,18 @@ namespace Zxcvbn.Matcher
         // Instances of Point or Pair in the standard library are in UI assemblies, so define our own version to reduce dependencies
         private struct Point
         {
-            public int x;
-            public int y;
-
             public Point(int x, int y)
             {
-                this.x = x;
-                this.y = y;
+                X = x;
+                Y = y;
             }
+
+            public int X { get; }
+            public int Y { get; }
 
             public override string ToString()
             {
-                return "{" + x + ", " + y + "}";
+                return "{" + X + ", " + Y + "}";
             }
         }
 
@@ -171,10 +152,10 @@ namespace Zxcvbn.Matcher
                 BuildGraph(layout, slanted);
             }
 
-            public double AverageDegree { get; private set; }
-            public string Name { get; private set; }
-            public int StartingPositions { get; private set; }
+            public string Name { get; }
             private Dictionary<char, List<string>> AdjacencyGraph { get; set; }
+            private double AverageDegree { get; set; }
+            private int StartingPositions { get; set; }
 
             /// <summary>
             /// Calculate entropy for a math that was found on this adjacency graph
@@ -184,11 +165,8 @@ namespace Zxcvbn.Matcher
                 // This is an estimation of the number of patterns with length of matchLength or less with turns turns or less
                 var possibilities = Enumerable.Range(2, matchLength - 1).Sum(i =>
                 {
-                    var possible_turns = Math.Min(turns, i - 1);
-                    return Enumerable.Range(1, possible_turns).Sum(j =>
-                    {
-                        return StartingPositions * Math.Pow(AverageDegree, j) * PasswordScoring.Binomial(i - 1, j - 1);
-                    });
+                    var possibleTurns = Math.Min(turns, i - 1);
+                    return Enumerable.Range(1, possibleTurns).Sum(j => StartingPositions * Math.Pow(AverageDegree, j) * PasswordScoring.Binomial(i - 1, j - 1));
                 });
 
                 var entropy = Math.Log(possibilities, 2);
@@ -224,13 +202,20 @@ namespace Zxcvbn.Matcher
                 return AdjacencyGraph[c].IndexOf(adjacentEntry);
             }
 
-            /// <summary>
-            /// Returns true when testAdjacent is in c's adjacency list
-            /// </summary>
-            public bool IsCharAdjacent(char c, char testAdjacent)
+            private static Point[] GetAlignedAdjacent(Point c)
             {
-                if (AdjacencyGraph.ContainsKey(c)) return AdjacencyGraph[c].Any(s => s.Contains(testAdjacent));
-                return false;
+                var x = c.X;
+                var y = c.Y;
+
+                return new[] { new Point(x - 1, y), new Point(x - 1, y - 1), new Point(x, y - 1), new Point(x + 1, y - 1), new Point(x + 1, y), new Point(x + 1, y + 1), new Point(x, y + 1), new Point(x - 1, y + 1) };
+            }
+
+            private static Point[] GetSlantedAdjacent(Point c)
+            {
+                var x = c.X;
+                var y = c.Y;
+
+                return new[] { new Point(x - 1, y), new Point(x, y - 1), new Point(x + 1, y - 1), new Point(x + 1, y), new Point(x, y + 1), new Point(x - 1, y + 1) };
             }
 
             private void BuildGraph(string layout, bool slanted)
@@ -248,7 +233,7 @@ namespace Zxcvbn.Matcher
 
                     foreach (var token in line.Split((char[])null, StringSplitOptions.RemoveEmptyEntries))
                     {
-                        var x = (line.IndexOf(token) - slant) / (tokenSize + 1);
+                        var x = (line.IndexOf(token, StringComparison.Ordinal) - slant) / (tokenSize + 1);
                         var p = new Point(x, y);
                         positionTable[p] = token;
                     }
@@ -266,31 +251,14 @@ namespace Zxcvbn.Matcher
                         foreach (var adjacent in adjacentPoints)
                         {
                             // We want to include nulls so that direction is correspondent with index in the list
-                            if (positionTable.ContainsKey(adjacent)) AdjacencyGraph[c].Add(positionTable[adjacent]);
-                            else AdjacencyGraph[c].Add(null);
+                            AdjacencyGraph[c].Add(positionTable.ContainsKey(adjacent) ? positionTable[adjacent] : null);
                         }
                     }
                 }
 
                 // Calculate average degree and starting positions, cf. init.coffee
                 StartingPositions = AdjacencyGraph.Count;
-                AverageDegree = AdjacencyGraph.Sum(adj => adj.Value.Where(a => a != null).Count()) * 1.0 / StartingPositions;
-            }
-
-            private Point[] GetAlignedAdjacent(Point c)
-            {
-                var x = c.x;
-                var y = c.y;
-
-                return new Point[] { new Point(x - 1, y), new Point(x - 1, y - 1), new Point(x, y - 1), new Point(x + 1, y - 1), new Point(x + 1, y), new Point(x + 1, y + 1), new Point(x, y + 1), new Point(x - 1, y + 1) };
-            }
-
-            private Point[] GetSlantedAdjacent(Point c)
-            {
-                var x = c.x;
-                var y = c.y;
-
-                return new Point[] { new Point(x - 1, y), new Point(x, y - 1), new Point(x + 1, y - 1), new Point(x + 1, y), new Point(x, y + 1), new Point(x - 1, y + 1) };
+                AverageDegree = AdjacencyGraph.Sum(adj => adj.Value.Count(a => a != null)) * 1.0 / StartingPositions;
             }
         }
     }

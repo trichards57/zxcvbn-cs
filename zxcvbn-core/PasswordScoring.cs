@@ -40,21 +40,21 @@ namespace Zxcvbn
         /// <returns>An estimation of the entropy gained from casing in <paramref name="word"/></returns>
         public static double CalculateUppercaseEntropy(string word)
         {
-            const string StartUpper = "^[A-Z][^A-Z]+$";
-            const string EndUpper = "^[^A-Z]+[A-Z]$";
-            const string AllUpper = "^[^a-z]+$";
-            const string AllLower = "^[^A-Z]+$";
+            const string startUpper = "^[A-Z][^A-Z]+$";
+            const string endUpper = "^[^A-Z]+[A-Z]$";
+            const string allUpper = "^[^a-z]+$";
+            const string allLower = "^[^A-Z]+$";
 
-            if (Regex.IsMatch(word, AllLower)) return 0;
+            if (Regex.IsMatch(word, allLower)) return 0;
 
             // If the word is all uppercase add's only one bit of entropy, add only one bit for initial/end single cap only
-            if (new[] { StartUpper, EndUpper, AllUpper }.Any(re => Regex.IsMatch(word, re))) return 1;
+            if (new[] { startUpper, endUpper, allUpper }.Any(re => Regex.IsMatch(word, re))) return 1;
 
-            var lowers = word.Where(c => 'a' <= c && c <= 'z').Count();
-            var uppers = word.Where(c => 'A' <= c && c <= 'Z').Count();
+            var lowers = word.Count(c => 'a' <= c && c <= 'z');
+            var uppers = word.Count(c => 'A' <= c && c <= 'Z');
 
             // Calculate numer of ways to capitalise (or inverse if there are fewer lowercase chars) and return lg for entropy
-            return Math.Log(Enumerable.Range(0, Math.Min(uppers, lowers) + 1).Sum(i => PasswordScoring.Binomial(uppers + lowers, i)), 2);
+            return Math.Log(Enumerable.Range(0, Math.Min(uppers, lowers) + 1).Sum(i => Binomial(uppers + lowers, i)), 2);
         }
 
         /// <summary>
@@ -65,10 +65,10 @@ namespace Zxcvbn
         public static int CrackTimeToScore(double crackTimeSeconds)
         {
             if (crackTimeSeconds < Math.Pow(10, 2)) return 0;
-            else if (crackTimeSeconds < Math.Pow(10, 4)) return 1;
-            else if (crackTimeSeconds < Math.Pow(10, 6)) return 2;
-            else if (crackTimeSeconds < Math.Pow(10, 8)) return 3;
-            else return 4;
+            if (crackTimeSeconds < Math.Pow(10, 4)) return 1;
+            if (crackTimeSeconds < Math.Pow(10, 6)) return 2;
+            if (crackTimeSeconds < Math.Pow(10, 8)) return 3;
+            return 4;
         }
 
         /// <summary>
@@ -78,11 +78,11 @@ namespace Zxcvbn
         /// <returns>An estimation of seconts taken to crack password</returns>
         public static double EntropyToCrackTime(double entropy)
         {
-            const double SingleGuess = 0.01;
-            const double NumAttackers = 100;
-            const double SecondsPerGuess = SingleGuess / NumAttackers;
+            const double singleGuess = 0.01;
+            const double numAttackers = 100;
+            const double secondsPerGuess = singleGuess / numAttackers;
 
-            return 0.5 * Math.Pow(2, entropy) * SecondsPerGuess;
+            return 0.5 * Math.Pow(2, entropy) * secondsPerGuess;
         }
 
         /// <summary>

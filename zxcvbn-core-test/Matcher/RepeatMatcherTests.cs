@@ -26,12 +26,12 @@ namespace Zxcvbn.Tests.Matcher
 
             res.Count.Should().Be(2);
 
-            res[0].i.Should().Be(0);
-            res[0].j.Should().Be(2);
+            res[0].I.Should().Be(0);
+            res[0].J.Should().Be(2);
             res[0].Token.Should().Be("aaa");
 
-            res[1].i.Should().Be(5);
-            res[1].j.Should().Be(8);
+            res[1].I.Should().Be(5);
+            res[1].J.Should().Be(8);
             res[1].Token.Should().Be("ffff");
         }
     }

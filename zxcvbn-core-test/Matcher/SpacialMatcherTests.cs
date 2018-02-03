@@ -24,8 +24,8 @@ namespace Zxcvbn.Tests.Matcher
             var res = sm.MatchPassword("qwert").ToList();
             res.Count.Should().Be(1);
 
-            res[0].i.Should().Be(0);
-            res[0].j.Should().Be(4);
+            res[0].I.Should().Be(0);
+            res[0].J.Should().Be(4);
             res[0].Token.Should().Be("qwert");
         }
     }
