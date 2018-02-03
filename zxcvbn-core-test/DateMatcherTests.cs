@@ -7,22 +7,22 @@ namespace Zxcvbn.Tests
 {
     public class DateMatcherTests
     {
-        [Theory, InlineData("mdy"), InlineData("dmy"),
+        [Theory(DisplayName = "DateMatcher.DifferentOrders"), InlineData("mdy"), InlineData("dmy"),
             InlineData("ymd"), InlineData("ydm")]
         public void DateMatcherMatchesDateInDifferentOrders(string order)
         {
-            var day = 22;
-            var month = 12;
-            var year = 1935;
+            const int day = 22;
+            const int month = 12;
+            const int year = 1935;
 
             var password = order.Replace("d", day.ToString())
                 .Replace("m", month.ToString()).Replace("y", year.ToString());
 
             var matcher = new DateMatcher();
 
-            var matches = matcher.MatchPassword(password);
+            var matches = matcher.MatchPassword(password).ToList();
 
-            matches.Count().Should().BeGreaterOrEqualTo(1);
+            matches.Count.Should().BeGreaterOrEqualTo(1);
             matches.Count(m => m is DateMatch).Should().Be(1);
 
             var match = matches.OfType<DateMatch>().Single();
@@ -36,7 +36,7 @@ namespace Zxcvbn.Tests
             match.Day.Should().Be(day);
         }
 
-        [Theory, InlineData(""), InlineData(" "), InlineData("-"), InlineData("/"),
+        [Theory(DisplayName = "DateMatcher.DifferentSeperator"), InlineData(""), InlineData(" "), InlineData("-"), InlineData("/"),
                     InlineData("\\"), InlineData("_"), InlineData(".")]
         public void DateMatcherMatchesDateUsingSeperator(string seperator)
         {
@@ -44,9 +44,9 @@ namespace Zxcvbn.Tests
 
             var matcher = new DateMatcher();
 
-            var matches = matcher.MatchPassword(password);
+            var matches = matcher.MatchPassword(password).ToList();
 
-            matches.Count().Should().BeGreaterOrEqualTo(1);
+            matches.Count.Should().BeGreaterOrEqualTo(1);
             matches.Count(m => m is DateMatch).Should().Be(1);
             matches.OfType<DateMatch>().Count().Should().Be(1);
 
@@ -61,7 +61,7 @@ namespace Zxcvbn.Tests
             match.Day.Should().Be(13);
         }
 
-        [Theory, InlineData("a", ""), InlineData("ab", ""), InlineData("", "!"),
+        [Theory(DisplayName = "DateMatcher.PrefixSuffix"), InlineData("a", ""), InlineData("ab", ""), InlineData("", "!"),
             InlineData("a", "!"), InlineData("ab", "!")]
         public void DateMatcherMatchesDateWithPrefixAndOrSuffix(string prefix, string suffix)
         {
@@ -69,9 +69,9 @@ namespace Zxcvbn.Tests
 
             var matcher = new DateMatcher();
 
-            var matches = matcher.MatchPassword(password);
+            var matches = matcher.MatchPassword(password).ToList();
 
-            matches.Count().Should().Be(1);
+            matches.Count.Should().Be(1);
             matches.OfType<DateMatch>().Count().Should().Be(1);
 
             var match = matches.OfType<DateMatch>().Single();
@@ -88,13 +88,13 @@ namespace Zxcvbn.Tests
         [Fact]
         public void DateMatcherMatchesOverlappingDate()
         {
-            var password = $"12/20/1991.12.20";
+            const string password = "12/20/1991.12.20";
 
             var matcher = new DateMatcher();
 
-            var matches = matcher.MatchPassword(password);
+            var matches = matcher.MatchPassword(password).ToList();
 
-            matches.Count().Should().BeGreaterOrEqualTo(1);
+            matches.Count.Should().BeGreaterOrEqualTo(1);
             matches.Count(m => m is DateMatch).Should().BeGreaterOrEqualTo(2);
             matches.OfType<DateMatch>().Count(m => m.Year == 1991).Should().Be(2);
 
