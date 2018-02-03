@@ -44,27 +44,6 @@ namespace zxcvbn_test
         }
 
         //[Fact]
-        public void DictionaryTest()
-        {
-            var dm = new Zxcvbn.Matcher.DictionaryMatcher("test", "test_dictionary.txt");
-
-            var res = dm.MatchPassword("NotInDictionary");
-            Assert.Equal(0, res.Count());
-
-            res = dm.MatchPassword("choreography");
-            Assert.Equal(1, res.Count());
-
-            res = dm.MatchPassword("ChOrEograPHy");
-            Assert.Equal(1, res.Count());
-
-            var leet = new Zxcvbn.Matcher.L33tMatcher(dm);
-            res = leet.MatchPassword("3mu");
-            Assert.Equal(1, res.Count());
-
-            res = leet.MatchPassword("3mupr4nce|egume");
-        }
-
-        //[Fact]
         public void DigitsRegexMatcher()
         {
             var re = new Zxcvbn.Matcher.RegexMatcher("\\d{3,}", 10);
