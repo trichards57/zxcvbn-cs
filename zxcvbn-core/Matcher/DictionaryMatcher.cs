@@ -70,8 +70,8 @@ namespace Zxcvbn.Matcher
                            select new DictionaryMatch
                            {
                                Pattern = DictionaryPattern,
-                               I = i,
-                               J = j,
+                               i = i,
+                               j = j,
                                Token = password.Substring(i, j - i + 1), // Could have different case so pull from password
                                MatchedWord = psub,
                                Rank = _rankedDictionary.Value[psub],

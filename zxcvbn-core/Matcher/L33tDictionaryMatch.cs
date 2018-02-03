@@ -20,8 +20,8 @@ namespace Zxcvbn.Matcher
             Cardinality = dm.Cardinality;
             DictionaryName = dm.DictionaryName;
             Entropy = dm.Entropy;
-            I = dm.I;
-            J = dm.J;
+            i = dm.i;
+            j = dm.j;
             MatchedWord = dm.MatchedWord;
             Pattern = dm.Pattern;
             Rank = dm.Rank;

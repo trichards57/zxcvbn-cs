@@ -49,7 +49,7 @@ namespace Zxcvbn.Matcher
                            let subPassword = TranslateString(subDict, password)
                            from matcher in _dictionaryMatchers
                            from match in matcher.MatchPassword(subPassword).OfType<DictionaryMatch>()
-                           let token = password.Substring(match.I, match.J - match.I + 1)
+                           let token = password.Substring(match.i, match.j - match.i + 1)
                            let usedSubs = subDict.Where(kv => token.Contains(kv.Key)) // Count subs ised in matched token
                            where usedSubs.Any() // Only want matches where substitutions were used
                            select new L33tDictionaryMatch(match)

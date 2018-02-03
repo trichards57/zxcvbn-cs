@@ -5,8 +5,8 @@
     ///
     /// <para>Some pattern matchers implement subclasses of match that can provide more information on their specific results.</para>
     ///
-    /// <para>Matches must all have the <see cref="Pattern"/>, <see cref="Token"/>, <see cref="Entropy"/>, <see cref="I"/> and
-    /// <see cref="J"/> fields (i.e. all but the <see cref="Cardinality"/> field, which is optional) set before being returned from the matcher
+    /// <para>Matches must all have the <see cref="Pattern"/>, <see cref="Token"/>, <see cref="Entropy"/>, <see cref="i"/> and
+    /// <see cref="j"/> fields (i.e. all but the <see cref="Cardinality"/> field, which is optional) set before being returned from the matcher
     /// in which they are created.</para>
     /// </summary>
     // TODO: These should probably be immutable
@@ -27,12 +27,12 @@
         /// <summary>
         /// The start index in the password string of the matched token.
         /// </summary>
-        public int I { get; set; }
+        public int i { get; set; }
 
         /// <summary>
         /// The end index in the password string of the matched token.
         /// </summary>
-        public int J { get; set; }
+        public int j { get; set; }
 
         /// <summary>
         /// The name of the pattern matcher used to generate this match
