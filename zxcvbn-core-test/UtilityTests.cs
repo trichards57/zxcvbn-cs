@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Xunit;
+using Zxcvbn.Utilities;
 
 namespace Zxcvbn.Tests
 {
@@ -11,7 +12,7 @@ namespace Zxcvbn.Tests
          InlineData(60 * 60 * 24 * 365 * 15.4, "17 years")]
         public void TimeDisplayStrings(double seconds, string result)
         {
-            Utility.DisplayTime(seconds).Should().Be(result);
+            DateFormatter.DisplayTime(seconds).Should().Be(result);
         }
 
         [Theory,
@@ -20,7 +21,7 @@ namespace Zxcvbn.Tests
          InlineData(60 * 60 * 24 * 365 * 15.4, "17 Jahre")]
         public void TimeDisplayStringsGerman(double seconds, string result)
         {
-            Utility.DisplayTime(seconds, Translation.German).Should().Be(result);
+            DateFormatter.DisplayTime(seconds, Translation.German).Should().Be(result);
         }
     }
 }

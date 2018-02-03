@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Zxcvbn.Utilities;
 
 namespace Zxcvbn
 {
@@ -187,7 +188,7 @@ namespace Zxcvbn
                 Entropy = Math.Round(minEntropy, 3),
                 MatchSequence = matchSequence,
                 CrackTime = Math.Round(crackTime, 3),
-                CrackTimeDisplay = Utility.DisplayTime(crackTime, translation),
+                CrackTimeDisplay = DateFormatter.DisplayTime(crackTime, translation),
                 Score = PasswordScoring.CrackTimeToScore(crackTime)
             };
             return result;
