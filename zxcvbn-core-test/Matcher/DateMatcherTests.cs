@@ -1,9 +1,9 @@
-﻿using FluentAssertions;
-using System.Linq;
+﻿using System.Linq;
+using FluentAssertions;
 using Xunit;
 using Zxcvbn.Matcher;
 
-namespace Zxcvbn.Tests
+namespace Zxcvbn.Tests.Matcher
 {
     public class DateMatcherTests
     {

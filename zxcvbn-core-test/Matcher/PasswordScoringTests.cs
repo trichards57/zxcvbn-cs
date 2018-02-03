@@ -1,8 +1,7 @@
 ﻿using FluentAssertions;
 using Xunit;
-using Zxcvbn;
 
-namespace zxcvbn_test
+namespace Zxcvbn.Tests.Matcher
 {
     public class PasswordScoringTests
     {

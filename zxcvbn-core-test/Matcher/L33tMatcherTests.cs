@@ -2,7 +2,7 @@
 using Xunit;
 using Zxcvbn.Matcher;
 
-namespace Zxcvbn.Tests
+namespace Zxcvbn.Tests.Matcher
 {
     // ReSharper disable once InconsistentNaming
     public class L33tMatcherTests

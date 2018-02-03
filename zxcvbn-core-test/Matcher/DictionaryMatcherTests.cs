@@ -2,7 +2,7 @@
 using Xunit;
 using Zxcvbn.Matcher;
 
-namespace Zxcvbn.Tests
+namespace Zxcvbn.Tests.Matcher
 {
     public class DictionaryMatcherTests
     {
