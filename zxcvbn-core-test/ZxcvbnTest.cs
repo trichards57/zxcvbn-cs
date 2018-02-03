@@ -7,22 +7,6 @@ namespace zxcvbn_test
     public class ZxcvbnTest
     {
         //[Fact]
-        public void SpatialMatcher()
-        {
-            var sm = new Zxcvbn.Matcher.SpatialMatcher();
-
-            var res = sm.MatchPassword("qwert");
-            Assert.Equal(1, res.Count());
-            var m1 = res.First();
-            Assert.Equal("qwert", m1.Token);
-            Assert.Equal(0, m1.i);
-            Assert.Equal(4, m1.j);
-
-            res = sm.MatchPassword("plko14569852pyfdb");
-            Assert.Equal(6, res.Count()); // Multiple matches from different keyboard types
-        }
-
-        //[Fact]
         public void TimeDisplayStrings()
         {
             // Note that the time strings should be + 1
