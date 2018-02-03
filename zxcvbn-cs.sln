@@ -9,11 +9,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		appveyor.yml = appveyor.yml
 		LICENSE = LICENSE
 		nuget.exe = nuget.exe
-		postbuild.ps1 = postbuild.ps1
 		prebuild.ps1 = prebuild.ps1
 		README.md = README.md
-		test.ps1 = test.ps1
+		tests.bat = tests.bat
 		TODO-Global.txt = TODO-Global.txt
+		upload-results.ps1 = upload-results.ps1
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zxcvbn-core", "zxcvbn-core\zxcvbn-core.csproj", "{5D3F6D54-EB79-4980-B09A-5C72136E8B4A}"
@@ -39,6 +39,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {57EAB0B7-A3B2-4716-871F-D7A6E5CA4B94}
+		SolutionGuid = {FF2D379C-4018-4EF8-B032-89FCE8B2A37D}
 	EndGlobalSection
 EndGlobal

@@ -21,26 +21,20 @@ namespace Zxcvbn
         /// <returns>A human-friendly time string</returns>
         public static string DisplayTime(double seconds, Translation translation = Translation.English)
         {
-            long minute = 60, hour = minute * 60, day = hour * 24, month = day * 31, year = month * 12, century = year * 100;
+            const long minute = 60;
+            const long hour = minute * 60;
+            const long day = hour * 24;
+            const long month = day * 31;
+            const long year = month * 12;
+            const long century = year * 100;
 
             if (seconds < minute) return GetTranslation("instant", translation);
-            else if (seconds < hour) return string.Format("{0} " + GetTranslation("minutes", translation), (1 + Math.Ceiling(seconds / minute)));
-            else if (seconds < day) return string.Format("{0} " + GetTranslation("hours", translation), (1 + Math.Ceiling(seconds / hour)));
-            else if (seconds < month) return string.Format("{0} " + GetTranslation("days", translation), (1 + Math.Ceiling(seconds / day)));
-            else if (seconds < year) return string.Format("{0} " + GetTranslation("months", translation), (1 + Math.Ceiling(seconds / month)));
-            else if (seconds < century) return string.Format("{0} " + GetTranslation("years", translation), (1 + Math.Ceiling(seconds / year)));
-            else return GetTranslation("centuries", translation);
-        }
-
-        /// <summary>
-        /// Shortcut for string.Format
-        /// </summary>
-        /// <param name="args">Format args</param>
-        /// <param name="str">Format string</param>
-        /// <returns>Formatted string</returns>
-        public static string F(this string str, params object[] args)
-        {
-            return string.Format(str, args);
+            if (seconds < hour) return string.Format("{0} " + GetTranslation("minutes", translation), (1 + Math.Ceiling(seconds / minute)));
+            if (seconds < day) return string.Format("{0} " + GetTranslation("hours", translation), (1 + Math.Ceiling(seconds / hour)));
+            if (seconds < month) return string.Format("{0} " + GetTranslation("days", translation), (1 + Math.Ceiling(seconds / day)));
+            if (seconds < year) return string.Format("{0} " + GetTranslation("months", translation), (1 + Math.Ceiling(seconds / month)));
+            if (seconds < century) return string.Format("{0} " + GetTranslation("years", translation), (1 + Math.Ceiling(seconds / year)));
+            return GetTranslation("centuries", translation);
         }
 
         /// <summary>
@@ -88,18 +82,6 @@ namespace Zxcvbn
         public static string StringReverse(this string str)
         {
             return new string(str.Reverse().ToArray());
-        }
-
-        /// <summary>
-        /// Quickly convert a string to an integer, uses TryParse so any non-integers will return zero
-        /// </summary>
-        /// <param name="str">String to parse into an int</param>
-        /// <returns>Parsed int or zero</returns>
-        public static int ToInt(this string str)
-        {
-            int r = 0;
-            int.TryParse(str, out r);
-            return r;
         }
 
         private static string GetTranslation(string matcher, Translation translation)
