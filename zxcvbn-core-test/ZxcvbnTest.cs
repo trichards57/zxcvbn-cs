@@ -8,30 +8,6 @@ namespace zxcvbn_test
     public class ZxcvbnTest
     {
         //[Fact]
-        public void BinomialTest()
-        {
-            Assert.Equal(1, PasswordScoring.Binomial(0, 0));
-            Assert.Equal(1, PasswordScoring.Binomial(1, 0));
-            Assert.Equal(0, PasswordScoring.Binomial(0, 1));
-            Assert.Equal(1, PasswordScoring.Binomial(1, 1));
-            Assert.Equal(56, PasswordScoring.Binomial(8, 3));
-            Assert.Equal(2598960, PasswordScoring.Binomial(52, 5));
-        }
-
-        //[Fact]
-        public void BruteForceCardinalityTest()
-        {
-            Assert.Equal(26, PasswordScoring.PasswordCardinality("asdf"));
-            Assert.Equal(26, PasswordScoring.PasswordCardinality("ASDF"));
-            Assert.Equal(52, PasswordScoring.PasswordCardinality("aSDf"));
-            Assert.Equal(10, PasswordScoring.PasswordCardinality("124890"));
-            Assert.Equal(62, PasswordScoring.PasswordCardinality("aS159Df"));
-            Assert.Equal(33, PasswordScoring.PasswordCardinality("!@<%:{$:#<@}{+&)(*%"));
-            Assert.Equal(100, PasswordScoring.PasswordCardinality("©"));
-            Assert.Equal(95, PasswordScoring.PasswordCardinality("ThisIs@T3stP4ssw0rd!"));
-        }
-
-        //[Fact]
         public void DateMatcher()
         {
             var dm = new Zxcvbn.Matcher.DateMatcher();
