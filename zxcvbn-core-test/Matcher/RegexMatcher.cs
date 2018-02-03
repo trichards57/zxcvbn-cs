@@ -29,7 +29,7 @@ namespace Zxcvbn.Tests.Matcher
             res.Count.Should().Be(3);
 
             res[2].i.Should().Be(16);
-            res[2].j.Should().Be(23);
+            res[2].j.Should().Be(22);
             res[2].Token.Should().Be("1234567");
         }
 
