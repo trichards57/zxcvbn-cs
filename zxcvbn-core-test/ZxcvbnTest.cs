@@ -32,19 +32,6 @@ namespace zxcvbn_test
         }
 
         //[Fact]
-        public void L33tTest()
-        {
-            var l = new Zxcvbn.Matcher.L33tMatcher(new Zxcvbn.Matcher.DictionaryMatcher("test", new List<string> { "password" }));
-
-            l.MatchPassword("password");
-            l.MatchPassword("p@ssword");
-            l.MatchPassword("p1ssword");
-            l.MatchPassword("p1!ssword");
-            l.MatchPassword("p1!ssw0rd");
-            l.MatchPassword("p1!ssw0rd|");
-        }
-
-        //[Fact]
         public void RepeatMatcher()
         {
             var repeat = new Zxcvbn.Matcher.RepeatMatcher();
