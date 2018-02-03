@@ -7,41 +7,6 @@ namespace zxcvbn_test
     public class ZxcvbnTest
     {
         //[Fact]
-        public void SequenceMatcher()
-        {
-            var seq = new Zxcvbn.Matcher.SequenceMatcher();
-
-            var res = seq.MatchPassword("abcd");
-            Assert.Equal(1, res.Count());
-            var m1 = res.First();
-            Assert.Equal(0, m1.i);
-            Assert.Equal(3, m1.j);
-            Assert.Equal("abcd", m1.Token);
-
-            res = seq.MatchPassword("asdfabcdhujzyxwhgjj");
-            Assert.Equal(2, res.Count());
-
-            m1 = res.ElementAt(0);
-            Assert.Equal(4, m1.i);
-            Assert.Equal(7, m1.j);
-            Assert.Equal("abcd", m1.Token);
-
-            var m2 = res.ElementAt(1);
-            Assert.Equal(11, m2.i);
-            Assert.Equal(14, m2.j);
-            Assert.Equal("zyxw", m2.Token);
-
-            res = seq.MatchPassword("dfsjkhfjksdh");
-            Assert.Equal(0, res.Count());
-        }
-
-        //[Fact]
-        public void SinglePasswordTest()
-        {
-            var res = Zxcvbn.Zxcvbn.MatchPassword("||ke");
-        }
-
-        //[Fact]
         public void SpatialMatcher()
         {
             var sm = new Zxcvbn.Matcher.SpatialMatcher();
