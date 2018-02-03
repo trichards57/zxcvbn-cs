@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<assemblies timestamp="02/03/2018 11:45:13">
+  <assembly name="zxcvbn-core-test.dll" environment="64-bit .NET Standard [collection-per-class, parallel (4 threads)]" test-framework="xUnit.net 2.3.1.3858" run-date="2018-02-03" run-time="11:45:12" total="35" passed="35" failed="0" skipped="0" time="0.654" errors="0">
+    <errors />
+    <collection total="3" passed="3" failed="0" skipped="0" name="Test collection for Zxcvbn.Tests.DictionaryMatcherTests" time="0.346">
+      <test name="Zxcvbn.Tests.DictionaryMatcherTests.DictionaryMatch(word: \&quot;NotInDictionary\&quot;, count: 0)" type="Zxcvbn.Tests.DictionaryMatcherTests" method="DictionaryMatch" time="0.3111467" result="Pass" />
+      <test name="Zxcvbn.Tests.DictionaryMatcherTests.DictionaryMatch(word: \&quot;choreography\&quot;, count: 1)" type="Zxcvbn.Tests.DictionaryMatcherTests" method="DictionaryMatch" time="0.0282982" result="Pass" />
+      <test name="Zxcvbn.Tests.DictionaryMatcherTests.DictionaryMatch(word: \&quot;ChOrEograPHy\&quot;, count: 1)" type="Zxcvbn.Tests.DictionaryMatcherTests" method="DictionaryMatch" time="0.0065381" result="Pass" />
+    </collection>
+    <collection total="14" passed="14" failed="0" skipped="0" name="Test collection for zxcvbn_test.PasswordScoringTests" time="0.322">
+      <test name="PasswordScoring.Binomial(n: 0, k: 0, score: 1)" type="zxcvbn_test.PasswordScoringTests" method="PasswordScoringBinomialScoresCorrectly" time="0.3081491" result="Pass" />
+      <test name="PasswordScoring.Binomial(n: 1, k: 0, score: 1)" type="zxcvbn_test.PasswordScoringTests" method="PasswordScoringBinomialScoresCorrectly" time="0.0000598" result="Pass" />
+      <test name="PasswordScoring.Binomial(n: 0, k: 1, score: 0)" type="zxcvbn_test.PasswordScoringTests" method="PasswordScoringBinomialScoresCorrectly" time="0.0000143" result="Pass" />
+      <test name="PasswordScoring.Binomial(n: 1, k: 1, score: 1)" type="zxcvbn_test.PasswordScoringTests" method="PasswordScoringBinomialScoresCorrectly" time="0.0000213" result="Pass" />
+      <test name="PasswordScoring.Binomial(n: 8, k: 3, score: 56)" type="zxcvbn_test.PasswordScoringTests" method="PasswordScoringBinomialScoresCorrectly" time="0.0000326" result="Pass" />
+      <test name="PasswordScoring.Binomial(n: 52, k: 5, score: 2598960)" type="zxcvbn_test.PasswordScoringTests" method="PasswordScoringBinomialScoresCorrectly" time="0.0000444" result="Pass" />
+      <test name="PasswordScoring.PasswordCardinality(password: \&quot;asdf\&quot;, score: 26)" type="zxcvbn_test.PasswordScoringTests" method="PasswordScoringPasswordCardinalityScoresCorrectly" time="0.0132527" result="Pass" />
+      <test name="PasswordScoring.PasswordCardinality(password: \&quot;ASDF\&quot;, score: 26)" type="zxcvbn_test.PasswordScoringTests" method="PasswordScoringPasswordCardinalityScoresCorrectly" time="0.0001139" result="Pass" />
+      <test name="PasswordScoring.PasswordCardinality(password: \&quot;aSDf\&quot;, score: 52)" type="zxcvbn_test.PasswordScoringTests" method="PasswordScoringPasswordCardinalityScoresCorrectly" time="0.0000464" result="Pass" />
+      <test name="PasswordScoring.PasswordCardinality(password: \&quot;124890\&quot;, score: 10)" type="zxcvbn_test.PasswordScoringTests" method="PasswordScoringPasswordCardinalityScoresCorrectly" time="0.0000546" result="Pass" />
+      <test name="PasswordScoring.PasswordCardinality(password: \&quot;aS159Df\&quot;, score: 62)" type="zxcvbn_test.PasswordScoringTests" method="PasswordScoringPasswordCardinalityScoresCorrectly" time="0.0001475" result="Pass" />
+      <test name="PasswordScoring.PasswordCardinality(password: \&quot;!@&lt;%:{$:#&lt;@}{+&amp;)(*%\&quot;, score: 33)" type="zxcvbn_test.PasswordScoringTests" method="PasswordScoringPasswordCardinalityScoresCorrectly" time="0.0002708" result="Pass" />
+      <test name="PasswordScoring.PasswordCardinality(password: \&quot;©\&quot;, score: 100)" type="zxcvbn_test.PasswordScoringTests" method="PasswordScoringPasswordCardinalityScoresCorrectly" time="0.0000588" result="Pass" />
+      <test name="PasswordScoring.PasswordCardinality(password: \&quot;ThisIs@T3stP4ssw0rd!\&quot;, score: 95)" type="zxcvbn_test.PasswordScoringTests" method="PasswordScoringPasswordCardinalityScoresCorrectly" time="0.0002285" result="Pass" />
+    </collection>
+    <collection total="17" passed="17" failed="0" skipped="0" name="Test collection for Zxcvbn.Tests.DateMatcherTests" time="0.392">
+      <test name="DateMatcher.DifferentSeperator(seperator: \&quot;\&quot;)" type="Zxcvbn.Tests.DateMatcherTests" method="DateMatcherMatchesDateUsingSeperator" time="0.362213" result="Pass" />
+      <test name="DateMatcher.DifferentSeperator(seperator: \&quot; \&quot;)" type="Zxcvbn.Tests.DateMatcherTests" method="DateMatcherMatchesDateUsingSeperator" time="0.0045097" result="Pass" />
+      <test name="DateMatcher.DifferentSeperator(seperator: \&quot;-\&quot;)" type="Zxcvbn.Tests.DateMatcherTests" method="DateMatcherMatchesDateUsingSeperator" time="0.0011289" result="Pass" />
+      <test name="DateMatcher.DifferentSeperator(seperator: \&quot;/\&quot;)" type="Zxcvbn.Tests.DateMatcherTests" method="DateMatcherMatchesDateUsingSeperator" time="0.0010952" result="Pass" />
+      <test name="DateMatcher.DifferentSeperator(seperator: \&quot;\\\\\&quot;)" type="Zxcvbn.Tests.DateMatcherTests" method="DateMatcherMatchesDateUsingSeperator" time="0.0011231" result="Pass" />
+      <test name="DateMatcher.DifferentSeperator(seperator: \&quot;_\&quot;)" type="Zxcvbn.Tests.DateMatcherTests" method="DateMatcherMatchesDateUsingSeperator" time="0.0011055" result="Pass" />
+      <test name="DateMatcher.DifferentSeperator(seperator: \&quot;.\&quot;)" type="Zxcvbn.Tests.DateMatcherTests" method="DateMatcherMatchesDateUsingSeperator" time="0.0011375" result="Pass" />
+      <test name="Zxcvbn.Tests.DateMatcherTests.DateMatcherMatchesOverlappingDate" type="Zxcvbn.Tests.DateMatcherTests" method="DateMatcherMatchesOverlappingDate" time="0.0063197" result="Pass" />
+      <test name="DateMatcher.PrefixSuffix(prefix: \&quot;a\&quot;, suffix: \&quot;\&quot;)" type="Zxcvbn.Tests.DateMatcherTests" method="DateMatcherMatchesDateWithPrefixAndOrSuffix" time="0.0011487" result="Pass" />
+      <test name="DateMatcher.PrefixSuffix(prefix: \&quot;ab\&quot;, suffix: \&quot;\&quot;)" type="Zxcvbn.Tests.DateMatcherTests" method="DateMatcherMatchesDateWithPrefixAndOrSuffix" time="0.0003861" result="Pass" />
+      <test name="DateMatcher.PrefixSuffix(prefix: \&quot;\&quot;, suffix: \&quot;!\&quot;)" type="Zxcvbn.Tests.DateMatcherTests" method="DateMatcherMatchesDateWithPrefixAndOrSuffix" time="0.0003191" result="Pass" />
+      <test name="DateMatcher.PrefixSuffix(prefix: \&quot;a\&quot;, suffix: \&quot;!\&quot;)" type="Zxcvbn.Tests.DateMatcherTests" method="DateMatcherMatchesDateWithPrefixAndOrSuffix" time="0.0003828" result="Pass" />
+      <test name="DateMatcher.PrefixSuffix(prefix: \&quot;ab\&quot;, suffix: \&quot;!\&quot;)" type="Zxcvbn.Tests.DateMatcherTests" method="DateMatcherMatchesDateWithPrefixAndOrSuffix" time="0.0004642" result="Pass" />
+      <test name="DateMatcher.DifferentOrders(order: \&quot;mdy\&quot;)" type="Zxcvbn.Tests.DateMatcherTests" method="DateMatcherMatchesDateInDifferentOrders" time="0.0037906" result="Pass" />
+      <test name="DateMatcher.DifferentOrders(order: \&quot;dmy\&quot;)" type="Zxcvbn.Tests.DateMatcherTests" method="DateMatcherMatchesDateInDifferentOrders" time="0.0023344" result="Pass" />
+      <test name="DateMatcher.DifferentOrders(order: \&quot;ymd\&quot;)" type="Zxcvbn.Tests.DateMatcherTests" method="DateMatcherMatchesDateInDifferentOrders" time="0.0023875" result="Pass" />
+      <test name="DateMatcher.DifferentOrders(order: \&quot;ydm\&quot;)" type="Zxcvbn.Tests.DateMatcherTests" method="DateMatcherMatchesDateInDifferentOrders" time="0.0026014" result="Pass" />
+    </collection>
+    <collection total="1" passed="1" failed="0" skipped="0" name="Test collection for Zxcvbn.Tests.L33tMatcherTests" time="0.372">
+      <test name="Zxcvbn.Tests.L33tMatcherTests.DictionaryMatch(word: \&quot;3mu\&quot;, count: 1)" type="Zxcvbn.Tests.L33tMatcherTests" method="DictionaryMatch" time="0.3722078" result="Pass" />
+    </collection>
+  </assembly>
+</assemblies>
