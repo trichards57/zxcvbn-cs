@@ -256,3 +256,4 @@ paket-files/
 /tools/ReportGenerator
 /tools/xunit.runner.console
 /test-results.xml
+/tools/coveralls.io/tools
