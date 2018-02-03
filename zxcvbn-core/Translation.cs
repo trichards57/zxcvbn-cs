@@ -1,7 +1,7 @@
 ﻿namespace Zxcvbn
 {
     /// <summary>
-    ///     The supported languages.
+    /// The supported languages.
     /// </summary>
     public enum Translation
     {
