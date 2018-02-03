@@ -8,7 +8,7 @@ namespace Zxcvbn.Tests
         [Fact]
         public void EmptyPassword()
         {
-            Zxcvbn.MatchPassword("").Should().Be(0);
+            Zxcvbn.MatchPassword("").Entropy.Should().Be(0);
         }
     }
 }

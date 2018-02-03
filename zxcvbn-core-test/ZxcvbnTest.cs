@@ -96,6 +96,12 @@ namespace zxcvbn_test
         }
 
         //[Fact]
+        public void SinglePasswordTest()
+        {
+            var res = Zxcvbn.Zxcvbn.MatchPassword("||ke");
+        }
+
+        //[Fact]
         public void SpatialMatcher()
         {
             var sm = new Zxcvbn.Matcher.SpatialMatcher();
