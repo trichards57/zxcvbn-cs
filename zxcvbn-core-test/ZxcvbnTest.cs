@@ -8,42 +8,6 @@ namespace zxcvbn_test
     public class ZxcvbnTest
     {
         //[Fact]
-        public void DateMatcher()
-        {
-            var dm = new Zxcvbn.Matcher.DateMatcher();
-
-            var res = dm.MatchPassword("1297");
-            Assert.Equal(1, res.Count());
-
-            res = dm.MatchPassword("98123");
-            Assert.Equal(1, res.Count());
-
-            res = dm.MatchPassword("221099");
-            Assert.Equal(1, res.Count());
-
-            res = dm.MatchPassword("352002");
-            Assert.Equal(1, res.Count());
-
-            res = dm.MatchPassword("2011157");
-            Assert.Equal(1, res.Count());
-
-            res = dm.MatchPassword("11222015");
-            Assert.Equal(1, res.Count());
-
-            res = dm.MatchPassword("2013/06/1");
-            Assert.Equal(2, res.Count()); // 2 since 2013 is a valid date without separators in its own right
-
-            res = dm.MatchPassword("13-05-08");
-            Assert.Equal(2, res.Count()); // 2 since prefix and suffix year sep matcher valid, so counts twice
-
-            res = dm.MatchPassword("17 8 1992");
-            Assert.Equal(3, res.Count()); // 3 since 1992 is a valid date without separators in its own right, and a partial match is valid prefix year
-
-            res = dm.MatchPassword("10.16.16");
-            Assert.Equal(1, res.Count());
-        }
-
-        //[Fact]
         public void DigitsRegexMatcher()
         {
             var re = new Zxcvbn.Matcher.RegexMatcher("\\d{3,}", 10);
@@ -65,13 +29,6 @@ namespace zxcvbn_test
 
             res = re.MatchPassword("dfsdfdfhgjkdfngjl");
             Assert.Equal(0, res.Count());
-        }
-
-        //[Fact]
-        public void EmptyPassword()
-        {
-            var res = Zxcvbn.Zxcvbn.MatchPassword("");
-            Assert.Equal(0, res.Entropy);
         }
 
         //[Fact]
@@ -139,12 +96,6 @@ namespace zxcvbn_test
         }
 
         //[Fact]
-        public void SinglePasswordTest()
-        {
-            var res = Zxcvbn.Zxcvbn.MatchPassword("||ke");
-        }
-
-        //[Fact]
         public void SpatialMatcher()
         {
             var sm = new Zxcvbn.Matcher.SpatialMatcher();
@@ -176,11 +127,6 @@ namespace zxcvbn_test
             Assert.Equal("11 Minuten", Utility.DisplayTime(60 * 10, Translation.German));
             Assert.Equal("2 Tage", Utility.DisplayTime(60 * 60 * 24, Translation.German));
             Assert.Equal("17 Jahre", Utility.DisplayTime(60 * 60 * 24 * 365 * 15.4, Translation.German));
-        }
-
-        private void O(string format, params object[] args)
-        {
-            System.Diagnostics.Debug.WriteLine(format, args);
         }
     }
 }
