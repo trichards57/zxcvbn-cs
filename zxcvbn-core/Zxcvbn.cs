@@ -181,6 +181,31 @@ namespace Zxcvbn
 
             var minEntropy = (password.Length == 0 ? 0 : minimumEntropyToIndex[password.Length - 1]);
             var crackTime = PasswordScoring.EntropyToCrackTime(minEntropy);
+            var score = PasswordScoring.CrackTimeToScore(crackTime);
+
+            var warning = Warning.Default;
+            var suggestions = new List<Suggestion>();
+
+            if (matchSequence == null || matchSequence.Count() == 0)
+            {
+                suggestions.Add(Suggestion.Default);
+            }
+            else
+            {
+                // Don't give feedback if the score is good or great
+                if (score > 2)
+                {
+                    warning = Warning.Empty;
+                    suggestions.Add(Suggestion.Empty);
+                }
+                else
+                {
+                    // Tie feedback to the longest match for longer sequences
+                    var longestMatch = GetLongestMatch(matchSequence);
+                    GetMatchFeedback(longestMatch, matchSequence.Count() == 1);
+                    suggestions.Insert(0, Suggestion.AddAnotherWordOrTwo);
+                }
+            }
 
             var result = new Result()
             {
@@ -189,9 +214,37 @@ namespace Zxcvbn
                 MatchSequence = matchSequence,
                 CrackTime = Math.Round(crackTime, 3),
                 CrackTimeDisplay = DateFormatter.DisplayTime(crackTime, translation),
-                Score = PasswordScoring.CrackTimeToScore(crackTime)
+                Score = score,
+                Warning = warning,
+                Suggestions = suggestions
             };
+
             return result;
+        }
+
+        private Match GetLongestMatch(List<Match> matchSequence)
+        {
+            var longestMatch = new Match();
+
+            if ((matchSequence != null) && (matchSequence.Count() > 0))
+            {
+                longestMatch = matchSequence[0];
+                foreach (var match in matchSequence)
+                {
+                    if (match.Token.Length > longestMatch.Token.Length)
+                        longestMatch = match;
+                }
+            }
+
+            return longestMatch;
+        }
+
+        private void GetMatchFeedback(Match match, bool isSoleMatch, Result result)
+        {
+            switch (match.Pattern) {
+                case "dictionary":
+                    GetDictionaryMatchFeedback((DictionaryMatch)match, isSoleMatch, result);
+            }
         }
     }
 }
