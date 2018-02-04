@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Zxcvbn.Matcher;
 
 namespace Zxcvbn
 {
@@ -37,6 +38,47 @@ namespace Zxcvbn
             return r;
         }
 
+        // ReSharper disable once InconsistentNaming
+        public static long CaculateL33tVariations(DictionaryMatch match)
+        {
+            if (!match.L33t)
+                return 1;
+
+            if (!(match is L33tDictionaryMatch lMatch))
+                return 1;
+
+            var variations = 1L;
+
+            foreach (var kvp in lMatch.Subs)
+            {
+                var unsubbed = kvp.Key;
+                var subbed = kvp.Value;
+
+                var chars = match.Token.ToLower().ToCharArray();
+
+                var s = chars.Count(c => c == subbed);
+                var u = chars.Count(c => c == unsubbed);
+
+                if (s == 0 || u == 0)
+                {
+                    variations *= 2;
+                }
+                else
+                {
+                    var p = Math.Min(u, s);
+                    var possibilities = 0L;
+                    for (var i = 1; i < p; i++)
+                    {
+                        possibilities += Binomial(u + s, i);
+                    }
+
+                    variations *= possibilities;
+                }
+            }
+
+            return variations;
+        }
+
         /// <summary>
         /// Estimate the extra entropy in a token that comes from mixing upper and lowercase letters.
         /// This has been moved to a static function so that it can be used in multiple entropy calculations.
@@ -55,6 +97,32 @@ namespace Zxcvbn
 
             // Calculate numer of ways to capitalise (or inverse if there are fewer lowercase chars) and return lg for entropy
             return Math.Log(Enumerable.Range(0, Math.Min(uppers, lowers) + 1).Sum(i => Binomial(uppers + lowers, i)), 2);
+        }
+
+        public static long CalculateUppercaseVariations(DictionaryMatch match)
+        {
+            var word = match.Token;
+
+            if (Regex.IsMatch(word, AllLower) || word.ToLower().Equals(word))
+                return 1;
+
+            // A capitalized word is the most common capitalization scheme, so it only doubles the search space (uncapitalzed + capitalized).
+            // All caps and end-capitalized are common enough too, so underestimating as 2x factor to be safe.
+            if (Regex.IsMatch(word, StartUpper) || Regex.IsMatch(word, EndUpper) || Regex.IsMatch(word, AllUpper))
+                return 2;
+
+            // Otherwise calculate the number of ways to capitalize U+L uppercase+lowercase letters with U uppercase letters or less.  If there's more uppercase than lower (e.g. PASSwORD) then use the number of ways to lowercase U+L letters with L lowercase letters or less.
+            var u = word.ToCharArray().Count(c => Regex.IsMatch(c.ToString(), "[A-Z]"));
+            var l = word.ToCharArray().Count(c => Regex.IsMatch(c.ToString(), "[a-z]"));
+
+            var variations = 0L;
+
+            for (var i = 1; i < Math.Min(u, l); i++)
+            {
+                variations += Binomial(u + l, i);
+            }
+
+            return variations;
         }
 
         /// <summary>

@@ -28,6 +28,12 @@ namespace Zxcvbn
                 new DictionaryMatcher("female_names", "female_names.lst"),
                 new DictionaryMatcher("surnames", "surnames.lst"),
                 new DictionaryMatcher("us_tv_and_film", "us_tv_and_film.lst"),
+                new ReverseDictionaryMatcher("passwords", "passwords.lst"),
+                new ReverseDictionaryMatcher("english", "english.lst"),
+                new ReverseDictionaryMatcher("male_names", "male_names.lst"),
+                new ReverseDictionaryMatcher("female_names", "female_names.lst"),
+                new ReverseDictionaryMatcher("surnames", "surnames.lst"),
+                new ReverseDictionaryMatcher("us_tv_and_film", "us_tv_and_film.lst")
             };
 
             _matchers = new List<IMatcher> {
