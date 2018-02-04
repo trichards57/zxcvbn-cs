@@ -16,7 +16,7 @@
         /// </summary>
         public double BaseEntropy { get; set; }
 
-        public int BaseGuesses { get; set; }
+        public long BaseGuesses { get; set; }
 
         /// <summary>
         /// The name of the dictionary the matched word was found in
@@ -30,7 +30,7 @@
         public bool L33t { get; set; }
 
         // ReSharper disable once InconsistentNaming
-        public int L33tVariations { get; set; }
+        public long L33tVariations { get; set; }
 
         /// <summary>
         /// The dictionary word matched

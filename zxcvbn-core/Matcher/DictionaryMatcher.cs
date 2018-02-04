@@ -122,8 +122,8 @@ namespace Zxcvbn.Matcher
         private static void CalculateVariationsForMatch(DictionaryMatch match)
         {
             match.BaseGuesses = match.Rank;
-            match.UppercaseVariations = PasswordScoring.CalculateUppercaseVariations(match.Token);
-            match.L33tVariations = PasswordScoring.CaculateL33tVariations(match.Token);
+            match.UppercaseVariations = PasswordScoring.CalculateUppercaseVariations(match);
+            match.L33tVariations = PasswordScoring.CaculateL33tVariations(match);
             match.Variations = match.BaseGuesses * match.UppercaseVariations * match.L33tVariations *
                                (match.Reversed ? 2 : 1);
         }
