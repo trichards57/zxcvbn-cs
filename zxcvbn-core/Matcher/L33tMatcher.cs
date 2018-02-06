@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace Zxcvbn.Matcher
@@ -12,8 +13,25 @@ namespace Zxcvbn.Matcher
     // ReSharper disable once InconsistentNaming
     public class L33tMatcher : IMatcher
     {
+        // ReSharper disable once InconsistentNaming
+        private static readonly ReadOnlyDictionary<char, char[]> _l33tTable = new ReadOnlyDictionary<char, char[]>(new Dictionary<char, char[]>
+        {
+            ['a'] = new[] { '4', '@' },
+            ['b'] = new[] { '8' },
+            ['c'] = new[] { '(', '{', '[', '<' },
+            ['e'] = new[] { '3' },
+            ['g'] = new[] { '6', '9' },
+            ['i'] = new[] { '1', '!', '|' },
+            ['l'] = new[] { '1', '|', '7' },
+            ['o'] = new[] { '0' },
+            ['s'] = new[] { '$', '5' },
+            ['t'] = new[] { '+', '7' },
+            ['x'] = new[] { '%' },
+            ['z'] = new[] { '2' }
+        });
+
         private readonly List<DictionaryMatcher> _dictionaryMatchers;
-        private readonly Dictionary<char, string> _substitutions;
+        private readonly Dictionary<char, char[]> _substitutions;
 
         /// <summary>
         /// Create a l33t matcher that applies substitutions and then matches agains the passed in list of dictionary matchers.
@@ -63,23 +81,23 @@ namespace Zxcvbn.Matcher
             return matches;
         }
 
-        private static Dictionary<char, string> BuildSubstitutionsMap()
+        private static Dictionary<char, char[]> BuildSubstitutionsMap()
         {
             // Is there an easier way of building this table?
-            var subs = new Dictionary<char, string>
+            var subs = new Dictionary<char, char[]>
             {
-                ['a'] = "4@",
-                ['b'] = "8",
-                ['c'] = "({[<",
-                ['e'] = "3",
-                ['g'] = "69",
-                ['i'] = "1!|",
-                ['l'] = "1|7",
-                ['o'] = "0",
-                ['s'] = "$5",
-                ['t'] = "+7",
-                ['x'] = "%",
-                ['z'] = "2"
+                ['a'] = new[] { '4', '@' },
+                ['b'] = new[] { '8' },
+                ['c'] = new[] { '(', '{', '[', '<' },
+                ['e'] = new[] { '3' },
+                ['g'] = new[] { '6', '9' },
+                ['i'] = new[] { '1', '!', '|' },
+                ['l'] = new[] { '1', '|', '7' },
+                ['o'] = new[] { '0' },
+                ['s'] = new[] { '$', '5' },
+                ['t'] = new[] { '+', '7' },
+                ['x'] = new[] { '%' },
+                ['z'] = new[] { '2' }
             };
             return subs;
         }
@@ -111,8 +129,34 @@ namespace Zxcvbn.Matcher
             match.Entropy += match.UppercaseEntropy;
         }
 
-        private static List<Dictionary<char, char>> EnumerateSubtitutions(Dictionary<char, string> table)
+        private static List<Dictionary<char, char>> EnumerateSubtitutions(Dictionary<char, char[]> table)
         {
+            var keys = table.Keys;
+            var subs = new List<Tuple<char, char>>();
+
+            IEnumerable<Tuple<char, char>> Dedup(IEnumerable<Tuple<char, char>> inputSubs)
+            {
+                return inputSubs.Distinct(new SubstituionComparer());
+            }
+
+            void Helper(ReadOnlyDictionary<char, char[]> table, IReadOnlyCollection<char> keys, List<Tuple<char, char>> substitutions)
+            {
+                if (!keys.Any())
+                    return;
+
+                var firstKey = keys.First();
+                var restKeys = keys.Skip(1);
+
+                foreach (var c in table[firstKey])
+                {
+                    foreach (var sub in substitutions)
+                    {
+                        var duplicateL33tIndex = -1;
+                        for (int i = 0; i < sub.)
+                    }
+                }
+            }
+
             // Produce a list of maps from l33t character to normal character. Some substitutions can be more than one normal character though,
             //  so we have to produce an entry that maps from the l33t char to both possibilities
 
@@ -158,6 +202,20 @@ namespace Zxcvbn.Matcher
             return subs;
         }
 
+        // ReSharper disable once InconsistentNaming
+        private static ReadOnlyDictionary<char, char[]> RelevantL33tSubtable(string password)
+        {
+            var subtable = new Dictionary<char, char[]>();
+
+            foreach (var c in password)
+            {
+                if (_l33tTable.ContainsKey(c))
+                    subtable[c] = _l33tTable[c];
+            }
+
+            return new ReadOnlyDictionary<char, char[]>(subtable);
+        }
+
         private static string TranslateString(IReadOnlyDictionary<char, char> charMap, string str)
         {
             // Make substitutions from the character map wherever possible
@@ -170,6 +228,19 @@ namespace Zxcvbn.Matcher
             //   contains a substituted form of
             return _substitutions.Where(kv => kv.Value.Any(password.Contains))
                                 .ToDictionary(kv => kv.Key, kv => new string(kv.Value.Where(password.Contains).ToArray()));
+        }
+
+        private class SubstituionComparer : IEqualityComparer<Tuple<char, char>>
+        {
+            public bool Equals(Tuple<char, char> x, Tuple<char, char> y)
+            {
+                return x.Item1 == y.Item1 && x.Item2 == y.Item2;
+            }
+
+            public int GetHashCode(Tuple<char, char> obj)
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }
