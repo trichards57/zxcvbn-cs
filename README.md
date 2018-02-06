@@ -1,8 +1,8 @@
 Zxcvbn C#/.NET
 ==============
 
-[![Build status](https://ci.appveyor.com/api/projects/status/ji4rr97d6rbxycw4?svg=true)](https://ci.appveyor.com/project/trichards57/zxcvbn-cs)
-[![Coverage Status](https://coveralls.io/repos/github/trichards57/zxcvbn-cs/badge.svg?branch=new%2Fnetstandard10)](https://coveralls.io/github/trichards57/zxcvbn-cs)
+[![Build status](https://ci.appveyor.com/api/projects/status/ji4rr97d6rbxycw4?svg=true)](https://ci.appveyor.com/project/trichards57/zxcvbn-cs-62692)
+[![Coverage Status](https://coveralls.io/repos/github/trichards57/zxcvbn-cs/badge.svg?branch=master)](https://coveralls.io/github/trichards57/zxcvbn-cs?branch=master)
 [![NuGet](https://img.shields.io/nuget/v/zxcvbn-core.svg)](https://www.nuget.org/packages/zxcvbn-core)
 
 This is a port of the `Zxcvbn` JavaScript password strength estimation library at
