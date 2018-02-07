@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Zxcvbn.Matcher.Matches;
 
@@ -10,11 +9,6 @@ namespace Zxcvbn.Matcher
     {
         /// <inheritdoc />
         public ReverseDictionaryMatcher(string name, string wordListPath) : base(name, wordListPath)
-        {
-        }
-
-        /// <inheritdoc />
-        public ReverseDictionaryMatcher(string name, IEnumerable<string> wordList) : base(name, wordList)
         {
         }
 

@@ -27,11 +27,13 @@
         /// <summary>
         /// The start index in the password string of the matched token.
         /// </summary>
+        // ReSharper disable once InconsistentNaming
         public int i { get; set; }
 
         /// <summary>
         /// The end index in the password string of the matched token.
         /// </summary>
+        // ReSharper disable once InconsistentNaming
         public int j { get; set; }
 
         /// <summary>

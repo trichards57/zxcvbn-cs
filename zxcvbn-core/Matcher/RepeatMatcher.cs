@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Zxcvbn.Matcher.Matches;
 
@@ -61,7 +60,7 @@ namespace Zxcvbn.Matcher
                 var baseMatches = baseAnalysis.Sequence;
                 var baseGuesses = baseAnalysis.Guesses;
 
-                matches.Add(new RepeatMatch()
+                matches.Add(new RepeatMatch
                 {
                     Pattern = RepeatPattern,
                     i = i,
@@ -75,11 +74,6 @@ namespace Zxcvbn.Matcher
             }
 
             return matches;
-        }
-
-        private static double CalculateEntropy(string match)
-        {
-            return Math.Log(PasswordScoring.PasswordCardinality(match) * match.Length, 2);
         }
     }
 }

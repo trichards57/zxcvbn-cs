@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace Zxcvbn.Matcher
@@ -13,22 +12,17 @@ namespace Zxcvbn.Matcher
     /// </summary>
     public class RegexMatcher : IMatcher
     {
-        private readonly int _cardinality;
         private readonly string _matcherName;
         private readonly Regex _matchRegex;
-        private readonly bool _perCharCardinality;
 
         /// <inheritdoc />
         /// <summary>
         /// Create a new regex pattern matcher
         /// </summary>
         /// <param name="pattern">The regex pattern to match</param>
-        /// <param name="cardinality">The cardinality of this match. Since this cannot be calculated from a pattern it must be provided. Can
-        /// be give per-matched-character or per-match</param>
-        /// <param name="perCharCardinality">True if cardinality is given as per-matched-character</param>
         /// <param name="matcherName">The name to give this matcher ('pattern' in resulting matches)</param>
-        public RegexMatcher(string pattern, int cardinality, bool perCharCardinality = true, string matcherName = "regex")
-            : this(new Regex(pattern), cardinality, perCharCardinality, matcherName)
+        public RegexMatcher(string pattern, string matcherName = "regex")
+            : this(new Regex(pattern), matcherName)
         {
         }
 
@@ -36,16 +30,11 @@ namespace Zxcvbn.Matcher
         /// Create a new regex pattern matcher
         /// </summary>
         /// <param name="matchRegex">The regex object used to perform matching</param>
-        /// <param name="cardinality">The cardinality of this match. Since this cannot be calculated from a pattern it must be provided. Can
-        /// be give per-matched-character or per-match</param>
-        /// <param name="perCharCardinality">True if cardinality is given as per-matched-character</param>
         /// <param name="matcherName">The name to give this matcher ('pattern' in resulting matches)</param>
-        public RegexMatcher(Regex matchRegex, int cardinality, bool perCharCardinality, string matcherName = "regex")
+        public RegexMatcher(Regex matchRegex, string matcherName = "regex")
         {
             _matchRegex = matchRegex;
             _matcherName = matcherName;
-            _cardinality = cardinality;
-            _perCharCardinality = perCharCardinality;
         }
 
         /// <inheritdoc />

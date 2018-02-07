@@ -14,8 +14,6 @@ namespace Zxcvbn.Matcher
     /// </summary>
     public class DateMatcher : IMatcher
     {
-        // TODO: This whole matcher is a rather messy but works (just), could do with a touching up. In particular it does not provide matched date details for dates without separators
-
         private const string DatePattern = "date";
         private const int MaxYear = 2050;
         private const int MinYear = 1000;
@@ -178,25 +176,6 @@ namespace Zxcvbn.Matcher
             });
 
             return filteredMatches;
-        }
-
-        private static double CalculateEntropy(string match, int? year, bool separator)
-        {
-            // The entropy calculation is pretty straightforward
-
-            // This is a slight departure from the zxcvbn case where the match has the actual year so the two-year vs four-year
-            //   can always be known rather than guessed for strings without separators.
-            if (!year.HasValue)
-            {
-                // Guess year length from string length
-                year = match.Length <= 6 ? 99 : 9999;
-            }
-
-            var entropy = year < 100 ? Math.Log(31 * 12 * 100, 2) : Math.Log(31 * 12 * 119, 2);
-
-            if (separator) entropy += 2; // Extra two bits for separator (/\...)
-
-            return entropy;
         }
 
         private static LooseDate? MapIntsToDate(IReadOnlyList<int> vals)

@@ -99,7 +99,6 @@ namespace Zxcvbn.Matcher
                 {
                     var prevChar = password[j - 1];
                     var found = false;
-                    var foundDirection = -1;
                     var currentDirection = -1;
                     var adjacents = graph.AdjacencyGraph.ContainsKey(prevChar) ? graph.AdjacencyGraph[prevChar] : Enumerable.Empty<string>();
 
@@ -112,8 +111,8 @@ namespace Zxcvbn.Matcher
                             if (adjacent.Contains(curChar))
                             {
                                 found = true;
-                                foundDirection = currentDirection;
-                                if (adjacent.IndexOf(curChar) == 1)
+                                var foundDirection = currentDirection;
+                                if (adjacent.IndexOf(curChar, StringComparison.Ordinal) == 1)
                                 {
                                     shiftedCount++;
                                 }
@@ -185,55 +184,8 @@ namespace Zxcvbn.Matcher
                 BuildGraph(layout, slanted);
             }
 
-            public Dictionary<char, List<string>> AdjacencyGraph { get; set; }
+            public Dictionary<char, List<string>> AdjacencyGraph { get; private set; }
             public string Name { get; }
-            private double AverageDegree { get; set; }
-            private int StartingPositions { get; set; }
-
-            /// <summary>
-            /// Calculate entropy for a math that was found on this adjacency graph
-            /// </summary>
-            public double CalculateEntropy(int matchLength, int turns, int shiftedCount)
-            {
-                // This is an estimation of the number of patterns with length of matchLength or less with turns turns or less
-                var possibilities = Enumerable.Range(2, matchLength - 1).Sum(i =>
-                {
-                    var possibleTurns = Math.Min(turns, i - 1);
-                    return Enumerable.Range(1, possibleTurns).Sum(j => StartingPositions * Math.Pow(AverageDegree, j) * PasswordScoring.Binomial(i - 1, j - 1));
-                });
-
-                var entropy = Math.Log(possibilities, 2);
-
-                // Entropy increaeses for a mix of shifted and unshifted
-                if (shiftedCount > 0)
-                {
-                    var unshifted = matchLength - shiftedCount;
-                    entropy += Math.Log(Enumerable.Range(0, Math.Min(shiftedCount, unshifted) + 1).Sum(i => PasswordScoring.Binomial(matchLength, i)), 2);
-                }
-
-                return entropy;
-            }
-
-            /// <summary>
-            /// Returns the 'direction' of the adjacent character (i.e. index in the adjacency list).
-            /// If the character is not adjacent, -1 is returned
-            ///
-            /// Uses the 'shifted' out parameter to let the caller know if the matched character is shifted
-            /// </summary>
-            public int GetAdjacentCharDirection(char c, char adjacent, out bool shifted)
-            {
-                //XXX: This function is a bit strange, with an out parameter this should be refactored into something sensible
-
-                shifted = false;
-
-                if (!AdjacencyGraph.ContainsKey(c)) return -1;
-
-                var adjacentEntry = AdjacencyGraph[c].FirstOrDefault(s => s != null && s.Contains(adjacent));
-                if (adjacentEntry == null) return -1;
-
-                shifted = adjacentEntry.IndexOf(adjacent) > 0; // i.e. shifted if not first character in the adjacency
-                return AdjacencyGraph[c].IndexOf(adjacentEntry);
-            }
 
             private static Point[] GetAlignedAdjacent(Point c)
             {
@@ -288,10 +240,6 @@ namespace Zxcvbn.Matcher
                         }
                     }
                 }
-
-                // Calculate average degree and starting positions, cf. init.coffee
-                StartingPositions = AdjacencyGraph.Count;
-                AverageDegree = AdjacencyGraph.Sum(adj => adj.Value.Count(a => a != null)) * 1.0 / StartingPositions;
             }
         }
     }

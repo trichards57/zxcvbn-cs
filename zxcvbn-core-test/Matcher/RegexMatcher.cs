@@ -10,7 +10,7 @@ namespace Zxcvbn.Tests.Matcher
         [Fact]
         public void MatchesMidString()
         {
-            var re = new RegexMatcher("\\d{3,}", 10);
+            var re = new RegexMatcher("\\d{3,}");
 
             var res = re.MatchPassword("abc123def").ToList();
             res.Count.Should().Be(1);
@@ -23,7 +23,7 @@ namespace Zxcvbn.Tests.Matcher
         [Fact]
         public void MatchesMultiple()
         {
-            var re = new RegexMatcher("\\d{3,}", 10);
+            var re = new RegexMatcher("\\d{3,}");
 
             var res = re.MatchPassword("123456789a12345b1234567").ToList();
             res.Count.Should().Be(3);
@@ -36,7 +36,7 @@ namespace Zxcvbn.Tests.Matcher
         [Fact]
         public void MatchesNoMatch()
         {
-            var re = new RegexMatcher("\\d{3,}", 10);
+            var re = new RegexMatcher("\\d{3,}");
 
             var res = re.MatchPassword("12");
             res.Should().BeEmpty();

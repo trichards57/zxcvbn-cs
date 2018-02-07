@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Zxcvbn.Matcher;
 using Zxcvbn.Matcher.Matches;
 
 namespace Zxcvbn
@@ -11,10 +10,10 @@ namespace Zxcvbn
     /// </summary>
     internal static class PasswordScoring
     {
-        public const string AllLower = "^[^A-Z]+$";
         public const string AllUpper = "^[^a-z]+$";
-        public const string EndUpper = "^[^A-Z]+[A-Z]$";
         public const string StartUpper = "^[A-Z][^A-Z]+$";
+        private const string AllLower = "^[^A-Z]+$";
+        private const string EndUpper = "^[^A-Z]+[A-Z]$";
 
         /// <summary>
         /// Caclulate binomial coefficient (i.e. nCk)
@@ -78,26 +77,6 @@ namespace Zxcvbn
             }
 
             return variations;
-        }
-
-        /// <summary>
-        /// Estimate the extra entropy in a token that comes from mixing upper and lowercase letters.
-        /// This has been moved to a static function so that it can be used in multiple entropy calculations.
-        /// </summary>
-        /// <param name="word">The word to calculate uppercase entropy for</param>
-        /// <returns>An estimation of the entropy gained from casing in <paramref name="word"/></returns>
-        public static double CalculateUppercaseEntropy(string word)
-        {
-            if (Regex.IsMatch(word, AllLower)) return 0;
-
-            // If the word is all uppercase add's only one bit of entropy, add only one bit for initial/end single cap only
-            if (new[] { StartUpper, EndUpper, AllUpper }.Any(re => Regex.IsMatch(word, re))) return 1;
-
-            var lowers = word.Count(c => 'a' <= c && c <= 'z');
-            var uppers = word.Count(c => 'A' <= c && c <= 'Z');
-
-            // Calculate numer of ways to capitalise (or inverse if there are fewer lowercase chars) and return lg for entropy
-            return Math.Log(Enumerable.Range(0, Math.Min(uppers, lowers) + 1).Sum(i => Binomial(uppers + lowers, i)), 2);
         }
 
         public static long CalculateUppercaseVariations(DictionaryMatch match)
