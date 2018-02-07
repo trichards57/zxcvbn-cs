@@ -62,14 +62,12 @@ namespace Zxcvbn.Matcher
 
             foreach (System.Text.RegularExpressions.Match rem in reMatches)
             {
-                pwMatches.Add(new Match()
+                pwMatches.Add(new Match
                 {
                     Pattern = _matcherName,
                     i = rem.Index,
                     j = rem.Index + rem.Length - 1,
-                    Token = password.Substring(rem.Index, rem.Length),
-                    Cardinality = _cardinality,
-                    Entropy = Math.Log((_perCharCardinality ? Math.Pow(_cardinality, rem.Length) : _cardinality), 2) // Raise cardinality to length when giver per character
+                    Token = password.Substring(rem.Index, rem.Length)
                 });
             }
 
