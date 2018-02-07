@@ -1,4 +1,4 @@
-﻿namespace Zxcvbn.Matcher
+﻿namespace Zxcvbn.Matcher.Matches
 {
     /// <inheritdoc />
     /// <summary>

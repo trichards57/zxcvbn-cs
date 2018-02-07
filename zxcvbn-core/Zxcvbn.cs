@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Zxcvbn.Matcher;
+using Zxcvbn.Matcher.Matches;
 using Zxcvbn.Utilities;
 
 namespace Zxcvbn

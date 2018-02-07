@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using Zxcvbn.Matcher;
+using Zxcvbn.Matcher.Matches;
 
 namespace Zxcvbn
 {

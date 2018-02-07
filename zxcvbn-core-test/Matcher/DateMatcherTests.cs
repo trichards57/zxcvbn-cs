@@ -2,6 +2,7 @@
 using FluentAssertions;
 using Xunit;
 using Zxcvbn.Matcher;
+using Zxcvbn.Matcher.Matches;
 
 namespace Zxcvbn.Tests.Matcher
 {
