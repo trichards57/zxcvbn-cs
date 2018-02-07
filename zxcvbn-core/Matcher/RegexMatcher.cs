@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Zxcvbn.Matcher.Matches;
 
 namespace Zxcvbn.Matcher
 {
@@ -37,6 +38,8 @@ namespace Zxcvbn.Matcher
             _matcherName = matcherName;
         }
 
+        public static string RegexPattern { get; } = "regex";
+
         /// <inheritdoc />
         /// <summary>
         /// Find all matches of the regex in <paramref name="password" />
@@ -51,9 +54,10 @@ namespace Zxcvbn.Matcher
 
             foreach (System.Text.RegularExpressions.Match rem in reMatches)
             {
-                pwMatches.Add(new Match
+                pwMatches.Add(new RegexMatch
                 {
-                    Pattern = _matcherName,
+                    Pattern = RegexPattern,
+                    RegexName = _matcherName,
                     i = rem.Index,
                     j = rem.Index + rem.Length - 1,
                     Token = password.Substring(rem.Index, rem.Length)
