@@ -153,6 +153,11 @@ namespace Zxcvbn
             return 0.5 * Math.Pow(2, entropy) * secondsPerGuess;
         }
 
+        public static SequenceMatch MostGuessableMatchSequence(string baseToken, Result matchPassword)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Calculate the cardinality of the minimal character sets necessary to brute force the password (roughly)
         /// (e.g. lowercase = 26, numbers = 10, lowercase + numbers = 36)

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Zxcvbn.Matcher
 {
@@ -10,10 +10,18 @@ namespace Zxcvbn.Matcher
     /// </summary>
     public class RepeatMatch : Match
     {
+        public long BaseGuesses { get; set; }
+
+        public string BaseMatches { get; set; }
+
+        public string BaseToken { get; set; }
+
         /// <summary>
         /// The character that was repeated
         /// </summary>
         public char RepeatChar { get; set; }
+
+        public int RepeatCount { get; set; }
     }
 
     /// <inheritdoc />
@@ -33,16 +41,59 @@ namespace Zxcvbn.Matcher
         /// <seealso cref="T:Zxcvbn.Matcher.RepeatMatch" />
         public IEnumerable<Match> MatchPassword(string password)
         {
-            // Be sure to not count groups of one or two characters
-            return password.GroupAdjacent(c => c).Where(g => g.Count() > 2).Select(g => new RepeatMatch
+            var matches = new List<Match>();
+            var greedy = "(.+)\\1+";
+            var lazy = "(.+?)\\1+";
+            var lazyAnchored = "^(.+?)\\1+$";
+            var lastIndex = 0;
+
+            while (lastIndex < password.Length)
             {
-                Pattern = RepeatPattern,
-                Token = password.Substring(g.StartIndex, g.EndIndex - g.StartIndex + 1),
-                i = g.StartIndex,
-                j = g.EndIndex,
-                Entropy = CalculateEntropy(password.Substring(g.StartIndex, g.EndIndex - g.StartIndex + 1)),
-                RepeatChar = g.Key
-            });
+                var greedyLastIndex = lastIndex;
+                var lazyLastIndex = lastIndex;
+
+                var greedyMatch = Regex.Match(password.Substring(greedyLastIndex), greedy);
+                var lazyMatch = Regex.Match(password.Substring(lazyLastIndex), lazy);
+
+                if (!greedyMatch.Success) break;
+
+                System.Text.RegularExpressions.Match match;
+                string baseToken;
+
+                if (greedyMatch.Length > lazyMatch.Length)
+                {
+                    match = greedyMatch;
+                    baseToken = Regex.Match(match.Value, lazyAnchored).Value;
+                }
+                else
+                {
+                    match = lazyMatch;
+                    baseToken = match.Value;
+                }
+
+                var i = match.Index;
+                var j = match.Index + match.Length - 1;
+
+                var baseAnalysis =
+                    PasswordScoring.MostGuessableMatchSequence(baseToken, Zxcvbn.MatchPassword(baseToken));
+
+                var baseMatches = baseAnalysis.Sequence;
+                var baseGuesses = baseAnalysis.Guesses;
+
+                matches.Add(new RepeatMatch()
+                {
+                    Pattern = RepeatPattern,
+                    i = i,
+                    j = j,
+                    Token = match.Value,
+                    BaseToken = baseToken,
+                    BaseGuesses = baseGuesses,
+                    BaseMatches = baseMatches,
+                    RepeatCount = match.Length / baseToken.Length
+                });
+            }
+
+            return matches;
         }
 
         private static double CalculateEntropy(string match)

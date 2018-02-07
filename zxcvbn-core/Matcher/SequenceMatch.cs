@@ -11,6 +11,13 @@
         /// </summary>
         public bool Ascending { get; set; }
 
+        public long BaseGuesses { get; set; }
+        public string BaseMatches { get; set; }
+        public string BaseToken { get; set; }
+        public long Guesses { get; set; }
+        public long RepeatCount { get; set; }
+        public string Sequence { get; set; }
+
         /// <summary>
         /// The name of the sequence that the match was found in (e.g. 'lower', 'upper', 'digits')
         /// </summary>
