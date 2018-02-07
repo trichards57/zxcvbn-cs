@@ -125,7 +125,6 @@ namespace Zxcvbn.Matcher
                         Year = bestCandidate.Year,
                         Month = bestCandidate.Month,
                         Day = bestCandidate.Day,
-                        Entropy = CalculateEntropy(dateMatch.Value, bestCandidate.Year, true)
                     });
                 }
             }
@@ -158,7 +157,6 @@ namespace Zxcvbn.Matcher
                         Year = date.Value.Year,
                         Month = date.Value.Month,
                         Day = date.Value.Day,
-                        Entropy = CalculateEntropy(match.Value, date.Value.Year, true)
                     };
 
                     matches.Add(m);
