@@ -47,8 +47,7 @@ namespace Zxcvbn.Tests.Matcher
             var matches = matcher.MatchPassword(password).ToList();
 
             matches.Count.Should().BeGreaterOrEqualTo(1);
-            matches.Count(m => m is DateMatch).Should().Be(1);
-            matches.OfType<DateMatch>().Count().Should().Be(1);
+            matches.OfType<DateMatch>().Should().ContainSingle();
 
             var match = matches.OfType<DateMatch>().Single();
             match.Pattern.Should().Be("date");
@@ -72,7 +71,7 @@ namespace Zxcvbn.Tests.Matcher
             var matches = matcher.MatchPassword(password).ToList();
 
             matches.Count.Should().Be(1);
-            matches.OfType<DateMatch>().Count().Should().Be(1);
+            matches.OfType<DateMatch>().Should().ContainSingle();
 
             var match = matches.OfType<DateMatch>().Single();
             match.Pattern.Should().Be("date");
@@ -95,7 +94,7 @@ namespace Zxcvbn.Tests.Matcher
             var matches = matcher.MatchPassword(password).ToList();
 
             matches.Count.Should().BeGreaterOrEqualTo(1);
-            matches.Count(m => m is DateMatch).Should().BeGreaterOrEqualTo(2);
+            matches.OfType<DateMatch>().Should().HaveCount(2);
             matches.OfType<DateMatch>().Count(m => m.Year == 1991).Should().Be(2);
 
             var slashMatch = matches.OfType<DateMatch>().Single(m => m.Separator == "/");
