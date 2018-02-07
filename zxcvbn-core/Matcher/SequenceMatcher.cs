@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Zxcvbn.Matcher
 {
@@ -10,6 +11,7 @@ namespace Zxcvbn.Matcher
     /// </summary>
     public class SequenceMatcher : IMatcher
     {
+        private const int MaxDelta = 5;
         private const string SequencePattern = "sequence";
 
         private readonly string[] _sequenceNames = {
@@ -34,65 +36,75 @@ namespace Zxcvbn.Matcher
         /// <seealso cref="T:Zxcvbn.Matcher.SequenceMatch" />
         public IEnumerable<Match> MatchPassword(string password)
         {
-            // Sequences to check should be the set of sequences and their reverses (i.e. want to match "abcd" and "dcba")
-            var seqs = _sequences.Union(_sequences.Select(s => s.StringReverse())).ToList();
+            if (password.Length == 1)
+                return Enumerable.Empty<Match>();
 
-            var matches = new List<Match>();
+            var result = new List<Match>();
 
-            var i = 0;
-            while (i < password.Length - 1)
+            void update(int i, int j, int delta)
             {
-                var j = i + 1;
-
-                // Find a sequence that the current and next characters could be part of
-                var seq = (from s in seqs
-                           let ixI = s.IndexOf(password[i])
-                           let ixJ = s.IndexOf(password[j])
-                           where ixJ == ixI + 1 // i.e. two consecutive letters in password are consecutive in sequence
-                           select s).FirstOrDefault();
-
-                // This isn't an ideal check, but we want to know whether the sequence is ascending/descending to keep entropy
-                //   calculation consistent with zxcvbn
-                var ascending = _sequences.Contains(seq);
-
-                // seq will be null when there are no matching sequences
-                if (seq != null)
+                if (j - i > 1 || Math.Abs(delta) == 1)
                 {
-                    var startIndex = seq.IndexOf(password[i]);
-
-                    // Find length of matching sequence (j should be the character after the end of the matching subsequence)
-                    for (; j < password.Length && startIndex + j - i < seq.Length && seq[startIndex + j - i] == password[j]; j++)
+                    if (0 < Math.Abs(delta) && Math.Abs(delta) <= MaxDelta)
                     {
-                    }
+                        var token = password.Substring(i, j - i);
+                        string sequenceName;
+                        int sequenceSpace;
 
-                    var length = j - i;
-
-                    // Only want to consider sequences that are longer than two characters
-                    if (length > 2)
-                    {
-                        // Find the sequence index so we can match it up with its name
-                        var seqIndex = seqs.IndexOf(seq);
-                        if (seqIndex >= _sequences.Length) seqIndex -= _sequences.Length; // match reversed sequence with its original
-
-                        var match = password.Substring(i, j - i);
-                        matches.Add(new SequenceMatch
+                        if (Regex.IsMatch(token, "^[a-z]+$"))
                         {
-                            i = i,
-                            j = j - 1,
-                            Token = match,
+                            sequenceName = "lower";
+                            sequenceSpace = 26;
+                        }
+                        else if (Regex.IsMatch(token, "^[A-Z]+$"))
+                        {
+                            sequenceName = "upper";
+                            sequenceSpace = 26;
+                        }
+                        else if (Regex.IsMatch(token, "^\\d+$"))
+                        {
+                            sequenceName = "digits";
+                            sequenceSpace = 10;
+                        }
+                        else
+                        {
+                            sequenceName = "unicode";
+                            sequenceSpace = 26;
+                        }
+
+                        result.Add(new SequenceMatch()
+                        {
                             Pattern = SequencePattern,
-                            Entropy = CalculateEntropy(match, ascending),
-                            Ascending = ascending,
-                            SequenceName = _sequenceNames[seqIndex],
-                            SequenceSize = _sequences[seqIndex].Length
+                            i = i,
+                            j = j,
+                            Token = token,
+                            SequenceName = sequenceName,
+                            SequenceSpace = sequenceSpace,
+                            Ascending = delta > 0
                         });
                     }
                 }
-
-                i = j;
             }
 
-            return matches;
+            var iIn = 0;
+            var lastDelta = -1;
+
+            for (var k = 1; k < password.Length; k++)
+            {
+                var deltaIn = password[k] - password[k - 1];
+                if (lastDelta < 0)
+                    lastDelta = deltaIn;
+                if (deltaIn == lastDelta)
+                    continue;
+
+                var jIn = k - 1;
+                update(iIn, jIn, lastDelta);
+                iIn = jIn;
+                lastDelta = deltaIn;
+            }
+
+            update(iIn, password.Length - 1, lastDelta);
+            return result;
         }
 
         private static double CalculateEntropy(string match, bool ascending)

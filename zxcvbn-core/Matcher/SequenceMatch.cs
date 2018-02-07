@@ -27,5 +27,7 @@
         /// The size of the sequence the match was found in (e.g. 26 for lowercase letters)
         /// </summary>
         public int SequenceSize { get; set; }
+
+        public int SequenceSpace { get; set; }
     }
 }
