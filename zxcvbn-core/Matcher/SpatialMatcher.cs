@@ -105,7 +105,7 @@ namespace Zxcvbn.Matcher
                     if (j < password.Length)
                     {
                         var curChar = password[j].ToString();
-                        foreach (var adjacent in adjacents)
+                        foreach (var adjacent in adjacents.Where(a => a != null))
                         {
                             currentDirection++;
                             if (adjacent.Contains(curChar))
@@ -134,14 +134,14 @@ namespace Zxcvbn.Matcher
                     }
                     else
                     {
-                        if (j - 1 > 2)
+                        if (j - i > 2)
                         {
                             matches.Add(new SpatialMatch()
                             {
                                 Pattern = SpatialPattern,
                                 i = i,
                                 j = j - 1,
-                                Token = password.Substring(i, j - i + 1),
+                                Token = password.Substring(i, j - i),
                                 Graph = graph.Name,
                                 Turns = turns,
                                 ShiftedCount = shiftedCount
