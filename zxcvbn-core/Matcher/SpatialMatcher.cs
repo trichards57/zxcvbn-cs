@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Zxcvbn.Matcher
 {
@@ -12,6 +13,7 @@ namespace Zxcvbn.Matcher
     /// </summary>
     public class SpatialMatcher : IMatcher
     {
+        private const string ShiftedRegex = "[~!@#$%^&*()_+QWERTYUIOP{}|ASDFGHJKL:\"ZXCVBNM<>?]";
         private const string SpatialPattern = "spatial";
 
         private readonly Lazy<List<SpatialGraph>> _spatialGraphs = new Lazy<List<SpatialGraph>>(GenerateSpatialGraphs);
@@ -25,7 +27,7 @@ namespace Zxcvbn.Matcher
         /// <seealso cref="M:Zxcvbn.Matcher.SpatialMatcher.SpatialMatch(Zxcvbn.Matcher.SpatialMatcher.SpatialGraph,System.String)" />
         public IEnumerable<Match> MatchPassword(string password)
         {
-            return _spatialGraphs.Value.SelectMany((g) => SpatialMatch(g, password)).ToList();
+            return _spatialGraphs.Value.SelectMany(g => SpatialMatch(g, password)).ToList();
         }
 
         // In the JS version these are precomputed, but for now we'll generate them here when they are first needed.
@@ -86,40 +88,70 @@ namespace Zxcvbn.Matcher
                 var lastDirection = -1;
 
                 var j = i + 1;
-                for (; j < password.Length; ++j)
-                {
-                    var foundDirection = graph.GetAdjacentCharDirection(password[j - 1], password[j], out var shifted);
 
-                    if (foundDirection != -1)
+                if ((graph.Name == "qwerty" || graph.Name == "dvorak") && Regex.IsMatch(password[i].ToString(), ShiftedRegex))
+                {
+                    shiftedCount = 1;
+                }
+
+                while (true)
+                {
+                    var prevChar = password[j - 1];
+                    var found = false;
+                    var foundDirection = -1;
+                    var currentDirection = -1;
+                    var adjacents = graph.AdjacencyGraph.ContainsKey(prevChar) ? graph.AdjacencyGraph[prevChar] : Enumerable.Empty<string>();
+
+                    if (j < password.Length)
                     {
-                        // Spatial match continues
-                        if (shifted) shiftedCount++;
-                        if (lastDirection != foundDirection)
+                        var curChar = password[j].ToString();
+                        foreach (var adjacent in adjacents)
                         {
-                            turns++;
-                            lastDirection = foundDirection;
+                            currentDirection++;
+                            if (adjacent.Contains(curChar))
+                            {
+                                found = true;
+                                foundDirection = currentDirection;
+                                if (adjacent.IndexOf(curChar) == 1)
+                                {
+                                    shiftedCount++;
+                                }
+
+                                if (lastDirection != foundDirection)
+                                {
+                                    turns++;
+                                    lastDirection = foundDirection;
+                                }
+
+                                break;
+                            }
                         }
                     }
-                    else break; // This character not a spatial match
-                }
 
-                // Only consider runs of greater than two
-                if (j - i > 2)
-                {
-                    matches.Add(new SpatialMatch()
+                    if (found)
                     {
-                        Pattern = SpatialPattern,
-                        i = i,
-                        j = j - 1,
-                        Token = password.Substring(i, j - i),
-                        Graph = graph.Name,
-                        Entropy = graph.CalculateEntropy(j - i, turns, shiftedCount),
-                        Turns = turns,
-                        ShiftedCount = shiftedCount
-                    });
-                }
+                        j++;
+                    }
+                    else
+                    {
+                        if (j - 1 > 2)
+                        {
+                            matches.Add(new SpatialMatch()
+                            {
+                                Pattern = SpatialPattern,
+                                i = i,
+                                j = j - 1,
+                                Token = password.Substring(i, j - i + 1),
+                                Graph = graph.Name,
+                                Turns = turns,
+                                ShiftedCount = shiftedCount
+                            });
+                        }
 
-                i = j;
+                        i = j;
+                        break;
+                    }
+                }
             }
 
             return matches;
@@ -152,8 +184,8 @@ namespace Zxcvbn.Matcher
                 BuildGraph(layout, slanted);
             }
 
+            public Dictionary<char, List<string>> AdjacencyGraph { get; set; }
             public string Name { get; }
-            private Dictionary<char, List<string>> AdjacencyGraph { get; set; }
             private double AverageDegree { get; set; }
             private int StartingPositions { get; set; }
 
