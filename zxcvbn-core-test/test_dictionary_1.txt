@@ -1,0 +1,5 @@
+﻿motherboard
+mother
+board
+abcd
+cdef

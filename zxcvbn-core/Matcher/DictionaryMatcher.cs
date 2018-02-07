@@ -65,7 +65,7 @@ namespace Zxcvbn.Matcher
 
             for (var i = 0; i < length; i++)
             {
-                for (var j = i; j < length - i; j++)
+                for (var j = i; j < length; j++)
                 {
                     var passwordSub = passwordLower.Substring(i, j - i + 1);
                     if (_rankedDictionary.Value.ContainsKey(passwordSub))

@@ -16,7 +16,10 @@
     <ProjectReference Include="..\zxcvbn-core\zxcvbn-core.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Update="test_dictionary.txt">
+    <None Update="test_dictionary_2.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="test_dictionary_1.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
