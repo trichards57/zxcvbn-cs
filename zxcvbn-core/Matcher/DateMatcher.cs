@@ -178,7 +178,7 @@ namespace Zxcvbn.Matcher
             return filteredMatches;
         }
 
-        private static LooseDate? MapIntsToDate(IReadOnlyList<int> vals)
+        private static LooseDate? MapIntsToDate(IList<int> vals)
         {
             if (vals[1] > 31 || vals[1] < 1)
                 return null;
@@ -231,7 +231,7 @@ namespace Zxcvbn.Matcher
             return null;
         }
 
-        private static LooseDate? MapIntsToDayMonth(IReadOnlyList<int> vals)
+        private static LooseDate? MapIntsToDayMonth(IList<int> vals)
         {
             var day = vals[0];
             var month = vals[1];

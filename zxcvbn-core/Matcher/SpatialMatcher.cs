@@ -17,7 +17,7 @@ namespace Zxcvbn.Matcher
         private const string ShiftedRegex = "[~!@#$%^&*()_+QWERTYUIOP{}|ASDFGHJKL:\"ZXCVBNM<>?]";
         private const string SpatialPattern = "spatial";
 
-        private readonly Lazy<List<SpatialGraph>> _spatialGraphs = new Lazy<List<SpatialGraph>>(GenerateSpatialGraphs);
+        private readonly List<SpatialGraph> _spatialGraphs = GenerateSpatialGraphs();
 
         /// <inheritdoc />
         /// <summary>
@@ -28,7 +28,7 @@ namespace Zxcvbn.Matcher
         /// <seealso cref="M:Zxcvbn.Matcher.SpatialMatcher.SpatialMatch(Zxcvbn.Matcher.SpatialMatcher.SpatialGraph,System.String)" />
         public IEnumerable<Match> MatchPassword(string password)
         {
-            return _spatialGraphs.Value.SelectMany(g => SpatialMatch(g, password)).ToList();
+            return _spatialGraphs.SelectMany(g => SpatialMatch(g, password)).ToList();
         }
 
         // In the JS version these are precomputed, but for now we'll generate them here when they are first needed.

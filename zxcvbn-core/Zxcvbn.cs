@@ -137,7 +137,7 @@ namespace Zxcvbn
                 result.Suggestions.Add(Suggestion.PredictableSubstitutionsEasy);
         }
 
-        private static Match GetLongestMatch(IReadOnlyList<Match> matchSequence)
+        private static Match GetLongestMatch(IList<Match> matchSequence)
         {
             var longestMatch = new Match();
 

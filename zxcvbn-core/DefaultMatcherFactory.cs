@@ -21,7 +21,7 @@ namespace Zxcvbn
         /// </summary>
         public DefaultMatcherFactory()
         {
-            var dictionaryMatchers = new List<DictionaryMatcher> {
+            var dictionaryMatchers = new List<IMatcher> {
                 new DictionaryMatcher("passwords", "passwords.lst"),
                 new DictionaryMatcher("english", "english.lst"),
                 new DictionaryMatcher("male_names", "male_names.lst"),

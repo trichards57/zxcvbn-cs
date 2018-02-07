@@ -18,7 +18,11 @@ namespace Zxcvbn
         /// <returns>An enumerable of lines of text in the resource or null if the resource does not exist</returns>
         public static IEnumerable<string> GetEmbeddedResourceLines(string resourceName)
         {
+#if NET35
+            var asm = typeof(Utility).Assembly;
+#else
             var asm = typeof(Utility).GetTypeInfo().Assembly;
+#endif
             if (!asm.GetManifestResourceNames().Contains(resourceName)) return null; // Not an embedded resource
 
             var lines = new List<string>();
@@ -57,6 +61,5 @@ namespace Zxcvbn
         {
             return new string(str.Reverse().ToArray());
         }
-
     }
 }

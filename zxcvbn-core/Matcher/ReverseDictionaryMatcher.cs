@@ -18,14 +18,17 @@ namespace Zxcvbn.Matcher
         /// </summary>
         public override IEnumerable<Match> MatchPassword(string password)
         {
-            var matches = base.MatchPassword(password.StringReverse()).Cast<DictionaryMatch>().ToList();
+            var matches = base.MatchPassword(password.StringReverse()).ToList();
 
             foreach (var m in matches)
             {
-                m.Token = m.Token.StringReverse();
-                m.Reversed = true;
-                m.i = password.Length - 1 - m.j;
-                m.j = password.Length - 1 - m.i;
+                if (!(m is DictionaryMatch ma))
+                    continue;
+
+                ma.Token = m.Token.StringReverse();
+                ma.Reversed = true;
+                ma.i = password.Length - 1 - m.j;
+                ma.j = password.Length - 1 - m.i;
             }
 
             return matches.OrderBy(m => m.i).ThenBy(m => m.j);

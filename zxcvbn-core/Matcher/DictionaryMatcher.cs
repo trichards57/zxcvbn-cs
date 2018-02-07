@@ -24,7 +24,7 @@ namespace Zxcvbn.Matcher
         public const string DictionaryPattern = "dictionary";
 
         private readonly string _dictionaryName;
-        private readonly Lazy<Dictionary<string, int>> _rankedDictionary;
+        private readonly Dictionary<string, int> _rankedDictionary;
 
         /// <summary>
         /// Creates a new dictionary matcher. <paramref name="wordListPath"/> must be the path (relative or absolute) to a file containing one word per line,
@@ -35,7 +35,7 @@ namespace Zxcvbn.Matcher
         public DictionaryMatcher(string name, string wordListPath)
         {
             _dictionaryName = name;
-            _rankedDictionary = new Lazy<Dictionary<string, int>>(() => BuildRankedDictionary(wordListPath));
+            _rankedDictionary = BuildRankedDictionary(wordListPath);
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace Zxcvbn.Matcher
             _dictionaryName = name;
 
             // Must ensure that the dictionary is using lowercase words only
-            _rankedDictionary = new Lazy<Dictionary<string, int>>(() => BuildRankedDictionary(wordList.Select(w => w.ToLower())));
+            _rankedDictionary = BuildRankedDictionary(wordList.Select(w => w.ToLower()));
         }
 
         /// <inheritdoc />
@@ -61,14 +61,14 @@ namespace Zxcvbn.Matcher
         {
             var passwordLower = password.ToLower();
             var length = passwordLower.Length;
-            var matches = new List<DictionaryMatch>();
+            var matches = new List<Match>();
 
             for (var i = 0; i < length; i++)
             {
                 for (var j = i; j < length; j++)
                 {
                     var passwordSub = passwordLower.Substring(i, j - i + 1);
-                    if (_rankedDictionary.Value.ContainsKey(passwordSub))
+                    if (_rankedDictionary.ContainsKey(passwordSub))
                     {
                         var match = new DictionaryMatch
                         {
@@ -76,7 +76,7 @@ namespace Zxcvbn.Matcher
                             j = j,
                             Token = password.Substring(i, j - i + 1),
                             MatchedWord = passwordSub,
-                            Rank = _rankedDictionary.Value[passwordSub],
+                            Rank = _rankedDictionary[passwordSub],
                             DictionaryName = _dictionaryName,
                             Reversed = false,
                             L33t = false
@@ -87,7 +87,7 @@ namespace Zxcvbn.Matcher
                 }
             }
 
-            foreach (var match in matches) CalculateVariationsForMatch(match);
+            foreach (var match in matches) CalculateVariationsForMatch(match as DictionaryMatch);
 
             return matches.OrderBy(m => m.i).ThenBy(m => m.j);
         }
