@@ -25,10 +25,13 @@ namespace Zxcvbn.Matcher
                 if (!(m is DictionaryMatch ma))
                     continue;
 
+                var i = ma.i;
+                var j = ma.j;
+
                 ma.Token = m.Token.StringReverse();
                 ma.Reversed = true;
-                ma.i = password.Length - 1 - m.j;
-                ma.j = password.Length - 1 - m.i;
+                ma.i = password.Length - 1 - j;
+                ma.j = password.Length - 1 - i;
             }
 
             return matches.OrderBy(m => m.i).ThenBy(m => m.j);
