@@ -85,8 +85,9 @@ namespace Zxcvbn.Matcher
             var i = 0;
             while (i < password.Length - 1)
             {
-                int turns = 0, shiftedCount = 0;
-                var lastDirection = -1;
+                var turns = 0;
+                var shiftedCount = 0;
+                int? lastDirection = null;
 
                 var j = i + 1;
 
@@ -105,9 +106,13 @@ namespace Zxcvbn.Matcher
                     if (j < password.Length)
                     {
                         var curChar = password[j].ToString();
-                        foreach (var adjacent in adjacents.Where(a => a != null))
+                        foreach (var adjacent in adjacents)
                         {
                             currentDirection++;
+
+                            if (adjacent == null)
+                                continue;
+
                             if (adjacent.Contains(curChar))
                             {
                                 found = true;
