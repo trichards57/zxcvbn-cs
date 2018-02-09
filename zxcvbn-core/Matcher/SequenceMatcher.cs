@@ -24,70 +24,74 @@ namespace Zxcvbn.Matcher
         /// <seealso cref="T:Zxcvbn.Matcher.SequenceMatch" />
         public IEnumerable<Match> MatchPassword(string password)
         {
-            if (password.Length == 1)
+            if (password.Length <= 1)
                 return Enumerable.Empty<Match>();
 
             var result = new List<Match>();
 
             void Update(int i, int j, int delta)
             {
-                if (j - i <= 1 && Math.Abs(delta) != 1) return;
-                if (0 >= Math.Abs(delta) || Math.Abs(delta) > MaxDelta) return;
-                var token = password.Substring(i, j - i);
-                string sequenceName;
-                int sequenceSpace;
+                if (j - i > 1 || Math.Abs(delta) == 1)
+                {
+                    if (0 < Math.Abs(delta) && Math.Abs(delta) <= MaxDelta)
+                    {
+                        var token = password.Substring(i, j - i + 1);
+                        string sequenceName;
+                        int sequenceSpace;
 
-                if (Regex.IsMatch(token, "^[a-z]+$"))
-                {
-                    sequenceName = "lower";
-                    sequenceSpace = 26;
-                }
-                else if (Regex.IsMatch(token, "^[A-Z]+$"))
-                {
-                    sequenceName = "upper";
-                    sequenceSpace = 26;
-                }
-                else if (Regex.IsMatch(token, "^\\d+$"))
-                {
-                    sequenceName = "digits";
-                    sequenceSpace = 10;
-                }
-                else
-                {
-                    sequenceName = "unicode";
-                    sequenceSpace = 26;
-                }
+                        if (Regex.IsMatch(token, "^[a-z]+$"))
+                        {
+                            sequenceName = "lower";
+                            sequenceSpace = 26;
+                        }
+                        else if (Regex.IsMatch(token, "^[A-Z]+$"))
+                        {
+                            sequenceName = "upper";
+                            sequenceSpace = 26;
+                        }
+                        else if (Regex.IsMatch(token, "^\\d+$"))
+                        {
+                            sequenceName = "digits";
+                            sequenceSpace = 10;
+                        }
+                        else
+                        {
+                            sequenceName = "unicode";
+                            sequenceSpace = 26;
+                        }
 
-                result.Add(new SequenceMatch
-                {
-                    Pattern = SequencePattern,
-                    i = i,
-                    j = j,
-                    Token = token,
-                    SequenceName = sequenceName,
-                    SequenceSpace = sequenceSpace,
-                    Ascending = delta > 0
-                });
+                        result.Add(new SequenceMatch
+                        {
+                            Pattern = SequencePattern,
+                            i = i,
+                            j = j,
+                            Token = token,
+                            SequenceName = sequenceName,
+                            SequenceSpace = sequenceSpace,
+                            Ascending = delta > 0
+                        });
+                    }
+                }
             }
 
             var iIn = 0;
-            var lastDelta = -1;
+            int? lastDelta = null;
 
             for (var k = 1; k < password.Length; k++)
             {
                 var deltaIn = password[k] - password[k - 1];
-                if (lastDelta < 0)
+                if (lastDelta == null)
                     lastDelta = deltaIn;
                 if (deltaIn == lastDelta)
                     continue;
 
                 var jIn = k - 1;
-                Update(iIn, jIn, lastDelta);
+                Update(iIn, jIn, lastDelta.Value);
                 iIn = jIn;
                 lastDelta = deltaIn;
             }
 
-            Update(iIn, password.Length - 1, lastDelta);
+            Update(iIn, password.Length - 1, lastDelta.Value);
             return result;
         }
     }

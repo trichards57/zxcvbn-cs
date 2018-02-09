@@ -1,48 +1,46 @@
-﻿//using System.Linq;
-//using FluentAssertions;
-//using Xunit;
-//using Zxcvbn.Matcher;
+﻿using System.Linq;
+using FluentAssertions;
+using Xunit;
+using Zxcvbn.Matcher;
+using Zxcvbn.Matcher.Matches;
 
-//namespace Zxcvbn.Tests.Matcher
-//{
-//    public class SequenceMatcherTests
-//    {
-//        [Fact]
-//        public void MultipleSequence()
-//        {
-//            var seq = new SequenceMatcher();
+namespace Zxcvbn.Tests.Matcher
+{
+    public class SequenceMatcherTests
+    {
+        private readonly SequenceMatcher _matcher = new SequenceMatcher();
 
-//            var res = seq.MatchPassword("asdfabcdhujzyxwhgjj").ToList();
-//            res.Count.Should().Be(2);
+        [Theory, InlineData(""), InlineData("a"), InlineData("1")]
+        public void DoesntMatchShortSequences(string password)
+        {
+            var res = _matcher.MatchPassword(password);
+            res.Should().BeEmpty();
+        }
 
-//            res[0].i.Should().Be(4);
-//            res[0].j.Should().Be(7);
-//            res[0].Token.Should().Be("abcd");
+        [Fact]
+        public void MatchesOverlappingPatterns()
+        {
+            var res = _matcher.MatchPassword("abcbabc").OfType<SequenceMatch>().ToList();
 
-//            res[1].i.Should().Be(11);
-//            res[1].j.Should().Be(14);
-//            res[1].Token.Should().Be("zyxw");
-//        }
+            res.Should().HaveCount(3);
 
-//        [Fact]
-//        public void NoSequence()
-//        {
-//            var seq = new SequenceMatcher();
+            res[0].Pattern.Should().Be("sequence");
+            res[0].Token.Should().Be("abc");
+            res[0].i.Should().Be(0);
+            res[0].j.Should().Be(2);
+            res[0].Ascending.Should().Be(true);
 
-//            var res = seq.MatchPassword("dfsjkhfjksdh").ToList();
-//            res.Should().BeEmpty();
-//        }
+            res[1].Pattern.Should().Be("sequence");
+            res[1].Token.Should().Be("cba");
+            res[1].i.Should().Be(2);
+            res[1].j.Should().Be(4);
+            res[1].Ascending.Should().Be(false);
 
-//        [Fact]
-//        public void SingleSequence()
-//        {
-//            var seq = new SequenceMatcher();
-
-//            var res = seq.MatchPassword("abcd").ToList();
-//            res.Count.Should().Be(1);
-//            res[0].i.Should().Be(0);
-//            res[0].j.Should().Be(3);
-//            res[0].Token.Should().Be("abcd");
-//        }
-//    }
-//}
+            res[2].Pattern.Should().Be("sequence");
+            res[2].Token.Should().Be("abc");
+            res[2].i.Should().Be(4);
+            res[2].j.Should().Be(6);
+            res[2].Ascending.Should().Be(true);
+        }
+    }
+}
