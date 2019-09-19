@@ -100,7 +100,7 @@ namespace Zxcvbn.Matcher
             if (firstChar == 'a' || firstChar == '1') baseEntropy = 1;
             else if ('0' <= firstChar && firstChar <= '9') baseEntropy = Math.Log(10, 2); // Numbers
             else if ('a' <= firstChar && firstChar <= 'z') baseEntropy = Math.Log(26, 2); // Lowercase
-            else baseEntropy = Math.Log(26, 1) + 1; // + 1 for uppercase
+            else baseEntropy = Math.Log(26, 2) + 1; // + 1 for uppercase
 
             if (!ascending) baseEntropy += 1; // Descending instead of ascending give + 1 bit of entropy
 
