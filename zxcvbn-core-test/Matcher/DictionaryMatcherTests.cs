@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using FluentAssertions;
+using System.Collections.Generic;
 using System.Linq;
-using FluentAssertions;
 using Xunit;
 using Zxcvbn.Matcher;
 using Zxcvbn.Matcher.Matches;
@@ -11,9 +11,11 @@ namespace Zxcvbn.Tests.Matcher
     {
         private readonly DictionaryMatcher _matcher1 = new DictionaryMatcher("d1", "test_dictionary_1.txt");
         private readonly DictionaryMatcher _matcher2 = new DictionaryMatcher("d2", "test_dictionary_2.txt");
+        private readonly DictionaryMatcher _matcherTv = new DictionaryMatcher("us_tv_films", "us_tv_and_film.lst");
 
         [Theory, InlineData("qasdf1234&*%"), InlineData("qasdf1234&*qq"), InlineData("%%asdf1234&*%"), InlineData("%%asdf1234&*qq")]
         public void IdentifiesWordsSurroundedByNonWords(string word)
+
         {
             var result = RunMatches(word);
 
@@ -133,6 +135,19 @@ namespace Zxcvbn.Tests.Matcher
             result[2].DictionaryName.Should().Be("d1");
             result[2].i.Should().Be(6);
             result[2].j.Should().Be(10);
+        }
+
+        [Fact]
+        public void TestBuiltInDictionary()
+        {
+            var result = _matcherTv.MatchPassword("wow");
+            var list = result.OfType<DictionaryMatch>().ToList();
+
+            list[0].MatchedWord.Should().Be("wow");
+            list[0].DictionaryName.Should().Be("us_tv_and_film");
+            list[0].Rank.Should().Be(322);
+            list[0].i.Should().Be(0);
+            list[0].j.Should().Be(2);
         }
 
         private List<DictionaryMatch> RunMatches(string word)
