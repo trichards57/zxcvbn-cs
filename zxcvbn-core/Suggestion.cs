@@ -27,7 +27,7 @@
         AvoidRepeatedWordsAndChars,
 
         /// <summary>
-        ///  Avoid sequences  
+        ///  Avoid sequences
         /// </summary>
         AvoidSequences,
 
@@ -38,27 +38,27 @@
         AvoidYearsAssociatedYou,
 
         /// <summary>
-        ///  Avoid dates and years that are associated with you 
+        ///  Avoid dates and years that are associated with you
         /// </summary>
         AvoidDatesYearsAssociatedYou,
 
         /// <summary>
-        ///  Capitalization doesn't help very much  
+        ///  Capitalization doesn't help very much
         /// </summary>
         CapsDontHelp,
 
         /// <summary>
-        /// All-uppercase is almost as easy to guess as all-lowercase   
+        /// All-uppercase is almost as easy to guess as all-lowercase
         /// </summary>
         AllCapsEasy,
 
         /// <summary>
-        /// Reversed words aren't much harder to guess   
+        /// Reversed words aren't much harder to guess
         /// </summary>
         ReversedWordEasy,
 
         /// <summary>
-        ///  Predictable substitutions like '@' instead of 'a' don't help very much  
+        ///  Predictable substitutions like '@' instead of 'a' don't help very much
         /// </summary>
         PredictableSubstitutionsEasy,
 
@@ -66,6 +66,5 @@
         ///  Empty String
         /// </summary>
         Empty,
-
     }
 }

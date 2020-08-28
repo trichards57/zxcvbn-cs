@@ -84,6 +84,5 @@
         ///  Empty String
         /// </summary>
         Empty,
-
     }
 }

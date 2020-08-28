@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using FluentAssertions;
 using System.Linq;
-using System.Text;
-using FluentAssertions;
 using Xunit;
 using Zxcvbn.Matcher;
 using Zxcvbn.Matcher.Matches;

@@ -9,16 +9,6 @@ namespace Zxcvbn
     public class Result
     {
         /// <summary>
-        /// Warning about the quality of the password
-        /// </summary>
-        public Warning Warning { get; set; }
-
-        /// <summary>
-        /// Suggestions on how to improve the password
-        /// </summary>
-        public List<Suggestion> Suggestions { get; set; }
-
-        /// <summary>
         /// The number of milliseconds that zxcvbn took to calculate results for this password
         /// </summary>
         public long CalcTime { get; set; }
@@ -54,5 +44,15 @@ namespace Zxcvbn
         /// Useful for implementing a strength meter
         /// </summary>
         public int Score { get; set; }
+
+        /// <summary>
+        /// Suggestions on how to improve the password
+        /// </summary>
+        public List<Suggestion> Suggestions { get; set; }
+
+        /// <summary>
+        /// Warning about the quality of the password
+        /// </summary>
+        public Warning Warning { get; set; }
     }
 }
