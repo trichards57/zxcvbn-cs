@@ -17,7 +17,7 @@ namespace Zxcvbn.Matcher
         private const string ShiftedRegex = "[~!@#$%^&*()_+QWERTYUIOP{}|ASDFGHJKL:\"ZXCVBNM<>?]";
         private const string SpatialPattern = "spatial";
 
-        private readonly List<SpatialGraph> _spatialGraphs = GenerateSpatialGraphs();
+        internal List<SpatialGraph> SpatialGraphs { get; set; } = GenerateSpatialGraphs();
 
         /// <inheritdoc />
         /// <summary>
@@ -28,7 +28,7 @@ namespace Zxcvbn.Matcher
         /// <seealso cref="M:Zxcvbn.Matcher.SpatialMatcher.SpatialMatch(Zxcvbn.Matcher.SpatialMatcher.SpatialGraph,System.String)" />
         public IEnumerable<Match> MatchPassword(string password)
         {
-            return _spatialGraphs.SelectMany(g => SpatialMatch(g, password)).ToList();
+            return SpatialGraphs.SelectMany(g => SpatialMatch(g, password)).ToList();
         }
 
         // In the JS version these are precomputed, but for now we'll generate them here when they are first needed.
@@ -181,7 +181,7 @@ namespace Zxcvbn.Matcher
         }
 
         // See build_keyboard_adjacency_graph.py in zxcvbn for how these are generated
-        private class SpatialGraph
+        internal class SpatialGraph
         {
             public SpatialGraph(string name, string layout, bool slanted)
             {

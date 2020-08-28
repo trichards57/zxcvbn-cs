@@ -37,5 +37,26 @@ namespace Zxcvbn.Tests.Matcher
             match.j.Should().Be(pattern.Length - 1);
             match.Pattern.Should().Be("spatial");
         }
+
+        [Fact]
+        public void MatchesSpatialPatternSurroundedByNonSpatialPatterns()
+        {
+            var matcher = new SpatialMatcher();
+            matcher.SpatialGraphs = matcher.SpatialGraphs.Where(g => g.Name == "qwerty").ToList();
+
+            var pattern = "6tfGHJ";
+            var password = $"rz!{pattern}%z";
+            var matches = matcher.MatchPassword(password).OfType<SpatialMatch>().ToList();
+
+            matches.Should().NotBeEmpty();
+
+            var match = matches.Single();
+
+            match.Turns.Should().Be(2);
+            match.ShiftedCount.Should().Be(3);
+            match.i.Should().Be(3);
+            match.j.Should().Be(3 + pattern.Length - 1);
+            match.Pattern.Should().Be("spatial");
+        }
     }
 }
