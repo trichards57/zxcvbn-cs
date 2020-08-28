@@ -9,7 +9,7 @@ namespace Zxcvbn.Tests.Matcher
     public class DateMatcherTests
     {
         [Fact]
-        public void DateMatcherMatchesClosersToReferenceYear()
+        public void DateMatcherMatchesCloserToReferenceYear()
         {
             const string password = "111504";
 
@@ -84,6 +84,7 @@ namespace Zxcvbn.Tests.Matcher
         public void DateMatcherMatchesDatesPaddedByNonAmbiguousDigits()
         {
             const string password = "912/20/919";
+            const string expectedToken = "12/20/91";
 
             var matcher = new DateMatcher();
 
@@ -94,9 +95,9 @@ namespace Zxcvbn.Tests.Matcher
 
             var match = matches.OfType<DateMatch>().Single();
             match.Pattern.Should().Be("date");
-            match.Token.Should().Be(password);
-            match.i.Should().Be(0);
-            match.j.Should().Be(password.Length - 1);
+            match.Token.Should().Be(expectedToken);
+            match.i.Should().Be(1);
+            match.j.Should().Be(password.Length - 2);
             match.Separator.Should().Be("/");
             match.Year.Should().Be(1991);
             match.Month.Should().Be(12);

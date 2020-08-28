@@ -189,7 +189,7 @@ namespace Zxcvbn.Matcher
 
             foreach (var i in vals)
             {
-                if (99 < i && i < MinYear || i > MaxYear)
+                if ((99 < i && i < MinYear) || i > MaxYear)
                     return null;
 
                 if (i > 31)
@@ -198,34 +198,34 @@ namespace Zxcvbn.Matcher
                     over12++;
                 if (i < 1)
                     under1++;
+            }
 
-                if (over31 >= 2 || over12 == 3 || under1 >= 2)
-                    return null;
+            if (over31 >= 2 || over12 == 3 || under1 >= 2)
+                return null;
 
-                var possibleSplits = new[]
-                {
-                    new[] {vals[2], vals[0], vals[1] },
-                    new[] {vals[0], vals[1], vals[2] }
-                };
+            var possibleSplits = new[]
+            {
+                new[] {vals[2], vals[0], vals[1] },
+                new[] {vals[0], vals[1], vals[2] }
+            };
 
-                foreach (var possibleSplit in possibleSplits)
-                {
-                    if (possibleSplit[0] < MinYear || possibleSplit[0] > MaxYear)
-                        continue;
+            foreach (var possibleSplit in possibleSplits)
+            {
+                if (possibleSplit[0] < MinYear || possibleSplit[0] > MaxYear)
+                    continue;
 
-                    var dayMonth = MapIntsToDayMonth(new[] { possibleSplit[1], possibleSplit[2] });
-                    if (dayMonth != null)
-                        return new LooseDate(possibleSplit[0], dayMonth.Value.Month, dayMonth.Value.Day);
-                    return null;
-                }
+                var dayMonth = MapIntsToDayMonth(new[] { possibleSplit[1], possibleSplit[2] });
+                if (dayMonth != null)
+                    return new LooseDate(possibleSplit[0], dayMonth.Value.Month, dayMonth.Value.Day);
+                return null;
+            }
 
-                foreach (var possibleSplit in possibleSplits)
-                {
-                    var dayMonth = MapIntsToDayMonth(new[] { possibleSplit[1], possibleSplit[2] });
-                    if (dayMonth == null) continue;
-                    var year = TwoToFourDigitYear(possibleSplit[0]);
-                    return new LooseDate(year, dayMonth.Value.Month, dayMonth.Value.Day);
-                }
+            foreach (var possibleSplit in possibleSplits)
+            {
+                var dayMonth = MapIntsToDayMonth(new[] { possibleSplit[1], possibleSplit[2] });
+                if (dayMonth == null) continue;
+                var year = TwoToFourDigitYear(possibleSplit[0]);
+                return new LooseDate(year, dayMonth.Value.Month, dayMonth.Value.Day);
             }
 
             return null;
