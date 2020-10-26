@@ -201,6 +201,43 @@ namespace Zxcvbn.Tests.Matcher
             result.Should().BeEquivalentTo(expected);
         }
 
+        [Fact]
+        public void UsesTheUserInputDictionary()
+        {
+            var matcher = new DictionaryMatcher("user_inputs", new[] { "foo", "bar" });
+
+            var result = matcher.MatchPassword("foobar").OfType<DictionaryMatch>().ToList();
+
+            var expected = new[] {
+                new DictionaryMatch
+                {
+                    Pattern="dictionary",
+                    DictionaryName = "user_inputs",
+                    i = 0,
+                    j = 2,
+                    MatchedWord = "foo",
+                    Rank = 1,
+                    Reversed = false,
+                    L33t = false,
+                    Token = "foo"
+                },
+                new DictionaryMatch
+                {
+                    Pattern="dictionary",
+                    DictionaryName = "user_inputs",
+                    i = 3,
+                    j = 5,
+                    MatchedWord = "bar",
+                    Rank = 2,
+                    Reversed = false,
+                    L33t = false,
+                    Token = "bar"
+                }
+            };
+
+            result.Should().BeEquivalentTo(expected);
+        }
+
         private List<DictionaryMatch> RunMatches(string word)
         {
             var result = _matcher1.MatchPassword(word).Concat(_matcher2.MatchPassword(word));
