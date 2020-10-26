@@ -78,6 +78,11 @@ namespace zxcvbn_core_list_builder
                     var token = tvp.Key;
                     var rank = tvp.Value;
 
+                    if (token == "o")
+                    {
+                        Console.Write("");
+                    }
+
                     if (minimumValues[token].Name != name)
                         continue;
                     if (IsRareAndShort(token, rank) || HasCommaOrDoubleQuote(token))
@@ -89,7 +94,7 @@ namespace zxcvbn_core_list_builder
 
             var result = new Dictionary<string, List<string>>();
 
-            foreach (var kvp in frequencyLists)
+            foreach (var kvp in filteredTokenAndRank)
             {
                 var name = kvp.Key;
                 var values = kvp.Value;
