@@ -13,18 +13,26 @@ namespace Zxcvbn.Tests.Matcher
         private readonly DictionaryMatcher _matcher2 = new DictionaryMatcher("d2", "test_dictionary_2.txt");
         private readonly DictionaryMatcher _matcherTv = new DictionaryMatcher("us_tv_and_film", "us_tv_and_film.lst");
 
-        [Theory, InlineData("qasdf1234&*%"), InlineData("qasdf1234&*qq"), InlineData("%%asdf1234&*%"), InlineData("%%asdf1234&*qq")]
-        public void IdentifiesWordsSurroundedByNonWords(string word)
-
+        [Theory, InlineData("q", "%"), InlineData("q", "qq"), InlineData("%%", "%"), InlineData("%%", "qq")]
+        public void IdentifiesWordsSurroundedByNonWords(string prefix, string suffix)
         {
-            var result = RunMatches(word);
+            var word = "asdf1234&*";
+            var password = $"{prefix}{word}{suffix}";
+            var result = RunMatches(password);
 
-            result.Should().ContainSingle();
-
-            result[0].Token.Should().Be("asdf1234&*");
-            result[0].MatchedWord.Should().Be("asdf1234&*");
-            result[0].Rank.Should().Be(5);
-            result[0].DictionaryName.Should().Be("d2");
+            var expected = new[] { new DictionaryMatch
+            {
+                Pattern="dictionary",
+                DictionaryName = "d2",
+                i = prefix.Length,
+                j = prefix.Length+word.Length-1,
+                MatchedWord = word,
+                Rank = 5,
+                Reversed = false,
+                L33t = false,
+                Token = word
+            } };
+            result.Should().BeEquivalentTo(expected);
         }
 
         [Fact]
@@ -32,21 +40,30 @@ namespace Zxcvbn.Tests.Matcher
         {
             var result = RunMatches("BoaRdZ");
 
-            result.Should().HaveCount(2);
-
-            result[0].Token.Should().Be("BoaRd");
-            result[0].MatchedWord.Should().Be("board");
-            result[0].Rank.Should().Be(3);
-            result[0].DictionaryName.Should().Be("d1");
-            result[0].i.Should().Be(0);
-            result[0].j.Should().Be(4);
-
-            result[1].Token.Should().Be("Z");
-            result[1].MatchedWord.Should().Be("z");
-            result[1].Rank.Should().Be(1);
-            result[1].DictionaryName.Should().Be("d2");
-            result[1].i.Should().Be(5);
-            result[1].j.Should().Be(5);
+            var expected = new[] { new DictionaryMatch
+            {
+                Pattern="dictionary",
+                DictionaryName = "d1",
+                i = 0,
+                j = 4,
+                MatchedWord = "board",
+                Rank = 3,
+                Reversed = false,
+                L33t = false,
+                Token = "BoaRd"
+            } ,
+                new DictionaryMatch{
+                Pattern="dictionary",
+                DictionaryName = "d2",
+                i = 5,
+                j = 5,
+                MatchedWord = "z",
+                Rank = 1,
+                Reversed = false,
+                L33t = false,
+                Token = "Z"
+            }};
+            result.Should().BeEquivalentTo(expected);
         }
 
         [Theory, InlineData("mother", 2, "d1"), InlineData("board", 3, "d1"), InlineData("abcd", 4, "d1"), InlineData("cdef", 5, "d1"),
@@ -55,36 +72,50 @@ namespace Zxcvbn.Tests.Matcher
         {
             var result = RunMatches(word);
 
-            result.Should().HaveCount(1);
-
-            result[0].Token.Should().Be(word);
-            result[0].MatchedWord.Should().Be(word);
-            result[0].Rank.Should().Be(rank);
-            result[0].DictionaryName.Should().Be(dictionary);
-            result[0].i.Should().Be(0);
-            result[0].j.Should().Be(word.Length - 1);
+            var expected = new[] { new DictionaryMatch
+            {
+                Pattern="dictionary",
+                DictionaryName = dictionary,
+                i = 0,
+                j = word.Length-1,
+                MatchedWord = word,
+                Rank = rank,
+                Reversed = false,
+                L33t = false,
+                Token = word
+            } };
+            result.Should().BeEquivalentTo(expected);
         }
 
         [Fact]
-        public void MatchesMultipleWordsWhenTheyOverlap()
+        public void MatchesMultipleOverlappingWords()
         {
             var result = RunMatches("abcdef");
 
-            result.Should().HaveCount(2);
-
-            result[0].Token.Should().Be("abcd");
-            result[0].MatchedWord.Should().Be("abcd");
-            result[0].Rank.Should().Be(4);
-            result[0].DictionaryName.Should().Be("d1");
-            result[0].i.Should().Be(0);
-            result[0].j.Should().Be(3);
-
-            result[1].Token.Should().Be("cdef");
-            result[1].MatchedWord.Should().Be("cdef");
-            result[1].Rank.Should().Be(5);
-            result[1].DictionaryName.Should().Be("d1");
-            result[1].i.Should().Be(2);
-            result[1].j.Should().Be(5);
+            var expected = new[] { new DictionaryMatch
+            {
+                Pattern="dictionary",
+                DictionaryName = "d1",
+                i = 0,
+                j = 3,
+                MatchedWord = "abcd",
+                Rank = 4,
+                Reversed = false,
+                L33t = false,
+                Token = "abcd"
+            } ,
+                new DictionaryMatch{
+                Pattern="dictionary",
+                DictionaryName = "d1",
+                i = 2,
+                j = 5,
+                MatchedWord = "cdef",
+                Rank = 5,
+                Reversed = false,
+                L33t = false,
+                Token = "cdef"
+            }};
+            result.Should().BeEquivalentTo(expected);
         }
 
         [Fact]
@@ -109,32 +140,65 @@ namespace Zxcvbn.Tests.Matcher
         }
 
         [Fact]
-        public void MatchesWordsContainedInWords()
+        public void MatchesWordsThatContainOtherWords()
         {
             var result = RunMatches("motherboard");
 
-            result.Should().HaveCount(3);
+            var expected = new[] { new DictionaryMatch
+            {
+                Pattern="dictionary",
+                DictionaryName = "d1",
+                i = 0,
+                j = 5,
+                MatchedWord = "mother",
+                Rank = 2,
+                Reversed = false,
+                L33t = false,
+                Token = "mother"
+            } ,
+                new DictionaryMatch{
+                Pattern="dictionary",
+                DictionaryName = "d1",
+                i = 0,
+                j = 10,
+                MatchedWord = "motherboard",
+                Rank = 1,
+                Reversed = false,
+                L33t = false,
+                Token = "motherboard"
+            },new DictionaryMatch{
+                Pattern="dictionary",
+                DictionaryName = "d1",
+                i = 6,
+                j = 10,
+                MatchedWord = "board",
+                Rank = 3,
+                Reversed = false,
+                L33t = false,
+                Token = "board"
+            }};
 
-            result[0].Token.Should().Be("mother");
-            result[0].MatchedWord.Should().Be("mother");
-            result[0].Rank.Should().Be(2);
-            result[0].DictionaryName.Should().Be("d1");
-            result[0].i.Should().Be(0);
-            result[0].j.Should().Be(5);
+            result.Should().BeEquivalentTo(expected);
+        }
 
-            result[1].Token.Should().Be("motherboard");
-            result[1].MatchedWord.Should().Be("motherboard");
-            result[1].Rank.Should().Be(1);
-            result[1].DictionaryName.Should().Be("d1");
-            result[1].i.Should().Be(0);
-            result[1].j.Should().Be(10);
+        [Fact]
+        public void UsesTheDefaultDictionaries()
+        {
+            var result = _matcherTv.MatchPassword("wow").OfType<DictionaryMatch>().ToList();
 
-            result[2].Token.Should().Be("board");
-            result[2].MatchedWord.Should().Be("board");
-            result[2].Rank.Should().Be(3);
-            result[2].DictionaryName.Should().Be("d1");
-            result[2].i.Should().Be(6);
-            result[2].j.Should().Be(10);
+            var expected = new[] { new DictionaryMatch
+            {
+                Pattern="dictionary",
+                DictionaryName = "us_tv_and_film",
+                i = 0,
+                j = 2,
+                MatchedWord = "wow",
+                Rank = 322,
+                Reversed = false,
+                L33t = false,
+                Token = "wow"
+            } };
+            result.Should().BeEquivalentTo(expected);
         }
 
         private List<DictionaryMatch> RunMatches(string word)

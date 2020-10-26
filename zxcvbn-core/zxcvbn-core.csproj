@@ -27,4 +27,8 @@
     <EmbeddedResource Include="Dictionaries\*.lst" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="Matcher\L33tMatcher.cs" />
+  </ItemGroup>
+
 </Project>

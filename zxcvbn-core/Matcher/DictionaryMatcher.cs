@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Zxcvbn.Matcher.Matches;
@@ -112,8 +113,11 @@ namespace Zxcvbn.Matcher
             var i = 1;
             foreach (var word in wordList)
             {
+                var actualWord = word;
+                if (actualWord.Contains(" "))
+                    actualWord = actualWord.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries)[0];
                 // The word list is assumed to be in increasing frequency order
-                dict[word] = i++;
+                dict[actualWord] = i++;
             }
 
             return dict;
@@ -121,11 +125,11 @@ namespace Zxcvbn.Matcher
 
         private static void CalculateVariationsForMatch(DictionaryMatch match)
         {
-            match.BaseGuesses = match.Rank;
-            match.UppercaseVariations = PasswordScoring.CalculateUppercaseVariations(match);
-            match.L33tVariations = PasswordScoring.CaculateL33tVariations(match);
-            match.Variations = match.BaseGuesses * match.UppercaseVariations * match.L33tVariations *
-                               (match.Reversed ? 2 : 1);
+            //match.BaseGuesses = match.Rank;
+            //match.UppercaseVariations = PasswordScoring.CalculateUppercaseVariations(match);
+            //match.L33tVariations = PasswordScoring.CaculateL33tVariations(match);
+            //match.Variations = match.BaseGuesses * match.UppercaseVariations * match.L33tVariations *
+            //                   (match.Reversed ? 2 : 1);
         }
     }
 }
