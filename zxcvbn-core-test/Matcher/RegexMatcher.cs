@@ -14,13 +14,16 @@ namespace Zxcvbn.Tests.Matcher
             var re = new RegexMatcher(pattern, name);
 
             var result = re.MatchPassword(pattern).OfType<RegexMatch>().ToList();
-            result.Should().ContainSingle();
 
-            result[0].Token.Should().Be(pattern);
-            result[0].i.Should().Be(0);
-            result[0].j.Should().Be(pattern.Length - 1);
-            result[0].Pattern.Should().Be("regex");
-            result[0].RegexName.Should().Be(name);
+            var expected = new[] { new RegexMatch
+            {
+                Pattern="regex",
+                i = 0,
+                j = pattern.Length-1,
+                RegexName = name,
+                Token = pattern
+            } };
+            result.Should().BeEquivalentTo(expected);
         }
     }
 }
