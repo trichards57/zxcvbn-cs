@@ -14,7 +14,6 @@
         public long BaseGuesses { get; set; }
         public string BaseMatches { get; set; }
         public string BaseToken { get; set; }
-        public long Guesses { get; set; }
         public long RepeatCount { get; set; }
         public string Sequence { get; set; }
 

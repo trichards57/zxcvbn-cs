@@ -1,4 +1,6 @@
-﻿namespace Zxcvbn
+﻿using System;
+
+namespace Zxcvbn
 {
     /// <summary>
     /// <para>A single match that one of the pattern matchers has made against the password being tested.</para>
@@ -12,29 +14,22 @@
     // TODO: These should probably be immutable
     public class Match
     {
-        /// <summary>
-        /// Some pattern matchers can associate the cardinality of the set of possible matches that the
-        /// entropy calculation is derived from. Not all matchers provide a value for cardinality.
-        /// </summary>
-        public int Cardinality { get; set; }
+        public int Guesses { get; set; }
+        public double GuessesLog10 => Math.Log10(Guesses);
 
-        /// <summary>
-        /// The entropy that this portion of the password covers using the current pattern matching technique
-        /// </summary>
-        public double Entropy { get; set; }
-
-        // The following are more internal measures, but may be useful to consumers
         /// <summary>
         /// The start index in the password string of the matched token.
         /// </summary>
-        // ReSharper disable once InconsistentNaming
+#pragma warning disable IDE1006 // Naming Styles
         public int i { get; set; }
+#pragma warning restore IDE1006 // Naming Styles
 
         /// <summary>
         /// The end index in the password string of the matched token.
         /// </summary>
-        // ReSharper disable once InconsistentNaming
+#pragma warning disable IDE1006 // Naming Styles
         public int j { get; set; }
+#pragma warning restore IDE1006 // Naming Styles
 
         /// <summary>
         /// The name of the pattern matcher used to generate this match

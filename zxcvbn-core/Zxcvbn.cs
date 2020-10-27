@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Zxcvbn.Matcher.Matches;
-using Zxcvbn.Utilities;
 
 namespace Zxcvbn
 {
@@ -81,7 +78,8 @@ namespace Zxcvbn
 
             matches = _matcherFactory.CreateMatchers(userInputs).Aggregate(matches, (current, matcher) => current.Union(matcher.MatchPassword(password)));
 
-            var result = FindMinimumEntropyMatch(password, matches);
+            //var result = FindMinimumEntropyMatch(password, matches);
+            var result = new Result();
 
             timer.Stop();
             result.CalcTime = timer.ElapsedMilliseconds;
@@ -89,53 +87,53 @@ namespace Zxcvbn
             return result;
         }
 
-        private static void GetDictionaryMatchFeedback(DictionaryMatch match, bool isSoleMatch, Result result)
-        {
-            switch (match.DictionaryName)
-            {
-                case "passwords":
-                    if (isSoleMatch && !(match is L33tDictionaryMatch))
-                    {
-                        if (match.Rank <= 10)
-                            result.Warning = Warning.Top10Passwords;
-                        else if (match.Rank <= 100)
-                            result.Warning = Warning.Top100Passwords;
-                        else
-                            result.Warning = Warning.CommonPasswords;
-                    }
-                    else if (PasswordScoring.CrackTimeToScore(PasswordScoring.EntropyToCrackTime(match.Entropy)) <= 1)
-                    {
-                        result.Warning = Warning.SimilarCommonPasswords;
-                    }
+        //private static void GetDictionaryMatchFeedback(DictionaryMatch match, bool isSoleMatch, Result result)
+        //{
+        //    switch (match.DictionaryName)
+        //    {
+        //        case "passwords":
+        //            if (isSoleMatch && !(match is L33tDictionaryMatch))
+        //            {
+        //                if (match.Rank <= 10)
+        //                    result.Warning = Warning.Top10Passwords;
+        //                else if (match.Rank <= 100)
+        //                    result.Warning = Warning.Top100Passwords;
+        //                else
+        //                    result.Warning = Warning.CommonPasswords;
+        //            }
+        //            else if (PasswordScoring.CrackTimeToScore(PasswordScoring.EntropyToCrackTime(match.Entropy)) <= 1)
+        //            {
+        //                result.Warning = Warning.SimilarCommonPasswords;
+        //            }
 
-                    break;
+        //            break;
 
-                case "english":
-                    if (isSoleMatch)
-                        result.Warning = Warning.WordEasy;
-                    break;
+        //        case "english":
+        //            if (isSoleMatch)
+        //                result.Warning = Warning.WordEasy;
+        //            break;
 
-                case "surnames":
-                case "male_names":
-                case "female_names":
-                    result.Warning = isSoleMatch ? Warning.NameSurnamesEasy : Warning.CommonNameSurnamesEasy;
-                    break;
+        //        case "surnames":
+        //        case "male_names":
+        //        case "female_names":
+        //            result.Warning = isSoleMatch ? Warning.NameSurnamesEasy : Warning.CommonNameSurnamesEasy;
+        //            break;
 
-                default:
-                    result.Warning = Warning.Empty;
-                    break;
-            }
+        //        default:
+        //            result.Warning = Warning.Empty;
+        //            break;
+        //    }
 
-            var word = match.Token;
+        //    var word = match.Token;
 
-            if (Regex.IsMatch(word, PasswordScoring.StartUpper))
-                result.Suggestions.Add(Suggestion.CapsDontHelp);
-            else if (Regex.IsMatch(word, PasswordScoring.AllUpper) && !word.Equals(word.ToLowerInvariant()))
-                result.Suggestions.Add(Suggestion.AllCapsEasy);
+        //    if (Regex.IsMatch(word, PasswordScoring.StartUpper))
+        //        result.Suggestions.Add(Suggestion.CapsDontHelp);
+        //    else if (Regex.IsMatch(word, PasswordScoring.AllUpper) && !word.Equals(word.ToLowerInvariant()))
+        //        result.Suggestions.Add(Suggestion.AllCapsEasy);
 
-            if (match is L33tDictionaryMatch)
-                result.Suggestions.Add(Suggestion.PredictableSubstitutionsEasy);
-        }
+        //    if (match is L33tDictionaryMatch)
+        //        result.Suggestions.Add(Suggestion.PredictableSubstitutionsEasy);
+        //}
 
         private static Match GetLongestMatch(IList<Match> matchSequence)
         {
@@ -157,7 +155,7 @@ namespace Zxcvbn
             switch (match.Pattern)
             {
                 case "dictionary":
-                    GetDictionaryMatchFeedback((DictionaryMatch)match, isSoleMatch, result);
+                    //GetDictionaryMatchFeedback((DictionaryMatch)match, isSoleMatch, result);
                     break;
 
                 case "spatial":
@@ -196,120 +194,120 @@ namespace Zxcvbn
         /// <param name="matches">Password being evaluated</param>
         /// <param name="password">List of matches found against the password</param>
         /// <returns>A result object for the lowest entropy match sequence</returns>
-        private Result FindMinimumEntropyMatch(string password, IEnumerable<Match> matches)
-        {
-            var bruteforceCardinality = PasswordScoring.PasswordCardinality(password);
+        //private Result FindMinimumEntropyMatch(string password, IEnumerable<Match> matches)
+        //{
+        //    var bruteforceCardinality = PasswordScoring.PasswordCardinality(password);
 
-            // Minimum entropy up to position k in the password
-            var minimumEntropyToIndex = new double[password.Length];
-            var bestMatchForIndex = new Match[password.Length];
+        //    // Minimum entropy up to position k in the password
+        //    var minimumEntropyToIndex = new double[password.Length];
+        //    var bestMatchForIndex = new Match[password.Length];
 
-            for (var k = 0; k < password.Length; k++)
-            {
-                // Start with bruteforce scenario added to previous sequence to beat
-                minimumEntropyToIndex[k] = (k == 0 ? 0 : minimumEntropyToIndex[k - 1]) + Math.Log(bruteforceCardinality, 2);
+        //    for (var k = 0; k < password.Length; k++)
+        //    {
+        //        // Start with bruteforce scenario added to previous sequence to beat
+        //        minimumEntropyToIndex[k] = (k == 0 ? 0 : minimumEntropyToIndex[k - 1]) + Math.Log(bruteforceCardinality, 2);
 
-                // All matches that end at the current character, test to see if the entropy is less
-                foreach (var match in matches.Where(m => m.j == k))
-                {
-                    var candidateEntropy = (match.i <= 0 ? 0 : minimumEntropyToIndex[match.i - 1]) + match.Entropy;
-                    if (!(candidateEntropy < minimumEntropyToIndex[k])) continue;
-                    minimumEntropyToIndex[k] = candidateEntropy;
-                    bestMatchForIndex[k] = match;
-                }
-            }
+        //        // All matches that end at the current character, test to see if the entropy is less
+        //        foreach (var match in matches.Where(m => m.j == k))
+        //        {
+        //            var candidateEntropy = (match.i <= 0 ? 0 : minimumEntropyToIndex[match.i - 1]) + match.Entropy;
+        //            if (!(candidateEntropy < minimumEntropyToIndex[k])) continue;
+        //            minimumEntropyToIndex[k] = candidateEntropy;
+        //            bestMatchForIndex[k] = match;
+        //        }
+        //    }
 
-            // Walk backwards through lowest entropy matches, to build the best password sequence
-            var matchSequence = new List<Match>();
-            for (var k = password.Length - 1; k >= 0; k--)
-            {
-                if (bestMatchForIndex[k] == null) continue;
-                matchSequence.Add(bestMatchForIndex[k]);
-                k = bestMatchForIndex[k].i; // Jump back to start of match
-            }
-            matchSequence.Reverse();
+        //    // Walk backwards through lowest entropy matches, to build the best password sequence
+        //    var matchSequence = new List<Match>();
+        //    for (var k = password.Length - 1; k >= 0; k--)
+        //    {
+        //        if (bestMatchForIndex[k] == null) continue;
+        //        matchSequence.Add(bestMatchForIndex[k]);
+        //        k = bestMatchForIndex[k].i; // Jump back to start of match
+        //    }
+        //    matchSequence.Reverse();
 
-            // The match sequence might have gaps, fill in with bruteforce matching
-            // After this the matches in matchSequence must cover the whole string (i.e. match[k].j == match[k + 1].i - 1)
-            if (matchSequence.Count == 0)
-            {
-                // To make things easy, we'll separate out the case where there are no matches so everything is bruteforced
-                matchSequence.Add(new Match
-                {
-                    i = 0,
-                    j = password.Length,
-                    Token = password,
-                    Cardinality = bruteforceCardinality,
-                    Pattern = BruteforcePattern,
-                    Entropy = Math.Log(Math.Pow(bruteforceCardinality, password.Length), 2)
-                });
-            }
-            else
-            {
-                // There are matches, so find the gaps and fill them in
-                var matchSequenceCopy = new List<Match>();
-                for (var k = 0; k < matchSequence.Count; k++)
-                {
-                    var m1 = matchSequence[k];
-                    var m2 = (k < matchSequence.Count - 1 ? matchSequence[k + 1] : new Match() { i = password.Length }); // Next match, or a match past the end of the password
+        //    // The match sequence might have gaps, fill in with bruteforce matching
+        //    // After this the matches in matchSequence must cover the whole string (i.e. match[k].j == match[k + 1].i - 1)
+        //    if (matchSequence.Count == 0)
+        //    {
+        //        // To make things easy, we'll separate out the case where there are no matches so everything is bruteforced
+        //        matchSequence.Add(new Match
+        //        {
+        //            i = 0,
+        //            j = password.Length,
+        //            Token = password,
+        //            Cardinality = bruteforceCardinality,
+        //            Pattern = BruteforcePattern,
+        //            Entropy = Math.Log(Math.Pow(bruteforceCardinality, password.Length), 2)
+        //        });
+        //    }
+        //    else
+        //    {
+        //        // There are matches, so find the gaps and fill them in
+        //        var matchSequenceCopy = new List<Match>();
+        //        for (var k = 0; k < matchSequence.Count; k++)
+        //        {
+        //            var m1 = matchSequence[k];
+        //            var m2 = (k < matchSequence.Count - 1 ? matchSequence[k + 1] : new Match() { i = password.Length }); // Next match, or a match past the end of the password
 
-                    matchSequenceCopy.Add(m1);
-                    if (m1.j >= m2.i - 1) continue;
-                    // Fill in gap
-                    var ns = m1.j + 1;
-                    var ne = m2.i - 1;
-                    matchSequenceCopy.Add(new Match()
-                    {
-                        i = ns,
-                        j = ne,
-                        Token = password.Substring(ns, ne - ns + 1),
-                        Cardinality = bruteforceCardinality,
-                        Pattern = BruteforcePattern,
-                        Entropy = Math.Log(Math.Pow(bruteforceCardinality, ne - ns + 1), 2)
-                    });
-                }
+        //            matchSequenceCopy.Add(m1);
+        //            if (m1.j >= m2.i - 1) continue;
+        //            // Fill in gap
+        //            var ns = m1.j + 1;
+        //            var ne = m2.i - 1;
+        //            matchSequenceCopy.Add(new Match()
+        //            {
+        //                i = ns,
+        //                j = ne,
+        //                Token = password.Substring(ns, ne - ns + 1),
+        //                Cardinality = bruteforceCardinality,
+        //                Pattern = BruteforcePattern,
+        //                Entropy = Math.Log(Math.Pow(bruteforceCardinality, ne - ns + 1), 2)
+        //            });
+        //        }
 
-                matchSequence = matchSequenceCopy;
-            }
+        //        matchSequence = matchSequenceCopy;
+        //    }
 
-            var minEntropy = (password.Length == 0 ? 0 : minimumEntropyToIndex[password.Length - 1]);
-            var crackTime = PasswordScoring.EntropyToCrackTime(minEntropy);
-            var score = PasswordScoring.CrackTimeToScore(crackTime);
+        //    var minEntropy = (password.Length == 0 ? 0 : minimumEntropyToIndex[password.Length - 1]);
+        //    var crackTime = PasswordScoring.EntropyToCrackTime(minEntropy);
+        //    var score = PasswordScoring.CrackTimeToScore(crackTime);
 
-            var result = new Result
-            {
-                Password = password,
-                Entropy = Math.Round(minEntropy, 3),
-                MatchSequence = matchSequence,
-                CrackTime = Math.Round(crackTime, 3),
-                CrackTimeDisplay = DateFormatter.DisplayTime(crackTime, _translation),
-                Score = score,
-                Warning = Warning.Default,
-                Suggestions = new List<Suggestion>()
-            };
+        //    var result = new Result
+        //    {
+        //        Password = password,
+        //        Entropy = Math.Round(minEntropy, 3),
+        //        MatchSequence = matchSequence,
+        //        CrackTime = Math.Round(crackTime, 3),
+        //        CrackTimeDisplay = DateFormatter.DisplayTime(crackTime, _translation),
+        //        Score = score,
+        //        Warning = Warning.Default,
+        //        Suggestions = new List<Suggestion>()
+        //    };
 
-            if (!matchSequence.Any())
-            {
-                result.Suggestions.Add(Suggestion.Default);
-            }
-            else
-            {
-                // Don't give feedback if the score is good or great
-                if (score > 2)
-                {
-                    result.Warning = Warning.Empty;
-                    result.Suggestions.Add(Suggestion.Empty);
-                }
-                else
-                {
-                    // Tie feedback to the longest match for longer sequences
-                    var longestMatch = GetLongestMatch(matchSequence);
-                    GetMatchFeedback(longestMatch, matchSequence.Count == 1, result);
-                    result.Suggestions.Insert(0, Suggestion.AddAnotherWordOrTwo);
-                }
-            }
+        //    if (!matchSequence.Any())
+        //    {
+        //        result.Suggestions.Add(Suggestion.Default);
+        //    }
+        //    else
+        //    {
+        //        // Don't give feedback if the score is good or great
+        //        if (score > 2)
+        //        {
+        //            result.Warning = Warning.Empty;
+        //            result.Suggestions.Add(Suggestion.Empty);
+        //        }
+        //        else
+        //        {
+        //            // Tie feedback to the longest match for longer sequences
+        //            var longestMatch = GetLongestMatch(matchSequence);
+        //            GetMatchFeedback(longestMatch, matchSequence.Count == 1, result);
+        //            result.Suggestions.Insert(0, Suggestion.AddAnotherWordOrTwo);
+        //        }
+        //    }
 
-            return result;
-        }
+        //    return result;
+        //}
     }
 }

@@ -56,7 +56,7 @@ namespace Zxcvbn.Matcher
                ( \d{1,4} )    # year
               $", RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace);
 
-        private readonly int _referenceYear = DateTime.Now.Year;
+        public static int ReferenceYear { get; } = DateTime.Now.Year;
 
         /// <inheritdoc />
         /// <summary>
@@ -100,7 +100,7 @@ namespace Zxcvbn.Matcher
 
                     var bestCandidate = candidates[0];
 
-                    int Metric(LooseDate c) => Math.Abs(c.Year - _referenceYear);
+                    int Metric(LooseDate c) => Math.Abs(c.Year - ReferenceYear);
 
                     var minDistance = Metric(bestCandidate);
 

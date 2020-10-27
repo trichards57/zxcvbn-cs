@@ -87,8 +87,6 @@ namespace Zxcvbn.Matcher
                 }
             }
 
-            foreach (var match in matches) CalculateVariationsForMatch(match as DictionaryMatch);
-
             return matches.OrderBy(m => m.i).ThenBy(m => m.j);
         }
 
@@ -121,15 +119,6 @@ namespace Zxcvbn.Matcher
             }
 
             return dict;
-        }
-
-        private static void CalculateVariationsForMatch(DictionaryMatch match)
-        {
-            //match.BaseGuesses = match.Rank;
-            //match.UppercaseVariations = PasswordScoring.CalculateUppercaseVariations(match);
-            //match.L33tVariations = PasswordScoring.CaculateL33tVariations(match);
-            //match.Variations = match.BaseGuesses * match.UppercaseVariations * match.L33tVariations *
-            //                   (match.Reversed ? 2 : 1);
         }
     }
 }

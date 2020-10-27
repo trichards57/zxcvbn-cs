@@ -49,7 +49,7 @@ namespace Zxcvbn
 
             var variations = 1L;
 
-            foreach (var kvp in lMatch.Subs)
+            foreach (var kvp in lMatch.Sub)
             {
                 var unsubbed = kvp.Key;
                 var subbed = kvp.Value;
