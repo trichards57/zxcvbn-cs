@@ -20,11 +20,9 @@ before_test:
   - cmd: nuget install xunit.runner.console -ExcludeVersion -OutputDirectory tools
   - cmd: nuget install coveralls.io -ExcludeVersion -OutputDirectory tools
 test_script:
-  - cmd: cd %APPVEYOR_BUILD_FOLDER%\zxcvbn-core-test && ..\tools\OpenCover\tools\OpenCover.Console.exe -target:"%programfiles%\dotnet\dotnet.exe" -targetargs:"test --test-adapter-path:. --logger:Appveyor" -register:user -output:"..\reports\coverage\coverage.xml" -skipautoprops -filter:"+[zxcvbn-core*]* -[zxcvbn-core-test]*"  -excludebyattribute:*.ExcludeFromCodeCoverage* -mergebyhash -returntargetcode
+  - cmd: cd %APPVEYOR_BUILD_FOLDER% && dotnet test  --collect:"XPlat Code Coverage" --test-adapter-path:. --logger:Appveyor
 after_test:
-  - cmd: cd %APPVEYOR_BUILD_FOLDER%
   - ps: .\upload-results.ps1
-  - cmd: cd %APPVEYOR_BUILD_FOLDER% && tools\coveralls.io\tools\coveralls.net.exe --autodetect reports\coverage\coverage.xml
 environment:
   COVERALLS_REPO_TOKEN:
     secure: iSoNwLqIwwMN/WHRx1cV7varflDclJFbg9SGrPrBzGYHJrMTXuk+h8hWfHajvaH/
