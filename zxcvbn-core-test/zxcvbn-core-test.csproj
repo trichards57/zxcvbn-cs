@@ -2,14 +2,13 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <IsPackable>false</IsPackable>
+    <AssemblyName>zxcvbn-core-test</AssemblyName>
+    <RootNamespace>Zxcvbn.Tests</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="TestResults\**" />
     <EmbeddedResource Remove="TestResults\**" />
     <None Remove="TestResults\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="Matcher\L33tMatcherTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Appveyor.TestLogger" Version="2.0.0" />

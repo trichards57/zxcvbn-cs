@@ -17,9 +17,7 @@ namespace Zxcvbn.Matcher.Matches
         public L33tDictionaryMatch(DictionaryMatch dm)
         {
             BaseEntropy = dm.BaseEntropy;
-            Cardinality = dm.Cardinality;
             DictionaryName = dm.DictionaryName;
-            Entropy = dm.Entropy;
             i = dm.i;
             j = dm.j;
             MatchedWord = dm.MatchedWord;
@@ -27,19 +25,15 @@ namespace Zxcvbn.Matcher.Matches
             Rank = dm.Rank;
             Token = dm.Token;
             UppercaseEntropy = dm.UppercaseEntropy;
-
-            Subs = new Dictionary<char, char>();
         }
 
-        /// <summary>
-        /// The extra entropy from using l33t substitutions
-        /// </summary>
-        // ReSharper disable once InconsistentNaming
-        public double L33tEntropy { get; set; }
+        public L33tDictionaryMatch()
+        {
+        }
 
         /// <summary>
         /// The character mappings that are in use for this match
         /// </summary>
-        public Dictionary<char, char> Subs { get; set; }
+        public Dictionary<char, char> Sub { get; set; }
     }
 }
