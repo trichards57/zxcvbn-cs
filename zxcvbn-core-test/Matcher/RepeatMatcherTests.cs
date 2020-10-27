@@ -1,5 +1,5 @@
-﻿//using System.Linq;
-//using FluentAssertions;
+﻿//using FluentAssertions;
+//using System.Linq;
 //using Xunit;
 //using Zxcvbn.Matcher;
 
@@ -7,6 +7,16 @@
 //{
 //    public class RepeatMatcherTests
 //    {
+//        [Theory, InlineData(""), InlineData("#")]
+//        public void DoesNotMatchEmptyOrOneCharacterRepeatPatterns(string pattern)
+//        {
+//            var matcher = new RepeatMatcher();
+
+//            var res = matcher.MatchPassword(pattern);
+
+//            res.Should().BeEmpty();
+//        }
+
 //        [Fact]
 //        public void MatchNoRepeatedCharacters()
 //        {
