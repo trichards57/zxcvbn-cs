@@ -131,7 +131,6 @@ namespace Zxcvbn.Tests.Matcher
             {
                 new DictionaryMatch()
                 {
-                    Pattern = "dictionary",
                     DictionaryName = "words",
                     i = 0,
                     j = 7,
@@ -140,7 +139,7 @@ namespace Zxcvbn.Tests.Matcher
                     Reversed = false,
                     L33t = true,
                     Token = "p4ssword",
-                    Sub = new Dictionary<char, char>
+                    L33tSubs = new Dictionary<char, char>
                     {
                         {'4','a' }
                     }
@@ -153,7 +152,6 @@ namespace Zxcvbn.Tests.Matcher
             {
                 new DictionaryMatch()
                 {
-                    Pattern = "dictionary",
                     DictionaryName = "words",
                     i = 0,
                     j = 7,
@@ -162,7 +160,7 @@ namespace Zxcvbn.Tests.Matcher
                     Reversed = false,
                     L33t = true,
                     Token = "p@ssw0rd",
-                    Sub = new Dictionary<char, char>
+                    L33tSubs = new Dictionary<char, char>
                     {
                         {'@','a' }, {'0','o' }
                     }
@@ -175,7 +173,6 @@ namespace Zxcvbn.Tests.Matcher
             {
                 new DictionaryMatch()
                 {
-                    Pattern = "dictionary",
                     DictionaryName = "words2",
                     i = 5,
                     j = 7,
@@ -184,7 +181,7 @@ namespace Zxcvbn.Tests.Matcher
                     Reversed = false,
                     L33t = true,
                     Token = "{G0",
-                    Sub = new Dictionary<char, char>
+                    L33tSubs = new Dictionary<char, char>
                     {
                         {'{','c' }, {'0','o' }
                     }
@@ -204,7 +201,6 @@ namespace Zxcvbn.Tests.Matcher
             {
                 new DictionaryMatch()
                 {
-                    Pattern = "dictionary",
                     DictionaryName = "words",
                     i = 0,
                     j = 2,
@@ -213,7 +209,7 @@ namespace Zxcvbn.Tests.Matcher
                     Reversed = false,
                     L33t = true,
                     Token = "@a(",
-                    Sub = new Dictionary<char, char>
+                    L33tSubs = new Dictionary<char, char>
                     {
                         {'@','a' },
                         {'(','c' }
@@ -221,7 +217,6 @@ namespace Zxcvbn.Tests.Matcher
                 },
                 new DictionaryMatch()
                 {
-                    Pattern = "dictionary",
                     DictionaryName = "words2",
                     i = 2,
                     j = 4,
@@ -230,14 +225,13 @@ namespace Zxcvbn.Tests.Matcher
                     Reversed = false,
                     L33t = true,
                     Token = "(go",
-                    Sub = new Dictionary<char, char>
+                    L33tSubs = new Dictionary<char, char>
                     {
                         {'(','c' }
                     }
                 },
                 new DictionaryMatch()
                 {
-                    Pattern = "dictionary",
                     DictionaryName = "words2",
                     i = 5,
                     j = 7,
@@ -246,7 +240,7 @@ namespace Zxcvbn.Tests.Matcher
                     Reversed = false,
                     L33t = true,
                     Token = "{G0",
-                    Sub = new Dictionary<char, char>
+                    L33tSubs = new Dictionary<char, char>
                     {
                         {'{','c' }, {'0','o' }
                     }

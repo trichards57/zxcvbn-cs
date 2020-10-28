@@ -1,21 +1,28 @@
 ﻿namespace Zxcvbn.Matcher.Matches
 {
-    /// <inheritdoc />
     /// <summary>
-    /// A match made using the <see cref="T:Zxcvbn.Matcher.SequenceMatcher" /> containing some additional sequence information.
+    /// A match identified as a predictable sequence of characters.
     /// </summary>
     public class SequenceMatch : Match
     {
         /// <summary>
-        /// Whether the match was found in ascending order (cdefg) or not (zyxw)
+        /// Gets a value indicating whether the match was found in ascending order (cdefg) or not (zyxw).
         /// </summary>
-        public bool Ascending { get; set; }
+        public bool Ascending { get; internal set; }
 
         /// <summary>
-        /// The name of the sequence that the match was found in (e.g. 'lower', 'upper', 'digits')
+        /// Gets the name of the pattern matcher used to generate this match.
         /// </summary>
-        public string SequenceName { get; set; }
+        public override string Pattern => "sequence";
 
-        public int SequenceSpace { get; set; }
+        /// <summary>
+        /// Gets the name of the sequence that the match was found in.
+        /// </summary>
+        public string SequenceName { get; internal set; }
+
+        /// <summary>
+        /// Gets the size of the sequence the pattern was found in.
+        /// </summary>
+        public int SequenceSpace { get; internal set; }
     }
 }

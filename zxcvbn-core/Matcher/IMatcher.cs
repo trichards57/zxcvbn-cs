@@ -4,16 +4,15 @@ using Zxcvbn.Matcher.Matches;
 namespace Zxcvbn.Matcher
 {
     /// <summary>
-    /// All pattern matchers must implement the IMatcher interface.
+    /// Represents a class that can look for matches in a password.
     /// </summary>
     internal interface IMatcher
     {
         /// <summary>
-        /// This function is called once for each matcher for each password being evaluated. It should perform the matching process and return
-        /// an enumerable of Match objects for each match found.
+        /// Find matches in <paramref name="password"/>.
         /// </summary>
-        /// <param name="password"></param>
-        /// <returns></returns>
+        /// <param name="password">The password to check.</param>
+        /// <returns>An enumerable of the matches.</returns>
         IEnumerable<Match> MatchPassword(string password);
     }
 }

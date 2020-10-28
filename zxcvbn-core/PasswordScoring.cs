@@ -7,21 +7,18 @@ using Zxcvbn.Scoring;
 namespace Zxcvbn
 {
     /// <summary>
-    /// Some useful shared functions used for evaluating passwords
+    /// Some useful shared functions used for evaluating passwords.
     /// </summary>
     internal static class PasswordScoring
     {
-        public const string AllUpper = "^[^a-z]+$";
-        public const string StartUpper = "^[A-Z][^A-Z]+$";
         private const int MinimumGuessesBeforeGrowingSequence = 10000;
 
         /// <summary>
-        /// Caclulate binomial coefficient (i.e. nCk)
-        /// Uses same algorithm as zxcvbn (cf. scoring.coffee), from http://blog.plover.com/math/choose.html
+        /// Caclulate binomial coefficient (i.e. nCk).
         /// </summary>
-        /// <param name="k">k</param>
-        /// <param name="n">n</param>
-        /// <returns>Binomial coefficient; nCk</returns>
+        /// <param name="n">n.</param>
+        /// <param name="k">k.</param>
+        /// <returns>Binomial coefficient.</returns>
         public static long Binomial(int n, int k)
         {
             if (k > n) return 0;
@@ -38,7 +35,13 @@ namespace Zxcvbn
             return r;
         }
 
-        public static double EstimateGuesses(Match match, string password)
+        /// <summary>
+        /// Estimates the attempts required to guess the password.
+        /// </summary>
+        /// <param name="match">The match.</param>
+        /// <param name="password">The actual password.</param>
+        /// <returns>The guesses estimate.</returns>
+        public static long EstimateGuesses(Match match, string password)
         {
             if (match.Guesses != 0)
                 return match.Guesses;
@@ -49,7 +52,7 @@ namespace Zxcvbn
                 minGuesses = match.Token.Length == 1 ? BruteForceGuessesCalculator.MinSubmatchGuessesSingleCharacter : BruteForceGuessesCalculator.MinSubmatchGuessesMultiCharacter;
             }
 
-            double guesses = 0;
+            long guesses = 0;
 
             switch (match.Pattern)
             {
@@ -86,6 +89,13 @@ namespace Zxcvbn
             return match.Guesses;
         }
 
+        /// <summary>
+        /// Identifies the most guessable match in the sequence.
+        /// </summary>
+        /// <param name="password">The password.</param>
+        /// <param name="matches">The matches.</param>
+        /// <param name="excludeAdditive">if set to <c>true</c>, will exclude additive matches (for unit testing only).</param>
+        /// <returns>A summary on the most testable match.</returns>
         public static MostGuessableMatchResult MostGuessableMatchSequence(string password, IEnumerable<Match> matches, bool excludeAdditive = false)
         {
             var matchesByJ = Enumerable.Range(0, password.Length).Select(i => new List<Match>()).ToList();
@@ -110,13 +120,14 @@ namespace Zxcvbn
                         Update(password, optimal, m, 1, excludeAdditive);
                     }
                 }
+
                 BruteforceUpdate(password, optimal, k, excludeAdditive);
             }
 
             var optimalMatchSequence = Unwind(optimal, password.Length);
             var optimalL = optimalMatchSequence.Count;
 
-            double guesses;
+            long guesses;
 
             if (password.Length == 0)
                 guesses = 1;
@@ -128,7 +139,7 @@ namespace Zxcvbn
                 Guesses = guesses,
                 Password = password,
                 Sequence = optimalMatchSequence,
-                Score = 0
+                Score = 0,
             };
         }
 
@@ -151,7 +162,7 @@ namespace Zxcvbn
             }
         }
 
-        private static double Factorial(double n)
+        private static long Factorial(long n)
         {
             if (n < 2)
                 return 1;
@@ -167,10 +178,9 @@ namespace Zxcvbn
         {
             return new BruteForceMatch
             {
-                Pattern = "bruteforce",
                 Token = password.Substring(i, j - i + 1),
                 i = i,
-                j = j
+                j = j,
             };
         }
 
@@ -212,7 +222,7 @@ namespace Zxcvbn
 
             var g = Factorial(l) * pi;
             if (!excludeAdditive)
-                g += Math.Pow(MinimumGuessesBeforeGrowingSequence, l - 1);
+                g += (long)Math.Pow(MinimumGuessesBeforeGrowingSequence, l - 1);
 
             foreach (var competingL in optimal.G[k].Keys)
             {
@@ -227,31 +237,5 @@ namespace Zxcvbn
             optimal.M[k][l] = m;
             optimal.Pi[k][l] = pi;
         }
-    }
-
-    internal class MostGuessableMatchResult
-    {
-        public double Guesses { get; set; }
-        public string Password { get; set; }
-        public int Score { get; set; }
-        public IEnumerable<Match> Sequence { get; set; }
-    }
-
-    internal class OptimalValues
-    {
-        public List<Dictionary<int, double>> G = new List<Dictionary<int, double>>();
-        public List<Dictionary<int, double>> Pi = new List<Dictionary<int, double>>();
-
-        public OptimalValues(int length)
-        {
-            for (var i = 0; i < length; i++)
-            {
-                G.Add(new Dictionary<int, double>());
-                Pi.Add(new Dictionary<int, double>());
-                M.Add(new Dictionary<int, Match>());
-            }
-        }
-
-        public List<Dictionary<int, Match>> M { get; set; } = new List<Dictionary<int, Match>>();
     }
 }

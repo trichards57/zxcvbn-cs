@@ -32,7 +32,6 @@ namespace Zxcvbn.Tests.Matcher
                 ShiftedCount = shifts,
                 i=0,
                 j=pattern.Length-1,
-                Pattern = "spatial",
                 Token = pattern
             } };
             result.Should().BeEquivalentTo(expected);
@@ -42,7 +41,7 @@ namespace Zxcvbn.Tests.Matcher
         public void MatchesSpatialPatternSurroundedByNonSpatialPatterns()
         {
             var matcher = new SpatialMatcher();
-            matcher.SpatialGraphs = matcher.SpatialGraphs.Where(g => g.Name == "qwerty").ToList();
+            SpatialMatcher.SpatialGraphs = SpatialMatcher.SpatialGraphs.Where(g => g.Name == "qwerty").ToList().AsReadOnly();
 
             var pattern = "6tfGHJ";
             var password = $"rz!{pattern}%z";
@@ -55,7 +54,6 @@ namespace Zxcvbn.Tests.Matcher
                 ShiftedCount = 3,
                 i=3,
                 j=3+pattern.Length-1,
-                Pattern = "spatial",
                 Token = pattern
             } };
             result.Should().BeEquivalentTo(expected);

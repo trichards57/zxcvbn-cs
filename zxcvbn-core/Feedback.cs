@@ -1,38 +1,44 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Zxcvbn.Matcher.Matches;
 
 namespace Zxcvbn
 {
-    public class FeedbackItem
-    {
-        public IList<string> Suggestions { get; set; }
-        public string Warning { get; set; }
-    }
-
-    internal class Feedback
+    /// <summary>
+    /// Generates feedback based on the match results.
+    /// </summary>
+    internal static class Feedback
     {
         private static readonly FeedbackItem DefaultFeedback = new FeedbackItem
         {
-            Warning = "",
+            Warning = string.Empty,
             Suggestions = new[]
             {
                 "Use a few words, avoid common phrases",
-                "No need for symbols, digits, or uppercase letters"
-            }
+                "No need for symbols, digits, or uppercase letters",
+            },
         };
 
+        /// <summary>
+        /// Gets feedback based on the provided score and matches.
+        /// </summary>
+        /// <param name="score">The score to assess.</param>
+        /// <param name="sequence">The sequence of matches to assess.</param>
+        /// <returns>Any warnings and suggestiongs about the password matches.</returns>
         public static FeedbackItem GetFeedback(int score, IEnumerable<Match> sequence)
         {
             if (!sequence.Any())
                 return DefaultFeedback;
 
             if (score > 2)
+            {
                 return new FeedbackItem
                 {
-                    Warning = "",
-                    Suggestions = new List<string>()
+                    Warning = string.Empty,
+                    Suggestions = new List<string>(),
                 };
+            }
 
             var longestMatch = sequence.OrderBy(c => c.Token.Length).Last();
 
@@ -40,13 +46,15 @@ namespace Zxcvbn
             var extraFeedback = "Add another word or two.  Uncommon words are better.";
 
             if (feedback != null)
+            {
                 feedback.Suggestions.Insert(0, extraFeedback);
+            }
             else
             {
                 feedback = new FeedbackItem
                 {
-                    Warning = "",
-                    Suggestions = new List<string> { extraFeedback }
+                    Warning = string.Empty,
+                    Suggestions = new List<string> { extraFeedback },
                 };
             }
 
@@ -55,7 +63,7 @@ namespace Zxcvbn
 
         private static FeedbackItem GetDictionaryMatchFeedback(DictionaryMatch match, bool isSoleMatch)
         {
-            var warning = "";
+            var warning = string.Empty;
 
             if (match.DictionaryName == "passwords")
             {
@@ -85,7 +93,7 @@ namespace Zxcvbn
             var word = match.Token;
             if (char.IsUpper(word[0]))
                 suggestions.Add("Capitalization doesn't help very much");
-            else if (word.All(c => char.IsUpper(c)) && word.ToLower() != word)
+            else if (word.All(c => char.IsUpper(c)) && word.ToLower(CultureInfo.InvariantCulture) != word)
                 suggestions.Add("All-uppercase is almost as easy to guess as all-lowercase");
 
             if (match.Reversed && match.Token.Length >= 4)
@@ -96,7 +104,7 @@ namespace Zxcvbn
             return new FeedbackItem
             {
                 Suggestions = suggestions,
-                Warning = warning
+                Warning = warning,
             };
         }
 
@@ -113,8 +121,8 @@ namespace Zxcvbn
                         Warning = (match as SpatialMatch).Turns == 1 ? "Straight rows of keys are easy to guess" : "Short keyboard patterns are easy to guess",
                         Suggestions = new List<string>
                         {
-                            "Use a longer keyboard pattern with more turns"
-                        }
+                            "Use a longer keyboard pattern with more turns",
+                        },
                     };
 
                 case "repeat":
@@ -123,8 +131,8 @@ namespace Zxcvbn
                         Warning = (match as RepeatMatch).BaseToken.Length == 1 ? "Repeats like 'aaa' are easy to guess" : "Repeats like 'abcabcabc' are only slightly harder to guess than 'abc'",
                         Suggestions = new List<string>
                         {
-                            "Avoid repeated words and characters"
-                        }
+                            "Avoid repeated words and characters",
+                        },
                     };
 
                 case "regex":
@@ -137,9 +145,10 @@ namespace Zxcvbn
                             {
                                 "Avoid recent years",
                                 "Avoid years that are associated with you",
-                            }
+                            },
                         };
                     }
+
                     break;
 
                 case "date":
@@ -148,8 +157,8 @@ namespace Zxcvbn
                         Warning = "Dates are often easy to guess",
                         Suggestions = new List<string>
                         {
-                            "Avoid dates and years that are associated with you"
-                        }
+                            "Avoid dates and years that are associated with you",
+                        },
                     };
             }
 

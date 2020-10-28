@@ -3,42 +3,44 @@
 namespace Zxcvbn.Matcher.Matches
 {
     /// <summary>
-    /// <para>A single match that one of the pattern matchers has made against the password being tested.</para>
-    ///
-    /// <para>Some pattern matchers implement subclasses of match that can provide more information on their specific results.</para>
-    ///
-    /// <para>Matches must all have the <see cref="Pattern"/>, <see cref="Token"/>, <see cref="Entropy"/>, <see cref="i"/> and
-    /// <see cref="j"/> fields (i.e. all but the <see cref="Cardinality"/> field, which is optional) set before being returned from the matcher
-    /// in which they are created.</para>
+    /// A match identified by zxcvbn.
     /// </summary>
-    // TODO: These should probably be immutable
-    public class Match
+    public abstract class Match
     {
-        public double Guesses { get; set; }
+        /// <summary>
+        /// Gets the number of guesses associated with this match.
+        /// </summary>
+        public long Guesses { get; internal set; }
+
+        /// <summary>
+        /// Gets log10(number of guesses) associated with this match.
+        /// </summary>
         public double GuessesLog10 => Math.Log10(Guesses);
 
-        /// <summary>
-        /// The start index in the password string of the matched token.
-        /// </summary>
 #pragma warning disable IDE1006 // Naming Styles
-        public int i { get; set; }
+#pragma warning disable SA1300 // Element should begin with upper-case letter
+
+        /// <summary>
+        /// Gets the start index in the password string of the matched token.
+        /// </summary>
+        public int i { get; internal set; }
+
+        /// <summary>
+        /// Gets the end index in the password string of the matched token.
+        /// </summary>
+        public int j { get; internal set; }
+
+#pragma warning restore SA1300 // Element should begin with upper-case letter
 #pragma warning restore IDE1006 // Naming Styles
 
         /// <summary>
-        /// The end index in the password string of the matched token.
+        /// Gets the name of the pattern matcher used to generate this match.
         /// </summary>
-#pragma warning disable IDE1006 // Naming Styles
-        public int j { get; set; }
-#pragma warning restore IDE1006 // Naming Styles
+        public abstract string Pattern { get; }
 
         /// <summary>
-        /// The name of the pattern matcher used to generate this match
+        /// Gets the portion of the password that was matched.
         /// </summary>
-        public string Pattern { get; set; }
-
-        /// <summary>
-        /// The portion of the password that was matched
-        /// </summary>
-        public string Token { get; set; }
+        public string Token { get; internal set; }
     }
 }

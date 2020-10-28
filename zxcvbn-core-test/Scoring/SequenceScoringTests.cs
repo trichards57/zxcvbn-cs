@@ -15,7 +15,6 @@ namespace Zxcvbn.Tests.Scoring
             {
                 Token = token,
                 Ascending = ascending,
-                Pattern = "sequence",
                 i = 1,
                 j = 2,
                 SequenceName = "abc",
@@ -33,7 +32,6 @@ namespace Zxcvbn.Tests.Scoring
             {
                 Token = "ab",
                 Ascending = true,
-                Pattern = "sequence",
                 i = 1,
                 j = 2,
                 SequenceName = "abc",

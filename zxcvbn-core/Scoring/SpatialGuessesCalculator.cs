@@ -5,23 +5,37 @@ using Zxcvbn.Matcher.Matches;
 
 namespace Zxcvbn.Scoring
 {
+    /// <summary>
+    /// Estimates the number of attempts needed to guess the spatial pattern.
+    /// </summary>
     internal static class SpatialGuessesCalculator
     {
-        internal static readonly double KeyboardAverageDegree;
-        internal static readonly int KeyboardStartingPositions;
-        internal static readonly double KeypadAverageDegree;
-        internal static readonly int KeypadStartingPositions;
+        /// <summary>
+        /// The average number of adjacent characters on a keyboard.
+        /// </summary>
+        internal static readonly int KeyboardAverageDegree = (int)Math.Round(CalculateAverageDegree(SpatialMatcher.SpatialGraphs.First(s => s.Name == "qwerty")));
 
-        static SpatialGuessesCalculator()
-        {
-            var matcher = new SpatialMatcher();
-            KeyboardAverageDegree = CalculateAverageDegree(matcher.SpatialGraphs.First(s => s.Name == "qwerty"));
-            KeyboardStartingPositions = matcher.SpatialGraphs.First(s => s.Name == "qwerty").AdjacencyGraph.Keys.Count;
-            KeypadAverageDegree = CalculateAverageDegree(matcher.SpatialGraphs.First(s => s.Name == "keypad"));
-            KeypadStartingPositions = matcher.SpatialGraphs.First(s => s.Name == "keypad").AdjacencyGraph.Keys.Count;
-        }
+        /// <summary>
+        /// The number of starting positions on a keyboard.
+        /// </summary>
+        internal static readonly int KeyboardStartingPositions = SpatialMatcher.SpatialGraphs.First(s => s.Name == "qwerty").AdjacencyGraph.Keys.Count;
 
-        public static double CalculateGuesses(SpatialMatch match)
+        /// <summary>
+        /// The average number of adjacent characters on a keypad.
+        /// </summary>
+        internal static readonly double KeypadAverageDegree = (int)Math.Round(CalculateAverageDegree(SpatialMatcher.SpatialGraphs.First(s => s.Name == "keypad")));
+
+        /// <summary>
+        /// The number of starting positions on a keypad.
+        /// </summary>
+        internal static readonly int KeypadStartingPositions = SpatialMatcher.SpatialGraphs.First(s => s.Name == "keypad").AdjacencyGraph.Keys.Count;
+
+        /// <summary>
+        /// Estimates the attempts required to guess the password.
+        /// </summary>
+        /// <param name="match">The match.</param>
+        /// <returns>The guesses estimate.</returns>
+        public static long CalculateGuesses(SpatialMatch match)
         {
             int s;
             double d;
@@ -36,7 +50,7 @@ namespace Zxcvbn.Scoring
                 d = KeypadAverageDegree;
             }
 
-            double guesses = 0;
+            long guesses = 0;
             var l = match.Token.Length;
             var t = match.Turns;
 
@@ -45,7 +59,7 @@ namespace Zxcvbn.Scoring
                 var possibleTurns = Math.Min(t, i - 1);
                 for (var j = 1; j <= possibleTurns; j++)
                 {
-                    guesses += PasswordScoring.Binomial(i - 1, j - 1) * s * Math.Pow(d, j);
+                    guesses += PasswordScoring.Binomial(i - 1, j - 1) * s * (long)Math.Pow(d, j);
                 }
             }
 
@@ -54,17 +68,21 @@ namespace Zxcvbn.Scoring
                 var shifted = match.ShiftedCount;
                 var unshifted = match.Token.Length - match.ShiftedCount;
                 if (shifted == 0 || unshifted == 0)
+                {
                     guesses *= 2;
+                }
                 else
                 {
-                    double variations = 0;
+                    long variations = 0;
                     for (var i = 1; i <= Math.Min(shifted, unshifted); i++)
                     {
                         variations += PasswordScoring.Binomial(shifted + unshifted, i);
                     }
+
                     guesses *= variations;
                 }
             }
+
             return guesses;
         }
 
@@ -75,6 +93,7 @@ namespace Zxcvbn.Scoring
             {
                 average += graph.AdjacencyGraph[key].Count(s => s != null);
             }
+
             average /= graph.AdjacencyGraph.Keys.Count;
             return average;
         }

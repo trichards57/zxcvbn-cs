@@ -1,29 +1,34 @@
 ﻿namespace Zxcvbn.Matcher.Matches
 {
-    /// <inheritdoc />
     /// <summary>
-    /// A match found by the date matcher
+    /// A match identified as a possible date.
     /// </summary>
+    /// <seealso cref="Zxcvbn.Matcher.Matches.Match" />
     public class DateMatch : Match
     {
         /// <summary>
-        /// The detected day
+        /// Gets the detected day.
         /// </summary>
-        public int Day { get; set; }
+        public int Day { get; internal set; }
 
         /// <summary>
-        /// The detected month
+        /// Gets the detected month.
         /// </summary>
-        public int Month { get; set; }
+        public int Month { get; internal set; }
+
+        public override string Pattern => "date";
 
         /// <summary>
-        /// Where a date with separators is matched, this will contain the separator that was used (e.g. '/', '-')
+        /// Gets the separator detected in the date.
         /// </summary>
-        public string Separator { get; set; }
+        /// <remarks>
+        /// If there is no separator then this will be an empty string.
+        /// </remarks>
+        public string Separator { get; internal set; }
 
         /// <summary>
-        /// The detected year
+        /// Gets the detected year.
         /// </summary>
-        public int Year { get; set; }
+        public int Year { get; internal set; }
     }
 }

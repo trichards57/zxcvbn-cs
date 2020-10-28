@@ -15,7 +15,6 @@ namespace Zxcvbn.Tests.Scoring
             {
                 Token = "aaaaa",
                 Rank = 32,
-                Pattern = "dictionary",
                 DictionaryName = "dic",
                 i = 1,
                 j = 2,
@@ -36,7 +35,6 @@ namespace Zxcvbn.Tests.Scoring
             {
                 Token = "AAAaaa",
                 Rank = 32,
-                Pattern = "dictionary",
                 DictionaryName = "dic",
                 i = 1,
                 j = 2,
@@ -57,14 +55,13 @@ namespace Zxcvbn.Tests.Scoring
             {
                 Token = "AaA@@@",
                 Rank = 32,
-                Pattern = "dictionary",
                 DictionaryName = "dic",
                 i = 1,
                 j = 2,
                 L33t = true,
                 MatchedWord = "a",
                 Reversed = false,
-                Sub = new Dictionary<char, char> { { '@', 'a' } }
+                L33tSubs = new Dictionary<char, char> { { '@', 'a' } }
             };
 
             var expected = 32 * DictionaryGuessesCalculator.L33tVariations(match) * DictionaryGuessesCalculator.UppercaseVariations(match.Token);
@@ -79,14 +76,13 @@ namespace Zxcvbn.Tests.Scoring
             {
                 Token = "aaa@@@",
                 Rank = 32,
-                Pattern = "dictionary",
                 DictionaryName = "dic",
                 i = 1,
                 j = 2,
                 L33t = true,
                 MatchedWord = "a",
                 Reversed = false,
-                Sub = new Dictionary<char, char> { { '@', 'a' } }
+                L33tSubs = new Dictionary<char, char> { { '@', 'a' } }
             };
 
             var expected = 32 * DictionaryGuessesCalculator.L33tVariations(match);
@@ -102,14 +98,13 @@ namespace Zxcvbn.Tests.Scoring
             {
                 Token = "",
                 Rank = 32,
-                Pattern = "dictionary",
                 DictionaryName = "dic",
                 i = 1,
                 j = 2,
                 L33t = false,
                 MatchedWord = "a",
                 Reversed = false,
-                Sub = new Dictionary<char, char>()
+                L33tSubs = new Dictionary<char, char>()
             };
             var actual = DictionaryGuessesCalculator.L33tVariations(match);
             actual.Should().Be(expected);
@@ -119,14 +114,13 @@ namespace Zxcvbn.Tests.Scoring
             {
                 Token = "a",
                 Rank = 32,
-                Pattern = "dictionary",
                 DictionaryName = "dic",
                 i = 1,
                 j = 2,
                 L33t = false,
                 MatchedWord = "a",
                 Reversed = false,
-                Sub = new Dictionary<char, char>()
+                L33tSubs = new Dictionary<char, char>()
             };
             actual = DictionaryGuessesCalculator.L33tVariations(match);
             actual.Should().Be(expected);
@@ -136,14 +130,13 @@ namespace Zxcvbn.Tests.Scoring
             {
                 Token = "abcet",
                 Rank = 32,
-                Pattern = "dictionary",
                 DictionaryName = "dic",
                 i = 1,
                 j = 2,
                 L33t = false,
                 MatchedWord = "a",
                 Reversed = false,
-                Sub = new Dictionary<char, char>()
+                L33tSubs = new Dictionary<char, char>()
             };
             actual = DictionaryGuessesCalculator.L33tVariations(match);
             actual.Should().Be(expected);
@@ -153,14 +146,13 @@ namespace Zxcvbn.Tests.Scoring
             {
                 Token = "4",
                 Rank = 32,
-                Pattern = "dictionary",
                 DictionaryName = "dic",
                 i = 1,
                 j = 2,
                 L33t = true,
                 MatchedWord = "a",
                 Reversed = false,
-                Sub = new Dictionary<char, char>() { { '4', 'a' } }
+                L33tSubs = new Dictionary<char, char>() { { '4', 'a' } }
             };
             actual = DictionaryGuessesCalculator.L33tVariations(match);
             actual.Should().Be(expected);
@@ -170,14 +162,13 @@ namespace Zxcvbn.Tests.Scoring
             {
                 Token = "4pple",
                 Rank = 32,
-                Pattern = "dictionary",
                 DictionaryName = "dic",
                 i = 1,
                 j = 2,
                 L33t = true,
                 MatchedWord = "a",
                 Reversed = false,
-                Sub = new Dictionary<char, char>() { { '4', 'a' } }
+                L33tSubs = new Dictionary<char, char>() { { '4', 'a' } }
             };
             actual = DictionaryGuessesCalculator.L33tVariations(match);
             actual.Should().Be(expected);
@@ -187,14 +178,13 @@ namespace Zxcvbn.Tests.Scoring
             {
                 Token = "4bcet",
                 Rank = 32,
-                Pattern = "dictionary",
                 DictionaryName = "dic",
                 i = 1,
                 j = 2,
                 L33t = true,
                 MatchedWord = "a",
                 Reversed = false,
-                Sub = new Dictionary<char, char>() { { '4', 'a' } }
+                L33tSubs = new Dictionary<char, char>() { { '4', 'a' } }
             };
             actual = DictionaryGuessesCalculator.L33tVariations(match);
             actual.Should().Be(expected);
@@ -204,14 +194,13 @@ namespace Zxcvbn.Tests.Scoring
             {
                 Token = "a8cet",
                 Rank = 32,
-                Pattern = "dictionary",
                 DictionaryName = "dic",
                 i = 1,
                 j = 2,
                 L33t = true,
                 MatchedWord = "a",
                 Reversed = false,
-                Sub = new Dictionary<char, char>() { { '8', 'b' } }
+                L33tSubs = new Dictionary<char, char>() { { '8', 'b' } }
             };
             actual = DictionaryGuessesCalculator.L33tVariations(match);
             actual.Should().Be(expected);
@@ -221,14 +210,13 @@ namespace Zxcvbn.Tests.Scoring
             {
                 Token = "abce+",
                 Rank = 32,
-                Pattern = "dictionary",
                 DictionaryName = "dic",
                 i = 1,
                 j = 2,
                 L33t = true,
                 MatchedWord = "a",
                 Reversed = false,
-                Sub = new Dictionary<char, char>() { { '+', 't' } }
+                L33tSubs = new Dictionary<char, char>() { { '+', 't' } }
             };
             actual = DictionaryGuessesCalculator.L33tVariations(match);
             actual.Should().Be(expected);
@@ -238,14 +226,13 @@ namespace Zxcvbn.Tests.Scoring
             {
                 Token = "48cet",
                 Rank = 32,
-                Pattern = "dictionary",
                 DictionaryName = "dic",
                 i = 1,
                 j = 2,
                 L33t = true,
                 MatchedWord = "a",
                 Reversed = false,
-                Sub = new Dictionary<char, char>() { { '4', 'a' }, { '8', 'b' } }
+                L33tSubs = new Dictionary<char, char>() { { '4', 'a' }, { '8', 'b' } }
             };
             actual = DictionaryGuessesCalculator.L33tVariations(match);
             actual.Should().Be(expected);
@@ -255,14 +242,13 @@ namespace Zxcvbn.Tests.Scoring
             {
                 Token = "a4a4aa",
                 Rank = 32,
-                Pattern = "dictionary",
                 DictionaryName = "dic",
                 i = 1,
                 j = 2,
                 L33t = true,
                 MatchedWord = "a",
                 Reversed = false,
-                Sub = new Dictionary<char, char>() { { '4', 'a' } }
+                L33tSubs = new Dictionary<char, char>() { { '4', 'a' } }
             };
             actual = DictionaryGuessesCalculator.L33tVariations(match);
             actual.Should().Be(expected);
@@ -272,14 +258,13 @@ namespace Zxcvbn.Tests.Scoring
             {
                 Token = "4a4a44",
                 Rank = 32,
-                Pattern = "dictionary",
                 DictionaryName = "dic",
                 i = 1,
                 j = 2,
                 L33t = true,
                 MatchedWord = "a",
                 Reversed = false,
-                Sub = new Dictionary<char, char>() { { '4', 'a' } }
+                L33tSubs = new Dictionary<char, char>() { { '4', 'a' } }
             };
             actual = DictionaryGuessesCalculator.L33tVariations(match);
             actual.Should().Be(expected);
@@ -289,14 +274,13 @@ namespace Zxcvbn.Tests.Scoring
             {
                 Token = "a44att+",
                 Rank = 32,
-                Pattern = "dictionary",
                 DictionaryName = "dic",
                 i = 1,
                 j = 2,
                 L33t = true,
                 MatchedWord = "a",
                 Reversed = false,
-                Sub = new Dictionary<char, char>() { { '4', 'a' }, { '+', 't' } }
+                L33tSubs = new Dictionary<char, char>() { { '4', 'a' }, { '+', 't' } }
             };
             actual = DictionaryGuessesCalculator.L33tVariations(match);
             actual.Should().Be(expected);
@@ -319,14 +303,13 @@ namespace Zxcvbn.Tests.Scoring
             {
                 Token = "Aa44aA",
                 Rank = 32,
-                Pattern = "dictionary",
                 DictionaryName = "dic",
                 i = 1,
                 j = 2,
                 L33t = true,
                 MatchedWord = "a",
                 Reversed = false,
-                Sub = new Dictionary<char, char>() { { '4', 'a' } }
+                L33tSubs = new Dictionary<char, char>() { { '4', 'a' } }
             };
             var actual = DictionaryGuessesCalculator.L33tVariations(match);
             actual.Should().Be(expected);
@@ -339,7 +322,6 @@ namespace Zxcvbn.Tests.Scoring
             {
                 Token = "aaaaa",
                 Rank = 32,
-                Pattern = "dictionary",
                 DictionaryName = "dic",
                 i = 1,
                 j = 2,
@@ -360,7 +342,6 @@ namespace Zxcvbn.Tests.Scoring
             {
                 Token = "aaaaa",
                 Rank = 32,
-                Pattern = "dictionary",
                 DictionaryName = "dic",
                 i = 1,
                 j = 2,

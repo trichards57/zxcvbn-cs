@@ -17,7 +17,6 @@ namespace Zxcvbn.Tests.Matcher
 
             var expected = new[] { new RegexMatch
             {
-                Pattern="regex",
                 i = 0,
                 j = pattern.Length-1,
                 RegexName = name,

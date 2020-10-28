@@ -1,54 +1,73 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Zxcvbn.Matcher.Matches
 {
-    /// <inheritdoc />
     /// <summary>
-    /// Matches found by the dictionary matcher contain some additional information about the matched word.
+    /// A match identified as being in one of the provided dictionaries.
     /// </summary>
+    /// <seealso cref="Zxcvbn.Matcher.Matches.Match" />
     public class DictionaryMatch : Match
     {
-        public DictionaryMatch()
-        {
-            Pattern = DictionaryMatcher.DictionaryPattern;
-        }
-
-        public long BaseGuesses { get; set; }
+        /// <summary>
+        /// Gets the base guesses associated with the matched word.
+        /// </summary>
+        public long BaseGuesses { get; internal set; }
 
         /// <summary>
-        /// The name of the dictionary the matched word was found in
+        /// Gets the name of the dictionary containing the matched word.
         /// </summary>
-        public string DictionaryName { get; set; }
+        public string DictionaryName { get; internal set; }
 
         /// <summary>
-        /// The matched word was found with l33t spelling
+        /// Gets a value indicating whether the matched word was found with l33t spelling.
         /// </summary>
-        // ReSharper disable once InconsistentNaming
-        public bool L33t { get; set; }
-
-        // ReSharper disable once InconsistentNaming
-        public long L33tVariations { get; set; }
+        public bool L33t { get; internal set; }
 
         /// <summary>
-        /// The dictionary word matched
+        /// Gets the number of L33T variations associated with this match.
         /// </summary>
-        public string MatchedWord { get; set; }
+        public long L33tVariations { get; internal set; }
 
         /// <summary>
-        /// The rank of the matched word in the dictionary (i.e. 1 is most frequent, and larger numbers are less common words)
+        /// Gets the dictionary word matched to.
         /// </summary>
-        public int Rank { get; set; }
+        public string MatchedWord { get; internal set; }
 
         /// <summary>
-        /// The matched word was reversed compared to the dictionary
+        /// Gets the name of the pattern matcher used to generate this match.
         /// </summary>
-        public bool Reversed { get; set; }
+        public override string Pattern => "dictionary";
 
         /// <summary>
-        /// The character mappings that are in use for this match
+        /// Gets the rank of the matched word in the dictionary.
         /// </summary>
-        public Dictionary<char, char> Sub { get; set; }
+        /// <remarks>
+        /// The most frequent word is has a rank of 1, with less frequent words having higher ranks.
+        /// </remarks>
+        public int Rank { get; internal set; }
 
-        public long UppercaseVariations { get; set; }
+        /// <summary>
+        /// Gets a value indicating whether the matched word was reversed.
+        /// </summary>
+        public bool Reversed { get; internal set; }
+
+        /// <summary>
+        /// Gets the l33t character mappings that are in use for this match.
+        /// </summary>
+        public IReadOnlyDictionary<char, char> Sub => new ReadOnlyDictionary<char, char>(L33tSubs);
+
+        /// <summary>
+        /// Gets the number of uppercase variations associated with this match.
+        /// </summary>
+        public long UppercaseVariations { get; internal set; }
+
+        /// <summary>
+        /// Gets or sets the l33t character mappings that are in use for this match.
+        /// </summary>
+        /// <remarks>
+        /// Modifiable version of Sub.
+        /// </remarks>
+        internal Dictionary<char, char> L33tSubs { get; set; } = new Dictionary<char, char>();
     }
 }

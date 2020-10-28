@@ -20,7 +20,6 @@ namespace Zxcvbn.Tests.Scoring
                 Day = 1,
                 i = 1,
                 j = 2,
-                Pattern = "date"
             };
 
             var actual = DateGuessesCalculator.CalculateGuesses(match);
@@ -41,7 +40,6 @@ namespace Zxcvbn.Tests.Scoring
                 Day = 1,
                 i = 1,
                 j = 2,
-                Pattern = "date"
             };
 
             var actual = DateGuessesCalculator.CalculateGuesses(match);
@@ -62,7 +60,6 @@ namespace Zxcvbn.Tests.Scoring
                 Day = 1,
                 i = 1,
                 j = 2,
-                Pattern = "date"
             };
 
             var actual = PasswordScoring.EstimateGuesses(match, "1923");
@@ -83,7 +80,6 @@ namespace Zxcvbn.Tests.Scoring
                 Day = 1,
                 i = 1,
                 j = 2,
-                Pattern = "date"
             };
 
             var actual = DateGuessesCalculator.CalculateGuesses(match);

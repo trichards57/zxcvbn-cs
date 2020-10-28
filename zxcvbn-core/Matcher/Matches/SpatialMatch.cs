@@ -1,24 +1,28 @@
 ﻿namespace Zxcvbn.Matcher.Matches
 {
-    /// <inheritdoc />
     /// <summary>
-    /// A match made with the <see cref="T:Zxcvbn.Matcher.SpatialMatcher" />. Contains additional information specific to spatial matches.
+    /// A match identified as a sequence of keys on a recognised keyboard.
     /// </summary>
     public class SpatialMatch : Match
     {
         /// <summary>
-        /// The name of the keyboard layout used to make the spatial match
+        /// Gets The name of the keyboard layout used to make the spatial match.
         /// </summary>
-        public string Graph { get; set; }
+        public string Graph { get; internal set; }
 
         /// <summary>
-        /// The number of shifted characters matched in the pattern (adds to entropy)
+        /// Gets the name of the pattern matcher used to generate this match.
         /// </summary>
-        public int ShiftedCount { get; set; }
+        public override string Pattern => "spatial";
 
         /// <summary>
-        /// The number of turns made (i.e. when diretion of adjacent keys changes)
+        /// Gets the number of shifted characters matched in the pattern.
         /// </summary>
-        public int Turns { get; set; }
+        public int ShiftedCount { get; internal set; }
+
+        /// <summary>
+        /// Gets the number of turns made.
+        /// </summary>
+        public int Turns { get; internal set; }
     }
 }

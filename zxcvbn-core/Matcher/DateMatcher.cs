@@ -1,54 +1,69 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Zxcvbn.Matcher.Matches;
 
 namespace Zxcvbn.Matcher
 {
-    /// <inheritdoc />
     /// <summary>
-    /// <para>This matcher attempts to guess dates, with and without date separators. e.g. 1197 (could be 1/1/97) through to 18/12/2015.</para>
-    /// <para>The format for matching dates is quite particular, and only detected years in the range 00-99 and 1900-2019 are considered by
-    /// this matcher.</para>
+    /// Attempts to match a string with a date.
+    /// </summary>
+    /// <remarks>
+    /// A date is recognised if it is:
+    /// <list type="bullet">
+    /// <item>Any 3 tuple that starts or ends with a 2- or 4- digit year</item>
+    /// <item>With 2 or 0 separator characters</item>
+    /// <item>May be zero padded</item>
+    /// <item>Has a month between 1 and 12</item>
+    /// <item>Has a day between 1 and 31</item>
+    /// </list>
+    ///
+    /// This isn't true date parsing.  Invalid dates like 31 February will be allowed.
+    /// </remarks>
     /// </summary>
     internal class DateMatcher : IMatcher
     {
-        private const string DatePattern = "date";
         private const int MaxYear = 2050;
         private const int MinYear = 1000;
 
-        private readonly Dictionary<int, int[][]> _dateSplits = new Dictionary<int, int[][]>
+        private static readonly ReadOnlyDictionary<int, int[][]> DateSplits = new ReadOnlyDictionary<int, int[][]>(new Dictionary<int, int[][]>
         {
-            [4] = new[] {
+            [4] = new[]
+            {
                 new[] { 1, 2 }, // 1 1 91
-                new[] { 2, 3 }  // 91 1 1
+                new[] { 2, 3 }, // 91 1 1
             },
-            [5] = new[]{
+            [5] = new[]
+            {
                 new[] { 1, 3 }, // 1 11 91
-                new[] { 2, 3 }  // 11 1 91
+                new[] { 2, 3 }, // 11 1 91
             },
-            [6] = new[]{
+            [6] = new[]
+            {
                 new[] { 1, 2 }, // 1 1 1991
                 new[] { 2, 4 }, // 11 11 91
-                new[] { 4, 5 }  // 1991 1 1
+                new[] { 4, 5 }, // 1991 1 1
             },
-            [7] = new[]{
+            [7] = new[]
+            {
                 new[] { 1, 3 }, // 1 11 1991
                 new[] { 2, 3 }, // 11 1 1991
                 new[] { 4, 5 }, // 1991 1 11
-                new[] { 4, 6 }  // 1991 11 1
+                new[] { 4, 6 }, // 1991 11 1
             },
-            [8] = new[] {
+            [8] = new[]
+            {
                 new[] { 2, 4 }, // 11 11 1991
-                new[] { 4, 6 }  // 1991 11 11
-            }
-        };
+                new[] { 4, 6 }, // 1991 11 11
+            },
+        });
 
-        private readonly Regex _dateWithNoSeperater = new Regex("^\\d{4,8}$", RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace);
+        private readonly Regex dateWithNoSeperater = new Regex("^\\d{4,8}$", RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace);
 
-        // The two regexes for matching dates with slashes is lifted directly from zxcvbn (matching.coffee about :400)
-        private readonly Regex _dateWithSeperator = new Regex(
+        private readonly Regex dateWithSeperator = new Regex(
             @"^( \d{1,4} )    # day or month
                ( [\s/\\_.-] ) # separator
                ( \d{1,2} )    # month or day
@@ -56,15 +71,16 @@ namespace Zxcvbn.Matcher
                ( \d{1,4} )    # year
               $", RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace);
 
+        /// <summary>
+        /// Gets the reference year used to check for recent dates.
+        /// </summary>
         public static int ReferenceYear { get; } = DateTime.Now.Year;
 
-        /// <inheritdoc />
         /// <summary>
-        /// Find date matches in <paramref name="password" />
+        /// Find date matches in <paramref name="password" />.
         /// </summary>
-        /// <param name="password">The passsord to check</param>
-        /// <returns>An enumerable of date matches</returns>
-        /// <seealso cref="T:Zxcvbn.Matcher.DateMatch" />
+        /// <param name="password">The passsord to check.</param>
+        /// <returns>An enumerable of date matches.</returns>
         public IEnumerable<Matches.Match> MatchPassword(string password)
         {
             var matches = new List<Matches.Match>();
@@ -73,23 +89,25 @@ namespace Zxcvbn.Matcher
             {
                 for (var j = 4; i + j <= password.Length; j++)
                 {
-                    var dateMatch = _dateWithNoSeperater.Match(password); // Slashless dates
+                    var dateMatch = dateWithNoSeperater.Match(password); // Slashless dates
                     if (!dateMatch.Success)
                         continue;
 
                     var candidates = new List<LooseDate>();
 
-                    foreach (var split in _dateSplits[dateMatch.Length])
+                    foreach (var split in DateSplits[dateMatch.Length])
                     {
                         var l = split[0];
                         var m = split[1];
                         var kLength = l;
                         var lLength = m - l;
 
-                        var date = MapIntsToDate(new[] {
-                                int.Parse(dateMatch.Value.Substring(0, kLength)),
-                                int.Parse(dateMatch.Value.Substring(l, lLength)),
-                                int.Parse(dateMatch.Value.Substring(m)) });
+                        var date = MapIntsToDate(new[]
+                        {
+                                int.Parse(dateMatch.Value.Substring(0, kLength), CultureInfo.InvariantCulture),
+                                int.Parse(dateMatch.Value.Substring(l, lLength), CultureInfo.InvariantCulture),
+                                int.Parse(dateMatch.Value.Substring(m), CultureInfo.InvariantCulture),
+                        });
 
                         if (date != null)
                             candidates.Add(date.Value);
@@ -116,11 +134,10 @@ namespace Zxcvbn.Matcher
 
                     matches.Add(new DateMatch
                     {
-                        Pattern = DatePattern,
                         Token = dateMatch.Value,
                         i = i,
                         j = j + i - 1,
-                        Separator = "",
+                        Separator = string.Empty,
                         Year = bestCandidate.Year,
                         Month = bestCandidate.Month,
                         Day = bestCandidate.Day,
@@ -133,22 +150,23 @@ namespace Zxcvbn.Matcher
                 for (var j = 6; i + j <= password.Length; j++)
                 {
                     var token = password.Substring(i, j);
-                    var match = _dateWithSeperator.Match(token);
+                    var match = dateWithSeperator.Match(token);
 
                     if (!match.Success)
                         continue;
 
-                    var date = MapIntsToDate(new[] {
-                                int.Parse(match.Groups[1].Value),
-                                int.Parse(match.Groups[3].Value),
-                                int.Parse(match.Groups[4].Value) });
+                    var date = MapIntsToDate(new[]
+                    {
+                        int.Parse(match.Groups[1].Value, CultureInfo.InvariantCulture),
+                        int.Parse(match.Groups[3].Value, CultureInfo.InvariantCulture),
+                        int.Parse(match.Groups[4].Value, CultureInfo.InvariantCulture),
+                    });
 
                     if (date == null)
                         continue;
 
                     var m = new DateMatch
                     {
-                        Pattern = DatePattern,
                         Token = token,
                         i = i,
                         j = j + i - 1,
@@ -189,7 +207,7 @@ namespace Zxcvbn.Matcher
 
             foreach (var i in vals)
             {
-                if ((99 < i && i < MinYear) || i > MaxYear)
+                if ((i > 99 && i < MinYear) || i > MaxYear)
                     return null;
 
                 if (i > 31)
@@ -205,8 +223,8 @@ namespace Zxcvbn.Matcher
 
             var possibleSplits = new[]
             {
-                new[] {vals[2], vals[0], vals[1] },
-                new[] {vals[0], vals[1], vals[2] }
+                new[] { vals[2], vals[0], vals[1] },
+                new[] { vals[0], vals[1], vals[2] },
             };
 
             foreach (var possibleSplit in possibleSplits)
@@ -236,13 +254,13 @@ namespace Zxcvbn.Matcher
             var day = vals[0];
             var month = vals[1];
 
-            if (1 <= day && day <= 31 && 1 <= month && month <= 12)
+            if (day >= 1 && day <= 31 && month >= 1 && month <= 12)
                 return new LooseDate(0, month, day);
 
             day = vals[1];
             month = vals[0];
 
-            if (1 <= day && day <= 31 && 1 <= month && month <= 12)
+            if (day >= 1 && day <= 31 && month >= 1 && month <= 12)
                 return new LooseDate(0, month, day);
 
             return null;

@@ -17,7 +17,6 @@ namespace Zxcvbn.Tests.Matcher
             {
                 i = 1,
                 j = 8,
-                Pattern="date",
                 Token = "12/20/91",
                 Day= 20,
                 Month=12,
@@ -42,7 +41,6 @@ namespace Zxcvbn.Tests.Matcher
             {
                 i = 0,
                 j = password.Length-1,
-                Pattern="date",
                 Token = password,
                 Day= 13,
                 Month=2,
@@ -72,7 +70,6 @@ namespace Zxcvbn.Tests.Matcher
             {
                 i = 0,
                 j = password.Length-1,
-                Pattern="date",
                 Token = password,
                 Day= day,
                 Month=month,
@@ -98,7 +95,6 @@ namespace Zxcvbn.Tests.Matcher
             {
                 i = prefix.Length,
                 j = prefix.Length + pattern.Length-1,
-                Pattern="date",
                 Token = "1/1/91",
                 Day= 1,
                 Month=1,
@@ -122,7 +118,6 @@ namespace Zxcvbn.Tests.Matcher
             {
                 i =0,
                 j = 9,
-                Pattern="date",
                 Token = "12/20/1991",
                 Day= 20,
                 Month=12,
@@ -133,7 +128,6 @@ namespace Zxcvbn.Tests.Matcher
             {
                   i =6,
                 j = 15,
-                Pattern="date",
                 Token = "1991.12.20",
                 Day= 20,
                 Month=12,
@@ -157,7 +151,6 @@ namespace Zxcvbn.Tests.Matcher
             {
                 i = 0,
                 j = password.Length - 1,
-                Pattern = "date",
                 Token = password,
                 Day = 15,
                 Month = 11,
@@ -216,7 +209,6 @@ namespace Zxcvbn.Tests.Matcher
             {
                 i = 0,
                 j = password.Length - 1,
-                Pattern = "date",
                 Token = password,
                 Day = 2,
                 Month = 2,

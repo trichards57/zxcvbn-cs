@@ -33,7 +33,6 @@ namespace Zxcvbn.Tests.Matcher
                 Ascending = false,
                 i=i,
                 j=j,
-                Pattern = "sequence",
                 SequenceName = "lower",
                 SequenceSpace = 26,
                 Token = pattern
@@ -55,7 +54,6 @@ namespace Zxcvbn.Tests.Matcher
                 Ascending = ascending,
                 i=0,
                 j=password.Length - 1,
-                Pattern = "sequence",
                 SequenceName = name,
                 SequenceSpace = space,
                 Token = password
@@ -73,7 +71,6 @@ namespace Zxcvbn.Tests.Matcher
                 Ascending = true,
                 i = 0,
                 j = 2,
-                Pattern = "sequence",
                 SequenceName = "lower",
                 SequenceSpace = 26,
                 Token = "abc"
@@ -82,7 +79,6 @@ namespace Zxcvbn.Tests.Matcher
                 Ascending = false,
                 i = 2,
                 j = 4,
-                Pattern = "sequence",
                 SequenceName = "lower",
                 SequenceSpace = 26,
                 Token = "cba"
@@ -91,7 +87,6 @@ namespace Zxcvbn.Tests.Matcher
                 Ascending = true,
                 i = 4,
                 j = 6,
-                Pattern = "sequence",
                 SequenceName = "lower",
                 SequenceSpace = 26,
                 Token = "abc"

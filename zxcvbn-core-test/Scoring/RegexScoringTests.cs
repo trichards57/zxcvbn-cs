@@ -16,7 +16,6 @@ namespace Zxcvbn.Tests.Scoring
                 RegexName = "recent_year",
                 i = 1,
                 j = 2,
-                Pattern = "regex"
             };
 
             var result = PasswordScoring.EstimateGuesses(match, "1972");
@@ -32,7 +31,6 @@ namespace Zxcvbn.Tests.Scoring
                 RegexName = "recent_year",
                 i = 1,
                 j = 2,
-                Pattern = "regex"
             };
 
             var result = PasswordScoring.EstimateGuesses(match, "1972");

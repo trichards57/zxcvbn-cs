@@ -4,51 +4,45 @@ using Zxcvbn.Matcher.Matches;
 
 namespace Zxcvbn.Matcher
 {
-    /// <inheritdoc />
     /// <summary>
-    /// <para>Use a regular expression to match agains the password. (e.g. 'year' and 'digits' pattern matchers are implemented with this matcher.</para>
-    /// <para>A note about cardinality: the cardinality parameter is used to calculate the entropy of matches found with the regex matcher. Since
-    /// this cannot be calculated automatically from the regex pattern it must be provided. It can be provided per-character or per-match. Per-match will
-    /// result in every match having the same entropy (lg cardinality) whereas per-character will depend on the match length (lg cardinality ^ length)</para>
+    /// Attempts to match a string with a pre-defined regular expressions.
     /// </summary>
     internal class RegexMatcher : IMatcher
     {
-        private readonly string _matcherName;
-        private readonly Regex _matchRegex;
+        private readonly string matcherName;
+        private readonly Regex matchRegex;
 
-        /// <inheritdoc />
         /// <summary>
-        /// Create a new regex pattern matcher
+        /// Initializes a new instance of the <see cref="RegexMatcher"/> class.
+        /// Create a new regex pattern matcher.
         /// </summary>
-        /// <param name="pattern">The regex pattern to match</param>
-        /// <param name="matcherName">The name to give this matcher ('pattern' in resulting matches)</param>
+        /// <param name="pattern">The regex pattern to match.</param>
+        /// <param name="matcherName">The name to give this matcher ('pattern' in resulting matches).</param>
         public RegexMatcher(string pattern, string matcherName = "regex")
             : this(new Regex(pattern), matcherName)
         {
         }
 
         /// <summary>
-        /// Create a new regex pattern matcher
+        /// Initializes a new instance of the <see cref="RegexMatcher"/> class.
+        /// Create a new regex pattern matcher.
         /// </summary>
-        /// <param name="matchRegex">The regex object used to perform matching</param>
-        /// <param name="matcherName">The name to give this matcher ('pattern' in resulting matches)</param>
+        /// <param name="matchRegex">The regex object used to perform matching.</param>
+        /// <param name="matcherName">The name to give this matcher ('pattern' in resulting matches).</param>
         public RegexMatcher(Regex matchRegex, string matcherName = "regex")
         {
-            _matchRegex = matchRegex;
-            _matcherName = matcherName;
+            this.matchRegex = matchRegex;
+            this.matcherName = matcherName;
         }
 
-        public static string RegexPattern { get; } = "regex";
-
-        /// <inheritdoc />
         /// <summary>
-        /// Find all matches of the regex in <paramref name="password" />
+        /// Find regex matches in <paramref name="password" />.
         /// </summary>
-        /// <param name="password">The password to check</param>
-        /// <returns>An enumerable of matches for each regex match in <paramref name="password" /></returns>
+        /// <param name="password">The password to check.</param>
+        /// <returns>An enumerable of regex matches.</returns>
         public IEnumerable<Matches.Match> MatchPassword(string password)
         {
-            var reMatches = _matchRegex.Matches(password);
+            var reMatches = matchRegex.Matches(password);
 
             var pwMatches = new List<Matches.Match>();
 
@@ -56,11 +50,10 @@ namespace Zxcvbn.Matcher
             {
                 pwMatches.Add(new RegexMatch
                 {
-                    Pattern = RegexPattern,
-                    RegexName = _matcherName,
+                    RegexName = matcherName,
                     i = rem.Index,
                     j = rem.Index + rem.Length - 1,
-                    Token = password.Substring(rem.Index, rem.Length)
+                    Token = password.Substring(rem.Index, rem.Length),
                 });
             }
 

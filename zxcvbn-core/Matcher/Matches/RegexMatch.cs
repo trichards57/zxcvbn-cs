@@ -1,16 +1,18 @@
 ﻿namespace Zxcvbn.Matcher.Matches
 {
-    /// <inheritdoc />
     /// <summary>
-    /// Matches found by the dictionary matcher contain some additional information about the matched word.
+    /// A match identified as matching one of the provided regular expressions.
     /// </summary>
     public class RegexMatch : Match
     {
-        public RegexMatch()
-        {
-            Pattern = RegexMatcher.RegexPattern;
-        }
+        /// <summary>
+        /// Gets the name of the pattern matcher used to generate this match.
+        /// </summary>
+        public override string Pattern => "regex";
 
-        public string RegexName { get; set; }
+        /// <summary>
+        /// Gets the name of the regex that matched.
+        /// </summary>
+        public string RegexName { get; internal set; }
     }
 }

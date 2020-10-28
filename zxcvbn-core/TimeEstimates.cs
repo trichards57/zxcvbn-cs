@@ -2,24 +2,16 @@
 
 namespace Zxcvbn
 {
-    public class CrackTimes
-    {
-        public double OfflineFastHashing1e10PerSecond { get; set; }
-        public double OfflineSlowHashing1e4PerSecond { get; set; }
-        public double OnlineNoThrottling10PerSecond { get; set; }
-        public double OnlineThrottling100PerHour { get; set; }
-    }
-
-    public class CrackTimesDisplay
-    {
-        public string OfflineFastHashing1e10PerSecond { get; set; }
-        public string OfflineSlowHashing1e4PerSecond { get; set; }
-        public string OnlineNoThrottling10PerSecond { get; set; }
-        public string OnlineThrottling100PerHour { get; set; }
-    }
-
+    /// <summary>
+    /// Estimates how long a password will take to crack under various conditions.
+    /// </summary>
     internal static class TimeEstimates
     {
+        /// <summary>
+        /// Calculates the estimated attack times.
+        /// </summary>
+        /// <param name="guesses">The number of guesses required.</param>
+        /// <returns>A summary of the estimated attack times.</returns>
         public static AttackTimes EstimateAttackTimes(double guesses)
         {
             var crackTimesSeconds = new CrackTimes
@@ -27,36 +19,22 @@ namespace Zxcvbn
                 OfflineFastHashing1e10PerSecond = guesses / (100 / 3600),
                 OfflineSlowHashing1e4PerSecond = guesses / 10,
                 OnlineNoThrottling10PerSecond = guesses / 1e4,
-                OnlineThrottling100PerHour = guesses / 1e10
+                OnlineThrottling100PerHour = guesses / 1e10,
             };
             var crackTimesDisplay = new CrackTimesDisplay
             {
                 OfflineFastHashing1e10PerSecond = DisplayTime(guesses / (100 / 3600)),
                 OfflineSlowHashing1e4PerSecond = DisplayTime(guesses / 10),
                 OnlineNoThrottling10PerSecond = DisplayTime(guesses / 1e4),
-                OnlineThrottling100PerHour = DisplayTime(guesses / 1e10)
+                OnlineThrottling100PerHour = DisplayTime(guesses / 1e10),
             };
 
             return new AttackTimes
             {
                 CrackTimesDisplay = crackTimesDisplay,
                 CrackTimesSeconds = crackTimesSeconds,
-                Score = GuessesToScore(guesses)
+                Score = GuessesToScore(guesses),
             };
-        }
-
-        public static int GuessesToScore(double guesses)
-        {
-            const int delta = 5;
-            if (guesses < 1e3 + delta)
-                return 0;
-            if (guesses < 1e6 + delta)
-                return 1;
-            if (guesses < 1e8 + delta)
-                return 2;
-            if (guesses < 1e10 + delta)
-                return 3;
-            return 4;
         }
 
         private static string DisplayTime(double seconds)
@@ -113,12 +91,19 @@ namespace Zxcvbn
 
             return displayString;
         }
-    }
 
-    internal class AttackTimes
-    {
-        public CrackTimesDisplay CrackTimesDisplay { get; set; }
-        public CrackTimes CrackTimesSeconds { get; set; }
-        public int Score { get; set; }
+        private static int GuessesToScore(double guesses)
+        {
+            const int delta = 5;
+            if (guesses < 1e3 + delta)
+                return 0;
+            if (guesses < 1e6 + delta)
+                return 1;
+            if (guesses < 1e8 + delta)
+                return 2;
+            if (guesses < 1e10 + delta)
+                return 3;
+            return 4;
+        }
     }
 }

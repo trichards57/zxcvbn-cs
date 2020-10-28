@@ -17,7 +17,6 @@ namespace Zxcvbn.Tests.Scoring
                 Graph = "qwerty",
                 Turns = 3,
                 ShiftedCount = 0,
-                Pattern = "spatial",
                 i = 1,
                 j = 2
             };
@@ -25,13 +24,13 @@ namespace Zxcvbn.Tests.Scoring
             var l = match.Token.Length;
             var s = SpatialGuessesCalculator.KeyboardStartingPositions;
             var d = SpatialGuessesCalculator.KeyboardAverageDegree;
-            var expected = 0.0;
+            long expected = 0;
 
             for (var i = 2; i <= l; i++)
             {
                 for (var j = 1; j <= Math.Min(match.Turns, i - 1); j++)
                 {
-                    expected += PasswordScoring.Binomial(i - 1, j - 1) * s * Math.Pow(d, j);
+                    expected += PasswordScoring.Binomial(i - 1, j - 1) * s * (long)Math.Pow(d, j);
                 }
             }
 
@@ -49,7 +48,6 @@ namespace Zxcvbn.Tests.Scoring
                 Graph = "qwerty",
                 Turns = 1,
                 ShiftedCount = 2,
-                Pattern = "spatial",
                 i = 1,
                 j = 2
             };
@@ -70,7 +68,6 @@ namespace Zxcvbn.Tests.Scoring
                 Graph = "qwerty",
                 Turns = 1,
                 ShiftedCount = 6,
-                Pattern = "spatial",
                 i = 1,
                 j = 2
             };
@@ -91,7 +88,6 @@ namespace Zxcvbn.Tests.Scoring
                 Graph = "qwerty",
                 Turns = 1,
                 ShiftedCount = 0,
-                Pattern = "spatial",
                 i = 1,
                 j = 2
             };
@@ -112,7 +108,6 @@ namespace Zxcvbn.Tests.Scoring
                 Graph = "qwerty",
                 Turns = 1,
                 ShiftedCount = 0,
-                Pattern = "spatial",
                 i = 1,
                 j = 2
             };

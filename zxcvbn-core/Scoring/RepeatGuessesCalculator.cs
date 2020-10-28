@@ -2,9 +2,17 @@
 
 namespace Zxcvbn.Scoring
 {
+    /// <summary>
+    /// Estimates the number of attempts needed to guesses the number of repeats.
+    /// </summary>
     internal class RepeatGuessesCalculator
     {
-        public static double CalculateGuesses(RepeatMatch match)
+        /// <summary>
+        /// Estimates the attempts required to guess the password.
+        /// </summary>
+        /// <param name="match">The match.</param>
+        /// <returns>The guesses estimate.</returns>
+        public static long CalculateGuesses(RepeatMatch match)
         {
             return match.BaseGuesses * match.RepeatCount;
         }

@@ -22,7 +22,6 @@ namespace Zxcvbn.Tests.Matcher
 
             var expected = new[] { new DictionaryMatch
             {
-                Pattern="dictionary",
                 DictionaryName = "d2",
                 i = prefix.Length,
                 j = prefix.Length+word.Length-1,
@@ -42,7 +41,6 @@ namespace Zxcvbn.Tests.Matcher
 
             var expected = new[] { new DictionaryMatch
             {
-                Pattern="dictionary",
                 DictionaryName = "d1",
                 i = 0,
                 j = 4,
@@ -53,7 +51,6 @@ namespace Zxcvbn.Tests.Matcher
                 Token = "BoaRd"
             } ,
                 new DictionaryMatch{
-                Pattern="dictionary",
                 DictionaryName = "d2",
                 i = 5,
                 j = 5,
@@ -74,7 +71,6 @@ namespace Zxcvbn.Tests.Matcher
 
             var expected = new[] { new DictionaryMatch
             {
-                Pattern="dictionary",
                 DictionaryName = dictionary,
                 i = 0,
                 j = word.Length-1,
@@ -94,7 +90,6 @@ namespace Zxcvbn.Tests.Matcher
 
             var expected = new[] { new DictionaryMatch
             {
-                Pattern="dictionary",
                 DictionaryName = "d1",
                 i = 0,
                 j = 3,
@@ -105,7 +100,6 @@ namespace Zxcvbn.Tests.Matcher
                 Token = "abcd"
             } ,
                 new DictionaryMatch{
-                Pattern="dictionary",
                 DictionaryName = "d1",
                 i = 2,
                 j = 5,
@@ -146,7 +140,6 @@ namespace Zxcvbn.Tests.Matcher
 
             var expected = new[] { new DictionaryMatch
             {
-                Pattern="dictionary",
                 DictionaryName = "d1",
                 i = 0,
                 j = 5,
@@ -157,7 +150,6 @@ namespace Zxcvbn.Tests.Matcher
                 Token = "mother"
             } ,
                 new DictionaryMatch{
-                Pattern="dictionary",
                 DictionaryName = "d1",
                 i = 0,
                 j = 10,
@@ -167,7 +159,6 @@ namespace Zxcvbn.Tests.Matcher
                 L33t = false,
                 Token = "motherboard"
             },new DictionaryMatch{
-                Pattern="dictionary",
                 DictionaryName = "d1",
                 i = 6,
                 j = 10,
@@ -188,7 +179,6 @@ namespace Zxcvbn.Tests.Matcher
 
             var expected = new[] { new DictionaryMatch
             {
-                Pattern="dictionary",
                 DictionaryName = "us_tv_and_film",
                 i = 0,
                 j = 2,
@@ -211,7 +201,6 @@ namespace Zxcvbn.Tests.Matcher
             var expected = new[] {
                 new DictionaryMatch
                 {
-                    Pattern="dictionary",
                     DictionaryName = "user_inputs",
                     i = 0,
                     j = 2,
@@ -223,7 +212,6 @@ namespace Zxcvbn.Tests.Matcher
                 },
                 new DictionaryMatch
                 {
-                    Pattern="dictionary",
                     DictionaryName = "user_inputs",
                     i = 3,
                     j = 5,

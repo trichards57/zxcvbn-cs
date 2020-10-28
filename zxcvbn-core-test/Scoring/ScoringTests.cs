@@ -12,7 +12,6 @@ namespace Zxcvbn.Tests.Scoring
             var match = new DateMatch
             {
                 Guesses = 1,
-                Pattern = "date",
                 Token = "1977",
                 Year = 1977,
                 Month = 8,

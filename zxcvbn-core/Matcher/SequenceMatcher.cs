@@ -6,22 +6,18 @@ using Zxcvbn.Matcher.Matches;
 
 namespace Zxcvbn.Matcher
 {
-    /// <inheritdoc />
     /// <summary>
-    /// This matcher detects lexicographical sequences (and in reverse) e.g. abcd, 4567, PONML etc.
+    /// Attempts to match a string with a sequence of characters.
     /// </summary>
     internal class SequenceMatcher : IMatcher
     {
         private const int MaxDelta = 5;
-        private const string SequencePattern = "sequence";
 
-        /// <inheritdoc />
         /// <summary>
-        /// Find matching sequences in <paramref name="password" />
+        /// Find sequence matches in <paramref name="password" />.
         /// </summary>
-        /// <param name="password">The password to check</param>
-        /// <returns>Enumerable of sqeunec matches</returns>
-        /// <seealso cref="T:Zxcvbn.Matcher.SequenceMatch" />
+        /// <param name="password">The password to check.</param>
+        /// <returns>An enumerable of sequence matches.</returns>
         public IEnumerable<Matches.Match> MatchPassword(string password)
         {
             if (password.Length <= 1)
@@ -33,7 +29,7 @@ namespace Zxcvbn.Matcher
             {
                 if (j - i > 1 || Math.Abs(delta) == 1)
                 {
-                    if (0 < Math.Abs(delta) && Math.Abs(delta) <= MaxDelta)
+                    if (Math.Abs(delta) > 0 && Math.Abs(delta) <= MaxDelta)
                     {
                         var token = password.Substring(i, j - i + 1);
                         string sequenceName;
@@ -62,13 +58,12 @@ namespace Zxcvbn.Matcher
 
                         result.Add(new SequenceMatch
                         {
-                            Pattern = SequencePattern,
                             i = i,
                             j = j,
                             Token = token,
                             SequenceName = sequenceName,
                             SequenceSpace = sequenceSpace,
-                            Ascending = delta > 0
+                            Ascending = delta > 0,
                         });
                     }
                 }

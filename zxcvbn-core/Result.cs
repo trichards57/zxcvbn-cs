@@ -4,44 +4,48 @@ using Zxcvbn.Matcher.Matches;
 namespace Zxcvbn
 {
     /// <summary>
-    /// The results of zxcvbn's password analysis
+    /// The results of zxcvbn's password analysis.
     /// </summary>
-    // TODO: These should probably be immutable
     public class Result
     {
         /// <summary>
-        /// The number of milliseconds that zxcvbn took to calculate results for this password
+        /// Gets the number of milliseconds that zxcvbn took to calculate results for this password.
         /// </summary>
-        public long CalcTime { get; set; }
+        public long CalcTime { get; internal set; }
 
         /// <summary>
-        /// An estimation of the crack time for this password in seconds
+        /// Gets An estimation of the crack times for this password in seconds.
         /// </summary>
-        public CrackTimes CrackTime { get; set; }
+        public CrackTimes CrackTime { get; internal set; }
 
         /// <summary>
-        /// A friendly string for the crack time (like "centuries", "instant", "7 minutes", "14 hours" etc.)
+        /// Gets a set of string for the crack times.
         /// </summary>
-        public CrackTimesDisplay CrackTimeDisplay { get; set; }
+        public CrackTimesDisplay CrackTimeDisplay { get; internal set; }
 
+        /// <summary>
+        /// Gets the feedback for the user about their password.
+        /// </summary>
         public FeedbackItem Feedback { get; internal set; }
+
+        /// <summary>
+        /// Gets the number of guesses the password is estimated to need.
+        /// </summary>
         public double Guesses { get; internal set; }
 
         /// <summary>
-        /// The sequence of matches that were used to create the entropy calculation
+        /// Gets the sequence of matches that were used to assess the password.
         /// </summary>
-        public IEnumerable<Match> MatchSequence { get; set; }
+        public IEnumerable<Match> MatchSequence { get; internal set; }
 
         /// <summary>
-        /// The password that was used to generate these results
+        /// Gets the password that was used to generate these results.
         /// </summary>
-        public string Password { get; set; }
+        public string Password { get; internal set; }
 
         /// <summary>
-        /// A score from 0 to 4 (inclusive), with 0 being least secure and 4 being most secure calculated from crack time:
-        /// [0,1,2,3,4] if crack time is less than [10**2, 10**4, 10**6, 10**8, Infinity] seconds.
-        /// Useful for implementing a strength meter
+        /// Gets a score from 0 to 4 (inclusive), with 0 being least secure and 4 being most secure, calculated from the nubmer of guesses estimated to be needed.
         /// </summary>
-        public int Score { get; set; }
+        public int Score { get; internal set; }
     }
 }

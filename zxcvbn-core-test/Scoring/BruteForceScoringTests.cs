@@ -61,7 +61,6 @@ namespace Zxcvbn.Tests.Scoring
                  new BruteForceMatch {
                     i = 0,
                     j = 0,
-                    Pattern = "bruteforce",
                     Token = "0",
                     Guesses = 11
                 },
@@ -69,7 +68,6 @@ namespace Zxcvbn.Tests.Scoring
                   new BruteForceMatch {
                     i = 9,
                     j = 9,
-                    Pattern = "bruteforce",
                     Token = "9",
                     Guesses = 11
                 }
@@ -89,7 +87,6 @@ namespace Zxcvbn.Tests.Scoring
                  new BruteForceMatch {
                     i = 0,
                     j = 2,
-                    Pattern = "bruteforce",
                     Token = "012",
                     Guesses = 1000
                 },
@@ -111,7 +108,6 @@ namespace Zxcvbn.Tests.Scoring
                 new BruteForceMatch {
                     i = 6,
                     j = 9,
-                    Pattern = "bruteforce",
                     Token = "6789",
                     Guesses = 10000
                 }
@@ -129,7 +125,6 @@ namespace Zxcvbn.Tests.Scoring
                 new BruteForceMatch {
                 i = 0,
                 j = 9,
-                Pattern = "bruteforce",
                 Token = password,
                 Guesses = 10000000000
             }};
@@ -138,7 +133,7 @@ namespace Zxcvbn.Tests.Scoring
             result.Sequence.Should().BeEquivalentTo(expected);
         }
 
-        private Match CreateTestMatch(int i, int j, double guesses)
+        private Match CreateTestMatch(int i, int j, long guesses)
         {
             return new DateMatch
             {
@@ -146,7 +141,6 @@ namespace Zxcvbn.Tests.Scoring
                 j = j,
                 Guesses = guesses,
                 Token = "abc",
-                Pattern = "date",
                 Day = 1,
                 Month = 2,
                 Separator = "/",

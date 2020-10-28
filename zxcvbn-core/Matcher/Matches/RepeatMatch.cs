@@ -2,18 +2,42 @@
 
 namespace Zxcvbn.Matcher.Matches
 {
-    /// <inheritdoc />
     /// <summary>
-    /// A match found with the RepeatMatcher
+    /// A match identified as containing some repeated details.
     /// </summary>
     public class RepeatMatch : Match
     {
-        public double BaseGuesses { get; set; }
+        /// <summary>
+        /// Gets the base number guesses associated with the base matches.
+        /// </summary>
+        public long BaseGuesses { get; internal set; }
 
-        public List<Match> BaseMatches { get; set; }
+        /// <summary>
+        /// Gets the base matches that are repeated.
+        /// </summary>
+        public IReadOnlyList<Match> BaseMatches => BaseMatchItems.AsReadOnly();
 
-        public string BaseToken { get; set; }
+        /// <summary>
+        /// Gets the base repeated token.
+        /// </summary>
+        public string BaseToken { get; internal set; }
 
-        public int RepeatCount { get; set; }
+        /// <summary>
+        /// Gets the name of the pattern matcher used to generate this match.
+        /// </summary>
+        public override string Pattern => "repeat";
+
+        /// <summary>
+        /// Gets the number of times the base token is repeated.
+        /// </summary>
+        public int RepeatCount { get; internal set; }
+
+        /// <summary>
+        ///  Gets or sets the base matches that are repeated.
+        /// </summary>
+        /// <remarks>
+        /// The editable backing of BaseMatches.
+        /// </remarks>
+        internal List<Match> BaseMatchItems { get; set; } = new List<Match>();
     }
 }

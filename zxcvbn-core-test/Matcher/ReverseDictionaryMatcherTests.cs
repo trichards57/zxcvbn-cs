@@ -17,7 +17,6 @@ namespace Zxcvbn.Tests.Matcher
 
             var expected = new[] { new DictionaryMatch
             {
-                Pattern="dictionary",
                 DictionaryName = "d1",
                 i = 1,
                 j = 3,
@@ -28,7 +27,6 @@ namespace Zxcvbn.Tests.Matcher
                 Token = "123"
             } ,
                 new DictionaryMatch{
-                Pattern="dictionary",
                 DictionaryName = "d1",
                 i = 4,
                 j = 6,

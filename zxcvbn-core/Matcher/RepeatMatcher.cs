@@ -1,25 +1,22 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
 using Zxcvbn.Matcher.Matches;
 
 namespace Zxcvbn.Matcher
 {
-    /// <inheritdoc />
     /// <summary>
-    /// Match repeated characters in the password (repeats must be more than two characters long to count)
+    /// Attempts to match repeated characters in the string.
     /// </summary>
+    /// <remarks>
+    /// Repeats must be more than two characters long to count.
+    /// </remarks>
     internal class RepeatMatcher : IMatcher
     {
-        private const string RepeatPattern = "repeat";
-
-        /// <inheritdoc />
         /// <summary>
-        /// Find repeat matches in <paramref name="password" />
+        /// Find repeat matches in <paramref name="password" />.
         /// </summary>
-        /// <param name="password">The password to check</param>
-        /// <returns>List of repeat matches</returns>
-        /// <seealso cref="T:Zxcvbn.Matcher.RepeatMatch" />
+        /// <param name="password">The password to check.</param>
+        /// <returns>An enumerable of repeat matches.</returns>
         public IEnumerable<Matches.Match> MatchPassword(string password)
         {
             var matches = new List<Matches.Match>();
@@ -56,22 +53,23 @@ namespace Zxcvbn.Matcher
                 var j = match.Index + match.Length - 1;
 
                 var baseAnalysis =
-                    PasswordScoring.MostGuessableMatchSequence(baseToken, Zxcvbn.GetAllMatches(baseToken));
+                    PasswordScoring.MostGuessableMatchSequence(baseToken, Core.GetAllMatches(baseToken));
 
                 var baseMatches = baseAnalysis.Sequence;
                 var baseGuesses = baseAnalysis.Guesses;
 
-                matches.Add(new RepeatMatch
+                var m = new RepeatMatch
                 {
-                    Pattern = RepeatPattern,
                     i = i,
                     j = j,
                     Token = match.Value,
                     BaseToken = baseToken,
                     BaseGuesses = baseGuesses,
-                    BaseMatches = baseMatches.ToList(),
-                    RepeatCount = match.Length / baseToken.Length
-                });
+                    RepeatCount = match.Length / baseToken.Length,
+                };
+                m.BaseMatchItems.AddRange(baseMatches);
+
+                matches.Add(m);
 
                 lastIndex = j + 1;
             }

@@ -6,13 +6,14 @@ using Zxcvbn.Matcher.Matches;
 
 namespace Zxcvbn.Matcher
 {
-    /// <inheritdoc />
     /// <summary>
-    /// This matcher applies some known l33t character substitutions and then attempts to match against passed in dictionary matchers.
-    /// This detects passwords like 4pple which has a '4' substituted for an 'a'
+    /// Attempts to match a string with a list of words, considering common l33t substitutions.
     /// </summary>
     internal class L33tMatcher : IMatcher
     {
+        /// <summary>
+        /// The table of l33t transforms.
+        /// </summary>
         internal static ReadOnlyDictionary<char, char[]> L33tTable = new ReadOnlyDictionary<char, char[]>(new Dictionary<char, char[]>
         {
             ['a'] = new[] { '4', '@' },
@@ -26,36 +27,36 @@ namespace Zxcvbn.Matcher
             ['s'] = new[] { '$', '5' },
             ['t'] = new[] { '+', '7' },
             ['x'] = new[] { '%' },
-            ['z'] = new[] { '2' }
+            ['z'] = new[] { '2' },
         });
 
-        private readonly List<IMatcher> _dictionaryMatchers;
+        private readonly IEnumerable<IMatcher> dictionaryMatchers;
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="L33tMatcher"/> class.
         /// Create a l33t matcher that applies substitutions and then matches agains the passed in list of dictionary matchers.
         /// </summary>
-        /// <param name="dictionaryMatchers">The list of dictionary matchers to check transformed passwords against</param>
-        public L33tMatcher(List<IMatcher> dictionaryMatchers)
+        /// <param name="dictionaryMatchers">The list of dictionary matchers to check transformed passwords against.</param>
+        public L33tMatcher(IEnumerable<IMatcher> dictionaryMatchers)
         {
-            _dictionaryMatchers = dictionaryMatchers;
+            this.dictionaryMatchers = dictionaryMatchers;
         }
 
-        /// <inheritdoc />
         /// <summary>
+        /// Initializes a new instance of the <see cref="L33tMatcher"/> class.
         /// Create a l33t matcher that applies substitutions and then matches agains a single dictionary matcher.
         /// </summary>
-        /// <param name="dictionaryMatcher">The dictionary matcher to check transformed passwords against</param>
-        public L33tMatcher(DictionaryMatcher dictionaryMatcher) : this(new List<IMatcher> { dictionaryMatcher })
+        /// <param name="dictionaryMatcher">The dictionary matcher to check transformed passwords against.</param>
+        public L33tMatcher(DictionaryMatcher dictionaryMatcher)
+            : this(new List<IMatcher> { dictionaryMatcher })
         {
         }
 
-        /// <inheritdoc />
         /// <summary>
-        /// Apply applicable l33t transformations and check <paramref name="password" /> against the dictionaries.
+        /// Find l33t dictionary matches in <paramref name="password"/>.
         /// </summary>
-        /// <param name="password">The password to check</param>
-        /// <returns>A list of match objects where l33t substitutions match dictionary words</returns>
-        /// <seealso cref="T:Zxcvbn.Matcher.L33tDictionaryMatch" />
+        /// <param name="password">The password to check.</param>
+        /// <returns>An enumerable of dictionary matches.</returns>
         public IEnumerable<Match> MatchPassword(string password)
         {
             var result = new List<DictionaryMatch>();
@@ -67,7 +68,7 @@ namespace Zxcvbn.Matcher
 
                 var subbedPassword = TranslateString(sub, password);
 
-                foreach (var matcher in _dictionaryMatchers)
+                foreach (var matcher in dictionaryMatchers)
                 {
                     foreach (DictionaryMatch match in matcher.MatchPassword(subbedPassword))
                     {
@@ -86,7 +87,9 @@ namespace Zxcvbn.Matcher
 
                         match.L33t = true;
                         match.Token = token;
-                        match.Sub = matchSub;
+                        match.L33tSubs.Clear();
+                        foreach (var key in matchSub.Keys)
+                            match.L33tSubs[key] = matchSub[key];
 
                         result.Add(match);
                     }
@@ -96,7 +99,12 @@ namespace Zxcvbn.Matcher
             return result.Where(m => m.Token.Length > 1).OrderBy(m => m.i).ThenBy(m => m.j);
         }
 
-        internal static List<Dictionary<char, char>> EnumerateSubtitutions(ReadOnlyDictionary<char, char[]> table)
+        /// <summary>
+        /// Enumerates the subtitutions in the provided table.
+        /// </summary>
+        /// <param name="table">The table to get the enumerations from.</param>
+        /// <returns>The enumeration of possible substitutions.</returns>
+        internal static IEnumerable<Dictionary<char, char>> EnumerateSubtitutions(ReadOnlyDictionary<char, char[]> table)
         {
             return Helper(table.Keys, table).Select(s =>
             {
@@ -107,10 +115,16 @@ namespace Zxcvbn.Matcher
                     var chr = item.Item2;
                     subDictionary[l33tChar] = chr;
                 }
+
                 return subDictionary;
-            }).ToList();
+            });
         }
 
+        /// <summary>
+        /// Prunes the L33T subtable to only the relevant bits.
+        /// </summary>
+        /// <param name="password">The password to consider.</param>
+        /// <returns>The pruned l33t table.</returns>
         internal static ReadOnlyDictionary<char, char[]> RelevantL33tSubtable(string password)
         {
             var subtable = new Dictionary<char, char[]>();
@@ -153,7 +167,7 @@ namespace Zxcvbn.Matcher
             {
                 subs = new List<List<Tuple<char, char>>>
                 {
-                    new List<Tuple<char, char>>()
+                    new List<Tuple<char, char>>(),
                 };
             }
 
@@ -176,7 +190,7 @@ namespace Zxcvbn.Matcher
 
                     nextSubs.Add(new List<Tuple<char, char>>(sub)
                     {
-                        new Tuple<char, char>(l33tChr, firstKey)
+                        new Tuple<char, char>(l33tChr, firstKey),
                     });
                 }
             }

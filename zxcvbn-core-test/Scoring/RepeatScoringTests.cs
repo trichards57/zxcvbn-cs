@@ -12,7 +12,7 @@ namespace Zxcvbn.Tests.Scoring
             InlineData("abab", "ab", 2), InlineData("batterystaplebatterystaplebatterystaple", "batterystaple", 3)]
         public void CalculatesTheRightNumberOfGuesses(string token, string baseToken, int expectedRepeats)
         {
-            var baseGuesses = PasswordScoring.MostGuessableMatchSequence(baseToken, Zxcvbn.GetAllMatches(baseToken)).Guesses;
+            var baseGuesses = PasswordScoring.MostGuessableMatchSequence(baseToken, Core.GetAllMatches(baseToken)).Guesses;
 
             var match = new RepeatMatch
             {
@@ -20,8 +20,7 @@ namespace Zxcvbn.Tests.Scoring
                 BaseToken = baseToken,
                 BaseGuesses = baseGuesses,
                 RepeatCount = expectedRepeats,
-                Pattern = "repeat",
-                BaseMatches = new List<Match>(),
+                BaseMatchItems = new List<Match>(),
                 i = 1,
                 j = 2
             };
@@ -39,10 +38,9 @@ namespace Zxcvbn.Tests.Scoring
             {
                 Token = "aa",
                 BaseToken = "a",
-                BaseGuesses = PasswordScoring.MostGuessableMatchSequence("a", Zxcvbn.GetAllMatches("a")).Guesses,
-                BaseMatches = new List<Match>(),
+                BaseGuesses = PasswordScoring.MostGuessableMatchSequence("a", Core.GetAllMatches("a")).Guesses,
+                BaseMatchItems = new List<Match>(),
                 RepeatCount = 2,
-                Pattern = "repeat",
                 i = 1,
                 j = 2
             };
