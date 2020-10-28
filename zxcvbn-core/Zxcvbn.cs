@@ -44,6 +44,13 @@ namespace Zxcvbn
             _translation = translation;
         }
 
+        public static IEnumerable<Match> GetAllMatches(string token, IEnumerable<string> userInputs = null)
+        {
+            userInputs = userInputs ?? Enumerable.Empty<string>();
+
+            return new DefaultMatcherFactory().CreateMatchers(userInputs).SelectMany(matcher => matcher.MatchPassword(token));
+        }
+
         /// <summary>
         /// <para>A static function to match a password against the default matchers without having to create
         /// an instance of Zxcvbn yourself, with supplied user data. </para>
@@ -76,7 +83,7 @@ namespace Zxcvbn
 
             var timer = System.Diagnostics.Stopwatch.StartNew();
 
-            matches = _matcherFactory.CreateMatchers(userInputs).Aggregate(matches, (current, matcher) => current.Union(matcher.MatchPassword(password)));
+            matches = GetAllMatches(password, userInputs);
 
             //var result = FindMinimumEntropyMatch(password, matches);
             var result = new Result();

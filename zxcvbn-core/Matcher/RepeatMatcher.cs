@@ -44,19 +44,19 @@ namespace Zxcvbn.Matcher
                 if (greedyMatch.Length > lazyMatch.Length)
                 {
                     match = greedyMatch;
-                    baseToken = Regex.Match(match.Value, lazyAnchored).Value;
+                    baseToken = Regex.Match(match.Value, lazyAnchored).Groups[1].Value;
                 }
                 else
                 {
                     match = lazyMatch;
-                    baseToken = match.Value;
+                    baseToken = match.Groups[1].Value;
                 }
 
                 var i = match.Index;
                 var j = match.Index + match.Length - 1;
 
                 var baseAnalysis =
-                    PasswordScoring.MostGuessableMatchSequence(baseToken, Zxcvbn.MatchPassword(baseToken).MatchSequence);
+                    PasswordScoring.MostGuessableMatchSequence(baseToken, Zxcvbn.GetAllMatches(baseToken));
 
                 var baseMatches = baseAnalysis.Sequence;
                 var baseGuesses = baseAnalysis.Guesses;
@@ -72,6 +72,8 @@ namespace Zxcvbn.Matcher
                     BaseMatches = baseMatches.ToList(),
                     RepeatCount = match.Length / baseToken.Length
                 });
+
+                lastIndex = j + 1;
             }
 
             return matches;

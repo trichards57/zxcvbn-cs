@@ -1,0 +1,56 @@
+﻿using FluentAssertions;
+using System.Collections.Generic;
+using Xunit;
+using Zxcvbn.Matcher.Matches;
+using Zxcvbn.Scoring;
+
+namespace Zxcvbn.Tests.Scoring
+{
+    public class RepeatScoringTests
+    {
+        [Theory, InlineData("aa", "a", 2), InlineData("999", "9", 3), InlineData("$$$$", "$", 4),
+            InlineData("abab", "ab", 2), InlineData("batterystaplebatterystaplebatterystaple", "batterystaple", 3)]
+        public void CalculatesTheRightNumberOfGuesses(string token, string baseToken, int expectedRepeats)
+        {
+            var baseGuesses = PasswordScoring.MostGuessableMatchSequence(baseToken, Zxcvbn.GetAllMatches(baseToken)).Guesses;
+
+            var match = new RepeatMatch
+            {
+                Token = token,
+                BaseToken = baseToken,
+                BaseGuesses = baseGuesses,
+                RepeatCount = expectedRepeats,
+                Pattern = "repeat",
+                BaseMatches = new List<Match>(),
+                i = 1,
+                j = 2
+            };
+
+            var expected = baseGuesses * expectedRepeats;
+
+            var actual = RepeatGuessesCalculator.CalculateGuesses(match);
+            actual.Should().Be(expected);
+        }
+
+        [Fact]
+        public void IsDelegatedToByEstimateGuesses()
+        {
+            var match = new RepeatMatch
+            {
+                Token = "aa",
+                BaseToken = "a",
+                BaseGuesses = PasswordScoring.MostGuessableMatchSequence("a", Zxcvbn.GetAllMatches("a")).Guesses,
+                BaseMatches = new List<Match>(),
+                RepeatCount = 2,
+                Pattern = "repeat",
+                i = 1,
+                j = 2
+            };
+
+            var expected = RepeatGuessesCalculator.CalculateGuesses(match);
+            var actual = PasswordScoring.EstimateGuesses(match, "aa");
+
+            actual.Should().Be(expected);
+        }
+    }
+}
