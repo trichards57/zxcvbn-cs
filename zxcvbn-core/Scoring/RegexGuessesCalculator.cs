@@ -8,7 +8,7 @@ namespace Zxcvbn.Scoring
     {
         private const int MinimumYearSpace = 20;
 
-        public double CalculateGuesses(RegexMatch match)
+        public static double CalculateGuesses(RegexMatch match)
         {
             switch (match.RegexName)
             {

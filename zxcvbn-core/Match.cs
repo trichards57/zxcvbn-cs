@@ -14,7 +14,7 @@ namespace Zxcvbn
     // TODO: These should probably be immutable
     public class Match
     {
-        public int Guesses { get; set; }
+        public double Guesses { get; set; }
         public double GuessesLog10 => Math.Log10(Guesses);
 
         /// <summary>

@@ -1,4 +1,6 @@
-﻿namespace Zxcvbn.Matcher.Matches
+﻿using System.Collections.Generic;
+
+namespace Zxcvbn.Matcher.Matches
 {
     /// <inheritdoc />
     /// <summary>
@@ -6,9 +8,9 @@
     /// </summary>
     public class RepeatMatch : Match
     {
-        public long BaseGuesses { get; set; }
+        public double BaseGuesses { get; set; }
 
-        public string BaseMatches { get; set; }
+        public List<Match> BaseMatches { get; set; }
 
         public string BaseToken { get; set; }
 

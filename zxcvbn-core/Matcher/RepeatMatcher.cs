@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Zxcvbn.Matcher.Matches;
 
@@ -55,7 +56,7 @@ namespace Zxcvbn.Matcher
                 var j = match.Index + match.Length - 1;
 
                 var baseAnalysis =
-                    PasswordScoring.MostGuessableMatchSequence(baseToken, Zxcvbn.MatchPassword(baseToken));
+                    PasswordScoring.MostGuessableMatchSequence(baseToken, Zxcvbn.MatchPassword(baseToken).MatchSequence);
 
                 var baseMatches = baseAnalysis.Sequence;
                 var baseGuesses = baseAnalysis.Guesses;
@@ -68,7 +69,7 @@ namespace Zxcvbn.Matcher
                     Token = match.Value,
                     BaseToken = baseToken,
                     BaseGuesses = baseGuesses,
-                    BaseMatches = baseMatches,
+                    BaseMatches = baseMatches.ToList(),
                     RepeatCount = match.Length / baseToken.Length
                 });
             }

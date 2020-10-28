@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Zxcvbn.Matcher.Matches;
+using Zxcvbn.Scoring;
 
 namespace Zxcvbn
 {
@@ -12,8 +13,7 @@ namespace Zxcvbn
     {
         public const string AllUpper = "^[^a-z]+$";
         public const string StartUpper = "^[A-Z][^A-Z]+$";
-        private const string AllLower = "^[^A-Z]+$";
-        private const string EndUpper = "^[^A-Z]+[A-Z]$";
+        private const int MinimumGuessesBeforeGrowingSequence = 10000;
 
         /// <summary>
         /// Caclulate binomial coefficient (i.e. nCk)
@@ -36,69 +36,6 @@ namespace Zxcvbn
             }
 
             return r;
-        }
-
-        public static long CaculateL33tVariations(DictionaryMatch match)
-        {
-            if (!match.L33t)
-                return 1;
-
-            var variations = 1L;
-
-            foreach (var kvp in match.Sub)
-            {
-                var unsubbed = kvp.Key;
-                var subbed = kvp.Value;
-
-                var chars = match.Token.ToLower().ToCharArray();
-
-                var s = chars.Count(c => c == subbed);
-                var u = chars.Count(c => c == unsubbed);
-
-                if (s == 0 || u == 0)
-                {
-                    variations *= 2;
-                }
-                else
-                {
-                    var p = Math.Min(u, s);
-                    var possibilities = 0L;
-                    for (var i = 1; i < p; i++)
-                    {
-                        possibilities += Binomial(u + s, i);
-                    }
-
-                    variations *= possibilities;
-                }
-            }
-
-            return variations;
-        }
-
-        public static long CalculateUppercaseVariations(DictionaryMatch match)
-        {
-            var word = match.Token;
-
-            if (Regex.IsMatch(word, AllLower) || word.ToLower().Equals(word))
-                return 1;
-
-            // A capitalized word is the most common capitalization scheme, so it only doubles the search space (uncapitalzed + capitalized).
-            // All caps and end-capitalized are common enough too, so underestimating as 2x factor to be safe.
-            if (Regex.IsMatch(word, StartUpper) || Regex.IsMatch(word, EndUpper) || Regex.IsMatch(word, AllUpper))
-                return 2;
-
-            // Otherwise calculate the number of ways to capitalize U+L uppercase+lowercase letters with U uppercase letters or less.  If there's more uppercase than lower (e.g. PASSwORD) then use the number of ways to lowercase U+L letters with L lowercase letters or less.
-            var u = word.ToCharArray().Count(c => Regex.IsMatch(c.ToString(), "[A-Z]"));
-            var l = word.ToCharArray().Count(c => Regex.IsMatch(c.ToString(), "[a-z]"));
-
-            var variations = 0L;
-
-            for (var i = 1; i < Math.Min(u, l); i++)
-            {
-                variations += Binomial(u + l, i);
-            }
-
-            return variations;
         }
 
         /// <summary>
@@ -129,9 +66,98 @@ namespace Zxcvbn
             return 0.5 * Math.Pow(2, entropy) * secondsPerGuess;
         }
 
-        public static SequenceMatch MostGuessableMatchSequence(string baseToken, Result matchPassword)
+        public static double EstimateGuesses(Match match, string password)
         {
-            throw new NotImplementedException();
+            if (match.Guesses != 0)
+                return match.Guesses;
+
+            var minGuesses = 1;
+            if (match.Token.Length < password.Length)
+            {
+                minGuesses = match.Token.Length == 1 ? BruteForceGuessesCalculator.MinSubmatchGuessesSingleCharacter : BruteForceGuessesCalculator.MinSubmatchGuessesMultiCharacter;
+            }
+
+            double guesses = 0;
+
+            switch (match.Pattern)
+            {
+                case "bruteforce":
+                    guesses = BruteForceGuessesCalculator.CalculateGuesses(match as BruteForceMatch);
+                    break;
+
+                case "date":
+                    guesses = DateGuessesCalculator.CalculateGuesses(match as DateMatch);
+                    break;
+
+                case "dictionary":
+                    guesses = DictionaryGuessesCalculator.CalculateGuesses(match as DictionaryMatch);
+                    break;
+
+                case "regex":
+                    guesses = RegexGuessesCalculator.CalculateGuesses(match as RegexMatch);
+                    break;
+
+                case "repeat":
+                    guesses = RepeatGuessesCalculator.CalculateGuesses(match as RepeatMatch);
+                    break;
+
+                case "sequence":
+                    guesses = SequenceGuessesCalculator.CalculateGuesses(match as SequenceMatch);
+                    break;
+
+                case "spatial":
+                    guesses = SpatialGuessesCalculator.CalculateGuesses(match as SpatialMatch);
+                    break;
+            }
+
+            match.Guesses = Math.Max(guesses, minGuesses);
+            return match.Guesses;
+        }
+
+        public static MostGuessableMatchResult MostGuessableMatchSequence(string password, IEnumerable<Match> matches, bool excludeAdditive = false)
+        {
+            var matchesByJ = Enumerable.Range(0, password.Length).Select(i => new List<Match>()).ToList();
+            foreach (var m in matches)
+                matchesByJ[m.j].Add(m);
+
+            var optimal = new OptimalValues(password.Length);
+
+            for (var k = 0; k < password.Length; k++)
+            {
+                foreach (var m in matchesByJ[k])
+                {
+                    if (m.i > 0)
+                    {
+                        foreach (var l in optimal.M[m.i - 1].Keys)
+                        {
+                            Update(password, optimal, m, l + 1, excludeAdditive);
+                        }
+                    }
+                    else
+                    {
+                        Update(password, optimal, m, 1, excludeAdditive);
+                    }
+                }
+                BruteforceUpdate(password, optimal, k, excludeAdditive);
+            }
+
+            var optimalMatchSequence = Unwind(optimal, password.Length);
+            var optimalL = optimalMatchSequence.Count;
+
+            double guesses;
+
+            if (password.Length == 0)
+                guesses = 1;
+            else
+                guesses = optimal.G[password.Length - 1][optimalL];
+
+            return new MostGuessableMatchResult
+            {
+                Guesses = guesses,
+                Password = password,
+                Sequence = optimalMatchSequence,
+                Score = 0
+            };
         }
 
         /// <summary>
@@ -152,5 +178,127 @@ namespace Zxcvbn
 
             return cl;
         }
+
+        private static void BruteforceUpdate(string password, OptimalValues optimal, int k, bool excludeAdditive)
+        {
+            Update(password, optimal, MakeBruteforceMatch(password, 0, k), 1, excludeAdditive);
+
+            for (var i = 1; i <= k; i++)
+            {
+                var m = MakeBruteforceMatch(password, i, k);
+                var obj = optimal.M[i - 1];
+
+                foreach (var l in obj.Keys)
+                {
+                    var lastM = obj[l];
+                    if (lastM.Pattern == "bruteforce")
+                        continue;
+                    Update(password, optimal, m, l + 1, excludeAdditive);
+                }
+            }
+        }
+
+        private static double Factorial(double n)
+        {
+            if (n < 2)
+                return 1;
+            var f = 1;
+
+            for (var i = 2; i <= n; i++)
+                f *= i;
+
+            return f;
+        }
+
+        private static BruteForceMatch MakeBruteforceMatch(string password, int i, int j)
+        {
+            return new BruteForceMatch
+            {
+                Pattern = "bruteforce",
+                Token = password.Substring(i, j - i + 1),
+                i = i,
+                j = j
+            };
+        }
+
+        private static List<Match> Unwind(OptimalValues optimal, int n)
+        {
+            var optimalMatchSequence = new List<Match>();
+            var k = n - 1;
+            var l = -1;
+            var g = double.PositiveInfinity;
+
+            foreach (var candidateL in optimal.G[k].Keys)
+            {
+                var candidateG = optimal.G[k][candidateL];
+
+                if (candidateG < g)
+                {
+                    l = candidateL;
+                    g = candidateG;
+                }
+            }
+
+            while (k >= 0)
+            {
+                var m = optimal.M[k][l];
+                optimalMatchSequence.Insert(0, m);
+                k = m.i - 1;
+                l--;
+            }
+
+            return optimalMatchSequence;
+        }
+
+        private static void Update(string password, OptimalValues optimal, Match m, int l, bool excludeAdditive)
+        {
+            var k = m.j;
+            var pi = EstimateGuesses(m, password);
+            if (l > 1)
+                pi *= optimal.Pi[m.i - 1][l - 1];
+
+            var g = Factorial(l) * pi;
+            if (!excludeAdditive)
+                g += Math.Pow(MinimumGuessesBeforeGrowingSequence, l - 1);
+
+            foreach (var competingL in optimal.G[k].Keys)
+            {
+                var competingG = optimal.G[k][competingL];
+                if (competingL > l)
+                    continue;
+                if (competingG <= g)
+                    return;
+            }
+
+            optimal.G[k][l] = g;
+            optimal.M[k][l] = m;
+            optimal.Pi[k][l] = pi;
+        }
+    }
+
+    internal class MostGuessableMatchResult
+    {
+        public double Guesses { get; set; }
+        public string Password { get; set; }
+        public double Score { get; set; }
+        public IEnumerable<Match> Sequence { get; set; }
+    }
+
+    internal class OptimalValues
+    {
+        public List<Dictionary<int, double>> G = new List<Dictionary<int, double>>();
+        public List<Dictionary<int, double>> Pi = new List<Dictionary<int, double>>();
+
+        public OptimalValues(int length)
+        {
+            for (var i = 0; i < length; i++)
+            {
+                G.Add(new Dictionary<int, double>());
+                Pi.Add(new Dictionary<int, double>());
+                M.Add(new Dictionary<int, Match>());
+            }
+        }
+
+        public List<Dictionary<int, Match>> M { get; set; } = new List<Dictionary<int, Match>>();
     }
 }

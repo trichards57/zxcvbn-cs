@@ -5,12 +5,12 @@ namespace Zxcvbn.Scoring
 {
     public class SequenceGuessesCalculator
     {
-        private readonly List<char> obviousStartCharacters = new List<char>
+        private static readonly List<char> obviousStartCharacters = new List<char>
         {
             'a', 'A', 'z', 'Z', '0', '1', '9'
         };
 
-        public double CalculateGuesses(SequenceMatch match)
+        public static double CalculateGuesses(SequenceMatch match)
         {
             int baseGuesses;
 

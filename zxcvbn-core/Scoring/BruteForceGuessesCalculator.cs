@@ -9,7 +9,7 @@ namespace Zxcvbn.Scoring
         public const int MinSubmatchGuessesSingleCharacter = 10;
         private const int BruteforceCardinality = 10;
 
-        public double CalculateGuesses(BruteForceMatch match)
+        public static double CalculateGuesses(BruteForceMatch match)
         {
             var guesses = Math.Pow(BruteforceCardinality, match.Token.Length);
             if (double.IsPositiveInfinity(guesses))

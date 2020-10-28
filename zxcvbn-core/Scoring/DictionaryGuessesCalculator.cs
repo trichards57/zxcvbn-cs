@@ -6,7 +6,7 @@ namespace Zxcvbn.Scoring
 {
     public class DictionaryGuessesCalculator
     {
-        public double CalculateGuesses(DictionaryMatch match)
+        public static double CalculateGuesses(DictionaryMatch match)
         {
             match.BaseGuesses = match.Rank;
             match.UppercaseVariations = UppercaseVariations(match.Token);
@@ -16,7 +16,7 @@ namespace Zxcvbn.Scoring
             return match.BaseGuesses * match.UppercaseVariations * match.L33tVariations * reversedVariations;
         }
 
-        private long L33tVariations(DictionaryMatch match)
+        private static long L33tVariations(DictionaryMatch match)
         {
             if (!match.L33t)
                 return 1;
@@ -44,7 +44,7 @@ namespace Zxcvbn.Scoring
             return variations;
         }
 
-        private long UppercaseVariations(string token)
+        private static long UppercaseVariations(string token)
         {
             if (token.All(c => char.IsLower(c)) || token.ToLower() == token)
                 return 1;

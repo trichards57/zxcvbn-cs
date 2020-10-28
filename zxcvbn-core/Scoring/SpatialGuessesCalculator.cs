@@ -21,7 +21,7 @@ namespace Zxcvbn.Scoring
             KeypadStartingPositions = matcher.SpatialGraphs.First(s => s.Name == "keypad").AdjacencyGraph.Keys.Count;
         }
 
-        public double CalculateGuesses(SpatialMatch match)
+        public static double CalculateGuesses(SpatialMatch match)
         {
             int s;
             double d;

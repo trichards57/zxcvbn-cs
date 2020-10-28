@@ -127,9 +127,9 @@ namespace Zxcvbn.Tests.Matcher
             L33tMatcher.L33tTable = TestL33tTable;
             var matcher = new L33tMatcher(new List<DictionaryMatcher> { TestDictionary1, TestDictionary2 });
 
-            var expected = new List<L33tDictionaryMatch>
+            var expected = new List<DictionaryMatch>
             {
-                new L33tDictionaryMatch()
+                new DictionaryMatch()
                 {
                     Pattern = "dictionary",
                     DictionaryName = "words",
@@ -149,9 +149,9 @@ namespace Zxcvbn.Tests.Matcher
             var result = matcher.MatchPassword("p4ssword");
             result.Should().BeEquivalentTo(expected);
 
-            expected = new List<L33tDictionaryMatch>
+            expected = new List<DictionaryMatch>
             {
-                new L33tDictionaryMatch()
+                new DictionaryMatch()
                 {
                     Pattern = "dictionary",
                     DictionaryName = "words",
@@ -171,9 +171,9 @@ namespace Zxcvbn.Tests.Matcher
             result = matcher.MatchPassword("p@ssw0rd");
             result.Should().BeEquivalentTo(expected);
 
-            expected = new List<L33tDictionaryMatch>
+            expected = new List<DictionaryMatch>
             {
-                new L33tDictionaryMatch()
+                new DictionaryMatch()
                 {
                     Pattern = "dictionary",
                     DictionaryName = "words2",
@@ -200,9 +200,9 @@ namespace Zxcvbn.Tests.Matcher
             L33tMatcher.L33tTable = TestL33tTable;
             var matcher = new L33tMatcher(new List<DictionaryMatcher> { TestDictionary1, TestDictionary2 });
 
-            var expected = new List<L33tDictionaryMatch>
+            var expected = new List<DictionaryMatch>
             {
-                new L33tDictionaryMatch()
+                new DictionaryMatch()
                 {
                     Pattern = "dictionary",
                     DictionaryName = "words",
@@ -219,7 +219,7 @@ namespace Zxcvbn.Tests.Matcher
                         {'(','c' }
                     }
                 },
-                new L33tDictionaryMatch()
+                new DictionaryMatch()
                 {
                     Pattern = "dictionary",
                     DictionaryName = "words2",
@@ -235,7 +235,7 @@ namespace Zxcvbn.Tests.Matcher
                         {'(','c' }
                     }
                 },
-                new L33tDictionaryMatch()
+                new DictionaryMatch()
                 {
                     Pattern = "dictionary",
                     DictionaryName = "words2",

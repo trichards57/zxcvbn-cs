@@ -8,7 +8,7 @@ namespace Zxcvbn.Scoring
     {
         public const int MinimumYearSpace = 20;
 
-        public double CalculateGuesses(DateMatch match)
+        public static double CalculateGuesses(DateMatch match)
         {
             var yearSpace = Math.Max(Math.Abs(match.Year - DateMatcher.ReferenceYear), MinimumYearSpace);
 
