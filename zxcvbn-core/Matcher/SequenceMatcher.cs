@@ -22,12 +22,12 @@ namespace Zxcvbn.Matcher
         /// <param name="password">The password to check</param>
         /// <returns>Enumerable of sqeunec matches</returns>
         /// <seealso cref="T:Zxcvbn.Matcher.SequenceMatch" />
-        public IEnumerable<Match> MatchPassword(string password)
+        public IEnumerable<Matches.Match> MatchPassword(string password)
         {
             if (password.Length <= 1)
-                return Enumerable.Empty<Match>();
+                return Enumerable.Empty<Matches.Match>();
 
-            var result = new List<Match>();
+            var result = new List<Matches.Match>();
 
             void Update(int i, int j, int delta)
             {

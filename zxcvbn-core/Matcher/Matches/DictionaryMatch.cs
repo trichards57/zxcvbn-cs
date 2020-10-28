@@ -13,11 +13,6 @@ namespace Zxcvbn.Matcher.Matches
             Pattern = DictionaryMatcher.DictionaryPattern;
         }
 
-        /// <summary>
-        /// The base entropy of the match, calculated from frequency rank
-        /// </summary>
-        public double BaseEntropy { get; set; }
-
         public long BaseGuesses { get; set; }
 
         /// <summary>
@@ -54,12 +49,6 @@ namespace Zxcvbn.Matcher.Matches
         /// </summary>
         public Dictionary<char, char> Sub { get; set; }
 
-        /// <summary>
-        /// Additional entropy for this match from the use of mixed case
-        /// </summary>
-        public double UppercaseEntropy { get; set; }
-
         public long UppercaseVariations { get; set; }
-        public long Variations { get; set; }
     }
 }

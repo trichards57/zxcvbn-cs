@@ -39,19 +39,6 @@ namespace Zxcvbn
         }
 
         /// <summary>
-        /// A convenience for parsing a substring as an int and returning the results. Uses TryParse, and so returns zero where there is no valid int
-        /// </summary>
-        /// <param name="r">Substring parsed as int or zero</param>
-        /// <param name="length">Length of substring to parse</param>
-        /// <param name="startIndex">Start index of substring to parse</param>
-        /// <param name="str">String to get substring of</param>
-        /// <returns>True if the parse succeeds</returns>
-        public static bool IntParseSubstring(this string str, int startIndex, int length, out int r)
-        {
-            return int.TryParse(str.Substring(startIndex, length), out r);
-        }
-
-        /// <summary>
         /// Reverse a string in one call
         /// </summary>
         /// <param name="str">String to reverse</param>

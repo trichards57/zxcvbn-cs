@@ -65,9 +65,9 @@ namespace Zxcvbn.Matcher
         /// <param name="password">The passsord to check</param>
         /// <returns>An enumerable of date matches</returns>
         /// <seealso cref="T:Zxcvbn.Matcher.DateMatch" />
-        public IEnumerable<Match> MatchPassword(string password)
+        public IEnumerable<Matches.Match> MatchPassword(string password)
         {
-            var matches = new List<Match>();
+            var matches = new List<Matches.Match>();
 
             for (var i = 0; i <= password.Length - 4; i++)
             {

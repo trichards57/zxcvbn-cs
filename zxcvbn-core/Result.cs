@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Zxcvbn.Matcher.Matches;
 
 namespace Zxcvbn
 {
@@ -16,22 +17,20 @@ namespace Zxcvbn
         /// <summary>
         /// An estimation of the crack time for this password in seconds
         /// </summary>
-        public double CrackTime { get; set; }
+        public CrackTimes CrackTime { get; set; }
 
         /// <summary>
         /// A friendly string for the crack time (like "centuries", "instant", "7 minutes", "14 hours" etc.)
         /// </summary>
-        public string CrackTimeDisplay { get; set; }
+        public CrackTimesDisplay CrackTimeDisplay { get; set; }
 
-        /// <summary>
-        /// A calculated estimate of how many bits of entropy the password covers, rounded to three decimal places.
-        /// </summary>
-        public double Entropy { get; set; }
+        public FeedbackItem Feedback { get; internal set; }
+        public double Guesses { get; internal set; }
 
         /// <summary>
         /// The sequence of matches that were used to create the entropy calculation
         /// </summary>
-        public IList<Match> MatchSequence { get; set; }
+        public IEnumerable<Match> MatchSequence { get; set; }
 
         /// <summary>
         /// The password that was used to generate these results
@@ -44,15 +43,5 @@ namespace Zxcvbn
         /// Useful for implementing a strength meter
         /// </summary>
         public int Score { get; set; }
-
-        /// <summary>
-        /// Suggestions on how to improve the password
-        /// </summary>
-        public List<Suggestion> Suggestions { get; set; }
-
-        /// <summary>
-        /// Warning about the quality of the password
-        /// </summary>
-        public Warning Warning { get; set; }
     }
 }

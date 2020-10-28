@@ -7,10 +7,10 @@ namespace Zxcvbn.Scoring
 {
     public class SpatialGuessesCalculator
     {
-        private static readonly double KeyboardAverageDegree;
-        private static readonly int KeyboardStartingPositions;
-        private static readonly double KeypadAverageDegree;
-        private static readonly int KeypadStartingPositions;
+        internal static readonly double KeyboardAverageDegree;
+        internal static readonly int KeyboardStartingPositions;
+        internal static readonly double KeypadAverageDegree;
+        internal static readonly int KeypadStartingPositions;
 
         static SpatialGuessesCalculator()
         {

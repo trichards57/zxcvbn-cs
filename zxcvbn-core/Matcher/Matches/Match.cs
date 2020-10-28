@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Zxcvbn
+namespace Zxcvbn.Matcher.Matches
 {
     /// <summary>
     /// <para>A single match that one of the pattern matchers has made against the password being tested.</para>

@@ -44,7 +44,7 @@ namespace Zxcvbn.Matcher
         /// <param name="password">Password to match</param>
         /// <returns>List of matching patterns</returns>
         /// <seealso cref="M:Zxcvbn.Matcher.SpatialMatcher.SpatialMatch(Zxcvbn.Matcher.SpatialMatcher.SpatialGraph,System.String)" />
-        public IEnumerable<Match> MatchPassword(string password)
+        public IEnumerable<Matches.Match> MatchPassword(string password)
         {
             return SpatialGraphs.SelectMany(g => SpatialMatch(g, password)).ToList();
         }
@@ -96,9 +96,9 @@ namespace Zxcvbn.Matcher
         /// <param name="graph">Adjacency graph for this key layout</param>
         /// <param name="password">Password to match</param>
         /// <returns>List of matching patterns</returns>
-        private static IEnumerable<Match> SpatialMatch(SpatialGraph graph, string password)
+        private static IEnumerable<Matches.Match> SpatialMatch(SpatialGraph graph, string password)
         {
-            var matches = new List<Match>();
+            var matches = new List<Matches.Match>();
 
             var i = 0;
             while (i < password.Length - 1)

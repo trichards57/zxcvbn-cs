@@ -11,21 +11,10 @@
         /// </summary>
         public bool Ascending { get; set; }
 
-        public long BaseGuesses { get; set; }
-        public string BaseMatches { get; set; }
-        public string BaseToken { get; set; }
-        public long RepeatCount { get; set; }
-        public string Sequence { get; set; }
-
         /// <summary>
         /// The name of the sequence that the match was found in (e.g. 'lower', 'upper', 'digits')
         /// </summary>
         public string SequenceName { get; set; }
-
-        /// <summary>
-        /// The size of the sequence the match was found in (e.g. 26 for lowercase letters)
-        /// </summary>
-        public int SequenceSize { get; set; }
 
         public int SequenceSpace { get; set; }
     }

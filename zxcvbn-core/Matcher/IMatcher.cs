@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Zxcvbn.Matcher.Matches;
 
 namespace Zxcvbn.Matcher
 {

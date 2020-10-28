@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Zxcvbn.Matcher;
 
 namespace Zxcvbn
@@ -46,7 +45,7 @@ namespace Zxcvbn
             };
 
             _matchers.AddRange(dictionaryMatchers);
-            //_matchers.Add(new L33tMatcher(dictionaryMatchers));
+            _matchers.Add(new L33tMatcher(dictionaryMatchers));
         }
 
         /// <inheritdoc />
@@ -58,9 +57,9 @@ namespace Zxcvbn
         public IEnumerable<IMatcher> CreateMatchers(IEnumerable<string> userInputs)
         {
             var userInputDict = new DictionaryMatcher("user_inputs", userInputs);
-            //var leetUser = new L33tMatcher(userInputDict);
+            var leetUser = new L33tMatcher(userInputDict);
 
-            return _matchers.Union(new List<IMatcher> { userInputDict/*, leetUser*/ });
+            return new List<IMatcher>(_matchers) { userInputDict, leetUser };
         }
     }
 }

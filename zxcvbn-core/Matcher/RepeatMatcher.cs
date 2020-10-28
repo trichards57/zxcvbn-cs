@@ -20,9 +20,9 @@ namespace Zxcvbn.Matcher
         /// <param name="password">The password to check</param>
         /// <returns>List of repeat matches</returns>
         /// <seealso cref="T:Zxcvbn.Matcher.RepeatMatch" />
-        public IEnumerable<Match> MatchPassword(string password)
+        public IEnumerable<Matches.Match> MatchPassword(string password)
         {
-            var matches = new List<Match>();
+            var matches = new List<Matches.Match>();
             var greedy = "(.+)\\1+";
             var lazy = "(.+?)\\1+";
             var lazyAnchored = "^(.+?)\\1+$";

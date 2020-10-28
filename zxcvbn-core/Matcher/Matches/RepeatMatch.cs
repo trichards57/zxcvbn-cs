@@ -14,11 +14,6 @@ namespace Zxcvbn.Matcher.Matches
 
         public string BaseToken { get; set; }
 
-        /// <summary>
-        /// The character that was repeated
-        /// </summary>
-        public char RepeatChar { get; set; }
-
         public int RepeatCount { get; set; }
     }
 }

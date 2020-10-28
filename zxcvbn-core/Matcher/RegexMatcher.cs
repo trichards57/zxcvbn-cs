@@ -46,11 +46,11 @@ namespace Zxcvbn.Matcher
         /// </summary>
         /// <param name="password">The password to check</param>
         /// <returns>An enumerable of matches for each regex match in <paramref name="password" /></returns>
-        public IEnumerable<Match> MatchPassword(string password)
+        public IEnumerable<Matches.Match> MatchPassword(string password)
         {
             var reMatches = _matchRegex.Matches(password);
 
-            var pwMatches = new List<Match>();
+            var pwMatches = new List<Matches.Match>();
 
             foreach (System.Text.RegularExpressions.Match rem in reMatches)
             {

@@ -38,34 +38,6 @@ namespace Zxcvbn
             return r;
         }
 
-        /// <summary>
-        /// Return a score for password strength from the crack time. Scores are 0..4, 0 being minimum and 4 maximum strength.
-        /// </summary>
-        /// <param name="crackTimeSeconds">Number of seconds estimated for password cracking</param>
-        /// <returns>Password strength. 0 to 4, 0 is minimum</returns>
-        public static int CrackTimeToScore(double crackTimeSeconds)
-        {
-            if (crackTimeSeconds < Math.Pow(10, 2)) return 0;
-            if (crackTimeSeconds < Math.Pow(10, 4)) return 1;
-            if (crackTimeSeconds < Math.Pow(10, 6)) return 2;
-            if (crackTimeSeconds < Math.Pow(10, 8)) return 3;
-            return 4;
-        }
-
-        /// <summary>
-        /// Calculate a rough estimate of crack time for entropy, see zxcbn scoring.coffee for more information on the model used
-        /// </summary>
-        /// <param name="entropy">Entropy of password</param>
-        /// <returns>An estimation of seconts taken to crack password</returns>
-        public static double EntropyToCrackTime(double entropy)
-        {
-            const double singleGuess = 0.01;
-            const double numAttackers = 100;
-            const double secondsPerGuess = singleGuess / numAttackers;
-
-            return 0.5 * Math.Pow(2, entropy) * secondsPerGuess;
-        }
-
         public static double EstimateGuesses(Match match, string password)
         {
             if (match.Guesses != 0)
@@ -158,25 +130,6 @@ namespace Zxcvbn
                 Sequence = optimalMatchSequence,
                 Score = 0
             };
-        }
-
-        /// <summary>
-        /// Calculate the cardinality of the minimal character sets necessary to brute force the password (roughly)
-        /// (e.g. lowercase = 26, numbers = 10, lowercase + numbers = 36)
-        /// </summary>
-        /// <param name="password">THe password to evaluate</param>
-        /// <returns>An estimation of the cardinality of charactes for this password</returns>
-        public static int PasswordCardinality(string password)
-        {
-            var cl = 0;
-
-            if (password.Any(c => 'a' <= c && c <= 'z')) cl += 26; // Lowercase
-            if (password.Any(c => 'A' <= c && c <= 'Z')) cl += 26; // Uppercase
-            if (password.Any(c => '0' <= c && c <= '9')) cl += 10; // Numbers
-            if (password.Any(c => c <= '/' || (':' <= c && c <= '@') || ('[' <= c && c <= '`') || ('{' <= c && c <= 0x7F))) cl += 33; // Symbols
-            if (password.Any(c => c > 0x7F)) cl += 100; // 'Unicode' (why 100?)
-
-            return cl;
         }
 
         private static void BruteforceUpdate(string password, OptimalValues optimal, int k, bool excludeAdditive)
@@ -280,7 +233,7 @@ namespace Zxcvbn
     {
         public double Guesses { get; set; }
         public string Password { get; set; }
-        public double Score { get; set; }
+        public int Score { get; set; }
         public IEnumerable<Match> Sequence { get; set; }
     }
 

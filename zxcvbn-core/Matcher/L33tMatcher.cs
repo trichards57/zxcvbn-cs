@@ -29,13 +29,13 @@ namespace Zxcvbn.Matcher
             ['z'] = new[] { '2' }
         });
 
-        private readonly List<DictionaryMatcher> _dictionaryMatchers;
+        private readonly List<IMatcher> _dictionaryMatchers;
 
         /// <summary>
         /// Create a l33t matcher that applies substitutions and then matches agains the passed in list of dictionary matchers.
         /// </summary>
         /// <param name="dictionaryMatchers">The list of dictionary matchers to check transformed passwords against</param>
-        public L33tMatcher(List<DictionaryMatcher> dictionaryMatchers)
+        public L33tMatcher(List<IMatcher> dictionaryMatchers)
         {
             _dictionaryMatchers = dictionaryMatchers;
         }
@@ -45,7 +45,7 @@ namespace Zxcvbn.Matcher
         /// Create a l33t matcher that applies substitutions and then matches agains a single dictionary matcher.
         /// </summary>
         /// <param name="dictionaryMatcher">The dictionary matcher to check transformed passwords against</param>
-        public L33tMatcher(DictionaryMatcher dictionaryMatcher) : this(new List<DictionaryMatcher> { dictionaryMatcher })
+        public L33tMatcher(DictionaryMatcher dictionaryMatcher) : this(new List<IMatcher> { dictionaryMatcher })
         {
         }
 
@@ -189,19 +189,6 @@ namespace Zxcvbn.Matcher
         {
             // Make substitutions from the character map wherever possible
             return new string(str.Select(c => charMap.ContainsKey(c) ? charMap[c] : c).ToArray());
-        }
-
-        private class SubstituionComparer : IEqualityComparer<Tuple<char, char>>
-        {
-            public bool Equals(Tuple<char, char> x, Tuple<char, char> y)
-            {
-                return x.Item1 == y.Item1 && x.Item2 == y.Item2;
-            }
-
-            public int GetHashCode(Tuple<char, char> obj)
-            {
-                throw new NotImplementedException();
-            }
         }
     }
 }
