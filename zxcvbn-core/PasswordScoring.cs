@@ -38,18 +38,14 @@ namespace Zxcvbn
             return r;
         }
 
-        // ReSharper disable once InconsistentNaming
         public static long CaculateL33tVariations(DictionaryMatch match)
         {
             if (!match.L33t)
                 return 1;
 
-            if (!(match is L33tDictionaryMatch lMatch))
-                return 1;
-
             var variations = 1L;
 
-            foreach (var kvp in lMatch.Sub)
+            foreach (var kvp in match.Sub)
             {
                 var unsubbed = kvp.Key;
                 var subbed = kvp.Value;

@@ -58,7 +58,7 @@ namespace Zxcvbn.Matcher
         /// <seealso cref="T:Zxcvbn.Matcher.L33tDictionaryMatch" />
         public IEnumerable<Match> MatchPassword(string password)
         {
-            var result = new List<L33tDictionaryMatch>();
+            var result = new List<DictionaryMatch>();
 
             foreach (var sub in EnumerateSubtitutions(RelevantL33tSubtable(password)))
             {
@@ -84,13 +84,11 @@ namespace Zxcvbn.Matcher
                                 matchSub[subbedChar] = chr;
                         }
 
-                        var lMatch = new L33tDictionaryMatch(match)
-                        {
-                            L33t = true,
-                            Token = token,
-                            Sub = matchSub
-                        };
-                        result.Add(lMatch);
+                        match.L33t = true;
+                        match.Token = token;
+                        match.Sub = matchSub;
+
+                        result.Add(match);
                     }
                 }
             }

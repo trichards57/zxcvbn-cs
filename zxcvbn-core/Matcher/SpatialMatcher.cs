@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Zxcvbn.Matcher.Matches;
@@ -179,70 +180,70 @@ namespace Zxcvbn.Matcher
                 return "{" + X + ", " + Y + "}";
             }
         }
+    }
 
-        // See build_keyboard_adjacency_graph.py in zxcvbn for how these are generated
-        internal class SpatialGraph
+    // See build_keyboard_adjacency_graph.py in zxcvbn for how these are generated
+    internal class SpatialGraph
+    {
+        public SpatialGraph(string name, string layout, bool slanted)
         {
-            public SpatialGraph(string name, string layout, bool slanted)
+            Name = name;
+            BuildGraph(layout, slanted);
+        }
+
+        public Dictionary<char, List<string>> AdjacencyGraph { get; private set; }
+        public string Name { get; }
+
+        private static Point[] GetAlignedAdjacent(Point c)
+        {
+            var x = c.X;
+            var y = c.Y;
+
+            return new[] { new Point(x - 1, y), new Point(x - 1, y - 1), new Point(x, y - 1), new Point(x + 1, y - 1), new Point(x + 1, y), new Point(x + 1, y + 1), new Point(x, y + 1), new Point(x - 1, y + 1) };
+        }
+
+        private static Point[] GetSlantedAdjacent(Point c)
+        {
+            var x = c.X;
+            var y = c.Y;
+
+            return new[] { new Point(x - 1, y), new Point(x, y - 1), new Point(x + 1, y - 1), new Point(x + 1, y), new Point(x, y + 1), new Point(x - 1, y + 1) };
+        }
+
+        private void BuildGraph(string layout, bool slanted)
+        {
+            var tokens = layout.Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
+            var tokenSize = tokens[0].Length;
+
+            // Put the characters in each keyboard cell into the map agains t their coordinates
+            var positionTable = new Dictionary<Point, string>();
+            var lines = layout.Split("\n".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            for (var y = 0; y < lines.Length; ++y)
             {
-                Name = name;
-                BuildGraph(layout, slanted);
-            }
+                var line = lines[y];
+                var slant = slanted ? y - 1 : 0;
 
-            public Dictionary<char, List<string>> AdjacencyGraph { get; private set; }
-            public string Name { get; }
-
-            private static Point[] GetAlignedAdjacent(Point c)
-            {
-                var x = c.X;
-                var y = c.Y;
-
-                return new[] { new Point(x - 1, y), new Point(x - 1, y - 1), new Point(x, y - 1), new Point(x + 1, y - 1), new Point(x + 1, y), new Point(x + 1, y + 1), new Point(x, y + 1), new Point(x - 1, y + 1) };
-            }
-
-            private static Point[] GetSlantedAdjacent(Point c)
-            {
-                var x = c.X;
-                var y = c.Y;
-
-                return new[] { new Point(x - 1, y), new Point(x, y - 1), new Point(x + 1, y - 1), new Point(x + 1, y), new Point(x, y + 1), new Point(x - 1, y + 1) };
-            }
-
-            private void BuildGraph(string layout, bool slanted)
-            {
-                var tokens = layout.Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
-                var tokenSize = tokens[0].Length;
-
-                // Put the characters in each keyboard cell into the map agains t their coordinates
-                var positionTable = new Dictionary<Point, string>();
-                var lines = layout.Split("\n".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
-                for (var y = 0; y < lines.Length; ++y)
+                foreach (var token in line.Split((char[])null, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    var line = lines[y];
-                    var slant = slanted ? y - 1 : 0;
-
-                    foreach (var token in line.Split((char[])null, StringSplitOptions.RemoveEmptyEntries))
-                    {
-                        var x = (line.IndexOf(token, StringComparison.Ordinal) - slant) / (tokenSize + 1);
-                        var p = new Point(x, y);
-                        positionTable[p] = token;
-                    }
+                    var x = (line.IndexOf(token, StringComparison.Ordinal) - slant) / (tokenSize + 1);
+                    var p = new Point(x, y);
+                    positionTable[p] = token;
                 }
+            }
 
-                AdjacencyGraph = new Dictionary<char, List<string>>();
-                foreach (var pair in positionTable)
+            AdjacencyGraph = new Dictionary<char, List<string>>();
+            foreach (var pair in positionTable)
+            {
+                var p = pair.Key;
+                foreach (var c in pair.Value)
                 {
-                    var p = pair.Key;
-                    foreach (var c in pair.Value)
-                    {
-                        AdjacencyGraph[c] = new List<string>();
-                        var adjacentPoints = slanted ? GetSlantedAdjacent(p) : GetAlignedAdjacent(p);
+                    AdjacencyGraph[c] = new List<string>();
+                    var adjacentPoints = slanted ? GetSlantedAdjacent(p) : GetAlignedAdjacent(p);
 
-                        foreach (var adjacent in adjacentPoints)
-                        {
-                            // We want to include nulls so that direction is correspondent with index in the list
-                            AdjacencyGraph[c].Add(positionTable.ContainsKey(adjacent) ? positionTable[adjacent] : null);
-                        }
+                    foreach (var adjacent in adjacentPoints)
+                    {
+                        // We want to include nulls so that direction is correspondent with index in the list
+                        AdjacencyGraph[c].Add(positionTable.ContainsKey(adjacent) ? positionTable[adjacent] : null);
                     }
                 }
             }

@@ -1,4 +1,6 @@
-﻿namespace Zxcvbn.Matcher.Matches
+﻿using System.Collections.Generic;
+
+namespace Zxcvbn.Matcher.Matches
 {
     /// <inheritdoc />
     /// <summary>
@@ -46,6 +48,11 @@
         /// The matched word was reversed compared to the dictionary
         /// </summary>
         public bool Reversed { get; set; }
+
+        /// <summary>
+        /// The character mappings that are in use for this match
+        /// </summary>
+        public Dictionary<char, char> Sub { get; set; }
 
         /// <summary>
         /// Additional entropy for this match from the use of mixed case
