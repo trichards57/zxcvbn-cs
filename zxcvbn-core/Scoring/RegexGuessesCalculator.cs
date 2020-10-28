@@ -13,7 +13,7 @@ namespace Zxcvbn.Scoring
             switch (match.RegexName)
             {
                 case "recent_year":
-                    var yearSpace = Math.Abs(int.Parse(match.Pattern) - DateMatcher.ReferenceYear);
+                    var yearSpace = Math.Abs(int.Parse(match.Token) - DateMatcher.ReferenceYear);
                     yearSpace = Math.Max(yearSpace, MinimumYearSpace);
                     return yearSpace;
 
