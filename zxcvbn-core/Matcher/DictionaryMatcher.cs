@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using Zxcvbn.Matcher.Matches;
@@ -42,7 +41,7 @@ namespace Zxcvbn.Matcher
             dictionaryName = name;
 
             // Must ensure that the dictionary is using lowercase words only
-            rankedDictionary = BuildRankedDictionary(wordList.Select(w => w.ToLower(CultureInfo.InvariantCulture)));
+            rankedDictionary = BuildRankedDictionary(wordList.Select(w => w.ToLower()));
         }
 
         /// <summary>
@@ -52,7 +51,7 @@ namespace Zxcvbn.Matcher
         /// <returns>An enumerable of dictionary matches.</returns>
         public virtual IEnumerable<Match> MatchPassword(string password)
         {
-            var passwordLower = password.ToLower(CultureInfo.InvariantCulture);
+            var passwordLower = password.ToLower();
             var length = passwordLower.Length;
             var matches = new List<Match>();
 

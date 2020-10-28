@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Zxcvbn.Matcher.Matches;
 
 namespace Zxcvbn
@@ -31,7 +32,12 @@ namespace Zxcvbn
         /// <summary>
         /// Gets the number of guesses the password is estimated to need.
         /// </summary>
-        public double Guesses { get; internal set; }
+        public long Guesses { get; internal set; }
+
+        /// <summary>
+        /// Gets log10(the number of guesses) the password is estimated to need.
+        /// </summary>
+        public double GuessesLog10 => Math.Log10(Guesses);
 
         /// <summary>
         /// Gets the sequence of matches that were used to assess the password.

@@ -16,14 +16,14 @@ namespace Zxcvbn
         {
             var crackTimesSeconds = new CrackTimes
             {
-                OfflineFastHashing1e10PerSecond = guesses / (100 / 3600),
+                OfflineFastHashing1e10PerSecond = guesses / (100.0 / 3600),
                 OfflineSlowHashing1e4PerSecond = guesses / 10,
                 OnlineNoThrottling10PerSecond = guesses / 1e4,
                 OnlineThrottling100PerHour = guesses / 1e10,
             };
             var crackTimesDisplay = new CrackTimesDisplay
             {
-                OfflineFastHashing1e10PerSecond = DisplayTime(guesses / (100 / 3600)),
+                OfflineFastHashing1e10PerSecond = DisplayTime(guesses / (100.0 / 3600)),
                 OfflineSlowHashing1e4PerSecond = DisplayTime(guesses / 10),
                 OnlineNoThrottling10PerSecond = DisplayTime(guesses / 1e4),
                 OnlineThrottling100PerHour = DisplayTime(guesses / 1e10),
@@ -44,7 +44,7 @@ namespace Zxcvbn
             const double day = hour * 24;
             const double month = day * 31;
             const double year = month * 12;
-            const double century = year * 1000;
+            const double century = year * 100;
 
             int? displayNumber = null;
             string displayString;

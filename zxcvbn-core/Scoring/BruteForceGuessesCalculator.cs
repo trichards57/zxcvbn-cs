@@ -27,13 +27,13 @@ namespace Zxcvbn.Scoring
         /// <returns>The guesses estimate.</returns>
         public static long CalculateGuesses(BruteForceMatch match)
         {
-            var guesses = (long)Math.Pow(BruteforceCardinality, match.Token.Length);
+            var guesses = Math.Pow(BruteforceCardinality, match.Token.Length);
             if (double.IsPositiveInfinity(guesses))
-                guesses = long.MaxValue;
+                guesses = double.MaxValue;
 
             var minGuesses = match.Token.Length == 1 ? MinSubmatchGuessesSingleCharacter + 1 : MinSubmatchGuessesMultiCharacter + 1;
 
-            return Math.Max(guesses, minGuesses);
+            return (long)Math.Max(guesses, minGuesses);
         }
     }
 }

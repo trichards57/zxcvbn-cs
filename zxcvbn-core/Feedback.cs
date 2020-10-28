@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using Zxcvbn.Matcher.Matches;
 
@@ -93,7 +92,7 @@ namespace Zxcvbn
             var word = match.Token;
             if (char.IsUpper(word[0]))
                 suggestions.Add("Capitalization doesn't help very much");
-            else if (word.All(c => char.IsUpper(c)) && word.ToLower(CultureInfo.InvariantCulture) != word)
+            else if (word.All(c => char.IsUpper(c)) && word.ToLower() != word)
                 suggestions.Add("All-uppercase is almost as easy to guess as all-lowercase");
 
             if (match.Reversed && match.Token.Length >= 4)

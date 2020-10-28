@@ -73,7 +73,7 @@ namespace Zxcvbn.Matcher
                     foreach (DictionaryMatch match in matcher.MatchPassword(subbedPassword))
                     {
                         var token = password.Substring(match.i, match.j - match.i + 1);
-                        if (token.Equals(match.MatchedWord, StringComparison.InvariantCultureIgnoreCase))
+                        if (token.ToLower().Equals(match.MatchedWord.ToLower()))
                             continue;
 
                         var matchSub = new Dictionary<char, char>();

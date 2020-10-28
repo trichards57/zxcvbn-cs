@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Description>C#/.NET port of Dan Wheeler/DropBox's Zxcvbn JS password strength estimation library.  Updated for .Net Core.</Description>
     <Authors>mickford;Tony Richards (trichards57);Dan Wheeler;DropBox</Authors>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;net451;netstandard1.3</TargetFrameworks>
     <AssemblyName>zxcvbn-core</AssemblyName>
     <PackageId>zxcvbn-core</PackageId>
     <PackageTags>password;strength;validation;zxcvbn</PackageTags>
@@ -37,5 +37,4 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
-
 </Project>

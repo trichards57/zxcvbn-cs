@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
 using Zxcvbn.Matcher.Matches;
 
@@ -40,8 +39,8 @@ namespace Zxcvbn.Scoring
             foreach (var subbed in match.Sub.Keys)
             {
                 var unsubbed = match.Sub[subbed];
-                var s = match.Token.ToLower(CultureInfo.InvariantCulture).Count(c => c == subbed);
-                var u = match.Token.ToLower(CultureInfo.InvariantCulture).Count(c => c == unsubbed);
+                var s = match.Token.ToLower().Count(c => c == subbed);
+                var u = match.Token.ToLower().Count(c => c == unsubbed);
 
                 if (s == 0 || u == 0)
                 {
@@ -67,7 +66,7 @@ namespace Zxcvbn.Scoring
         /// <returns>The number of possible variations.</returns>
         internal static long UppercaseVariations(string token)
         {
-            if (token.All(c => char.IsLower(c)) || token.ToLower(CultureInfo.InvariantCulture) == token)
+            if (token.All(c => char.IsLower(c)) || token.ToLower() == token)
                 return 1;
 
             if ((char.IsUpper(token.First()) && token.Skip(1).All(c => char.IsLower(c)))

@@ -10,3 +10,5 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1503:Braces should not be omitted", Justification = "To match this project's coding style.")]
 [assembly: SuppressMessage("Globalization", "CA1308:Normalize strings to uppercase", Justification = "This normalization isn't security critical")]
 [assembly: SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1633:File should have header", Justification = "No header required.")]
+[assembly: SuppressMessage("Globalization", "CA1304:Specify CultureInfo", Justification = "Not supported in all the desired target libraries.")]
+[assembly: SuppressMessage("Globalization", "CA1307:Specify StringComparison", Justification = "Not supported in all the desired target libraries.")]
