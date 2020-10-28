@@ -19,7 +19,7 @@ namespace Zxcvbn.Matcher
     ///  place.</para>
     ///  <para>Dictionary word lists must be in decreasing frequency order and contain one word per line with no additional information.</para>
     ///  </summary>
-    public class DictionaryMatcher : IMatcher
+    internal class DictionaryMatcher : IMatcher
     {
         public const string DictionaryPattern = "dictionary";
 

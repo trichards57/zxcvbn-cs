@@ -4,7 +4,7 @@ using Zxcvbn.Matcher.Matches;
 
 namespace Zxcvbn.Scoring
 {
-    public class DateGuessesCalculator
+    internal class DateGuessesCalculator
     {
         public const int MinimumYearSpace = 20;
 

@@ -11,7 +11,7 @@ namespace Zxcvbn.Matcher
     /// This matcher applies some known l33t character substitutions and then attempts to match against passed in dictionary matchers.
     /// This detects passwords like 4pple which has a '4' substituted for an 'a'
     /// </summary>
-    public class L33tMatcher : IMatcher
+    internal class L33tMatcher : IMatcher
     {
         internal static ReadOnlyDictionary<char, char[]> L33tTable = new ReadOnlyDictionary<char, char[]>(new Dictionary<char, char[]>
         {

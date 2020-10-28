@@ -5,7 +5,7 @@ using Zxcvbn.Matcher.Matches;
 namespace Zxcvbn.Matcher
 {
     ///  <inheritdoc />
-    public class ReverseDictionaryMatcher : DictionaryMatcher
+    internal class ReverseDictionaryMatcher : DictionaryMatcher
     {
         /// <inheritdoc />
         public ReverseDictionaryMatcher(string name, string wordListPath) : base(name, wordListPath)

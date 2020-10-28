@@ -6,7 +6,7 @@ namespace Zxcvbn.Matcher.Matches
     /// <summary>
     /// A match found with the RepeatMatcher
     /// </summary>
-    public class RepeatMatch : Match
+    internal class RepeatMatch : Match
     {
         public double BaseGuesses { get; set; }
 

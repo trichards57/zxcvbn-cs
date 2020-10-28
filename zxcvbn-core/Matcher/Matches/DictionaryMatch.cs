@@ -6,7 +6,7 @@ namespace Zxcvbn.Matcher.Matches
     /// <summary>
     /// Matches found by the dictionary matcher contain some additional information about the matched word.
     /// </summary>
-    public class DictionaryMatch : Match
+    internal class DictionaryMatch : Match
     {
         public DictionaryMatch()
         {

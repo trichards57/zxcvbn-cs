@@ -9,7 +9,7 @@ namespace Zxcvbn.Matcher
     /// <summary>
     /// Match repeated characters in the password (repeats must be more than two characters long to count)
     /// </summary>
-    public class RepeatMatcher : IMatcher
+    internal class RepeatMatcher : IMatcher
     {
         private const string RepeatPattern = "repeat";
 

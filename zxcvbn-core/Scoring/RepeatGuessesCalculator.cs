@@ -2,7 +2,7 @@
 
 namespace Zxcvbn.Scoring
 {
-    public class RepeatGuessesCalculator
+    internal class RepeatGuessesCalculator
     {
         public static double CalculateGuesses(RepeatMatch match)
         {

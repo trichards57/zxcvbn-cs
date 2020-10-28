@@ -3,7 +3,7 @@ using Zxcvbn.Matcher.Matches;
 
 namespace Zxcvbn.Scoring
 {
-    public class SequenceGuessesCalculator
+    internal class SequenceGuessesCalculator
     {
         private static readonly List<char> obviousStartCharacters = new List<char>
         {

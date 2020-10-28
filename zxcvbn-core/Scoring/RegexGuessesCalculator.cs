@@ -4,7 +4,7 @@ using Zxcvbn.Matcher.Matches;
 
 namespace Zxcvbn.Scoring
 {
-    public class RegexGuessesCalculator
+    internal class RegexGuessesCalculator
     {
         private const int MinimumYearSpace = 20;
 

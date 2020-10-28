@@ -10,7 +10,7 @@ namespace Zxcvbn.Matcher
     /// <summary>
     /// This matcher detects lexicographical sequences (and in reverse) e.g. abcd, 4567, PONML etc.
     /// </summary>
-    public class SequenceMatcher : IMatcher
+    internal class SequenceMatcher : IMatcher
     {
         private const int MaxDelta = 5;
         private const string SequencePattern = "sequence";

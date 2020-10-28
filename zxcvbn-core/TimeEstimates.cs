@@ -2,7 +2,23 @@
 
 namespace Zxcvbn
 {
-    public static class TimeEstimates
+    public class CrackTimes
+    {
+        public double OfflineFastHashing1e10PerSecond { get; set; }
+        public double OfflineSlowHashing1e4PerSecond { get; set; }
+        public double OnlineNoThrottling10PerSecond { get; set; }
+        public double OnlineThrottling100PerHour { get; set; }
+    }
+
+    public class CrackTimesDisplay
+    {
+        public string OfflineFastHashing1e10PerSecond { get; set; }
+        public string OfflineSlowHashing1e4PerSecond { get; set; }
+        public string OnlineNoThrottling10PerSecond { get; set; }
+        public string OnlineThrottling100PerHour { get; set; }
+    }
+
+    internal static class TimeEstimates
     {
         public static AttackTimes EstimateAttackTimes(double guesses)
         {
@@ -99,26 +115,10 @@ namespace Zxcvbn
         }
     }
 
-    public class AttackTimes
+    internal class AttackTimes
     {
         public CrackTimesDisplay CrackTimesDisplay { get; set; }
         public CrackTimes CrackTimesSeconds { get; set; }
         public int Score { get; set; }
-    }
-
-    public class CrackTimes
-    {
-        public double OfflineFastHashing1e10PerSecond { get; set; }
-        public double OfflineSlowHashing1e4PerSecond { get; set; }
-        public double OnlineNoThrottling10PerSecond { get; set; }
-        public double OnlineThrottling100PerHour { get; set; }
-    }
-
-    public class CrackTimesDisplay
-    {
-        public string OfflineFastHashing1e10PerSecond { get; set; }
-        public string OfflineSlowHashing1e4PerSecond { get; set; }
-        public string OnlineNoThrottling10PerSecond { get; set; }
-        public string OnlineThrottling100PerHour { get; set; }
     }
 }

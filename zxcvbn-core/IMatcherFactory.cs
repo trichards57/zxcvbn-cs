@@ -7,7 +7,7 @@ namespace Zxcvbn
     /// Interface that matcher factories must implement. Matcher factories return a list of the matchers
     /// that will be used to evaluate the password
     /// </summary>
-    public interface IMatcherFactory
+    internal interface IMatcherFactory
     {
         /// <summary>
         /// <para>Create the matchers to be used by an instance of Zxcvbn. </para>

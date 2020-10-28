@@ -5,7 +5,7 @@ using Zxcvbn.Matcher.Matches;
 
 namespace Zxcvbn.Scoring
 {
-    public class SpatialGuessesCalculator
+    internal static class SpatialGuessesCalculator
     {
         internal static readonly double KeyboardAverageDegree;
         internal static readonly int KeyboardStartingPositions;

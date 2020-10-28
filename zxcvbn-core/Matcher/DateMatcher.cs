@@ -12,7 +12,7 @@ namespace Zxcvbn.Matcher
     /// <para>The format for matching dates is quite particular, and only detected years in the range 00-99 and 1900-2019 are considered by
     /// this matcher.</para>
     /// </summary>
-    public class DateMatcher : IMatcher
+    internal class DateMatcher : IMatcher
     {
         private const string DatePattern = "date";
         private const int MaxYear = 2050;

@@ -6,7 +6,7 @@ namespace Zxcvbn.Matcher
     /// <summary>
     /// All pattern matchers must implement the IMatcher interface.
     /// </summary>
-    public interface IMatcher
+    internal interface IMatcher
     {
         /// <summary>
         /// This function is called once for each matcher for each password being evaluated. It should perform the matching process and return

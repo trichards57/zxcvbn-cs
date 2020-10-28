@@ -3,7 +3,7 @@ using Zxcvbn.Matcher.Matches;
 
 namespace Zxcvbn.Scoring
 {
-    public class BruteForceGuessesCalculator
+    internal class BruteForceGuessesCalculator
     {
         public const int MinSubmatchGuessesMultiCharacter = 50;
         public const int MinSubmatchGuessesSingleCharacter = 10;

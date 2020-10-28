@@ -26,7 +26,7 @@ namespace Zxcvbn.Tests.Matcher
         public void DoesNotMatchEmptyString()
         {
             L33tMatcher.L33tTable = TestL33tTable;
-            var matcher = new L33tMatcher(new List<DictionaryMatcher> { TestDictionary1, TestDictionary2 });
+            var matcher = new L33tMatcher(new List<IMatcher> { TestDictionary1, TestDictionary2 });
 
             var result = matcher.MatchPassword("");
             result.Should().BeEmpty();
@@ -36,7 +36,7 @@ namespace Zxcvbn.Tests.Matcher
         public void DoesNotMatchNonL33tWords()
         {
             L33tMatcher.L33tTable = TestL33tTable;
-            var matcher = new L33tMatcher(new List<DictionaryMatcher> { TestDictionary1, TestDictionary2 });
+            var matcher = new L33tMatcher(new List<IMatcher> { TestDictionary1, TestDictionary2 });
 
             var result = matcher.MatchPassword("password");
             result.Should().BeEmpty();
@@ -46,7 +46,7 @@ namespace Zxcvbn.Tests.Matcher
         public void DoesNotMatchSingleCharacterL33tedWords()
         {
             L33tMatcher.L33tTable = TestL33tTable;
-            var matcher = new L33tMatcher(new List<DictionaryMatcher> { TestDictionary1, TestDictionary2 });
+            var matcher = new L33tMatcher(new List<IMatcher> { TestDictionary1, TestDictionary2 });
 
             var result = matcher.MatchPassword("4 1 @");
             result.Should().BeEmpty();
@@ -56,7 +56,7 @@ namespace Zxcvbn.Tests.Matcher
         public void DoesNotMatchWhenMultipleSubstitutionsAreNeededForTheSameLetter()
         {
             L33tMatcher.L33tTable = TestL33tTable;
-            var matcher = new L33tMatcher(new List<DictionaryMatcher> { TestDictionary1, TestDictionary2 });
+            var matcher = new L33tMatcher(new List<IMatcher> { TestDictionary1, TestDictionary2 });
 
             var result = matcher.MatchPassword("p4@ssword");
             result.Should().BeEmpty();
@@ -66,7 +66,7 @@ namespace Zxcvbn.Tests.Matcher
         public void DoesNotMatchWithSubsetsOfPossibleL33tCombinations()
         {
             L33tMatcher.L33tTable = TestL33tTable;
-            var matcher = new L33tMatcher(new List<DictionaryMatcher> { TestDictionary1, TestDictionary2 });
+            var matcher = new L33tMatcher(new List<IMatcher> { TestDictionary1, TestDictionary2 });
 
             var result = matcher.MatchPassword("4sdf0");
             result.Should().BeEmpty();
@@ -125,7 +125,7 @@ namespace Zxcvbn.Tests.Matcher
         public void MatchesCommonL33tSubstitutions()
         {
             L33tMatcher.L33tTable = TestL33tTable;
-            var matcher = new L33tMatcher(new List<DictionaryMatcher> { TestDictionary1, TestDictionary2 });
+            var matcher = new L33tMatcher(new List<IMatcher> { TestDictionary1, TestDictionary2 });
 
             var expected = new List<DictionaryMatch>
             {
@@ -198,7 +198,7 @@ namespace Zxcvbn.Tests.Matcher
         public void MatchesOveralppingL33tPatterns()
         {
             L33tMatcher.L33tTable = TestL33tTable;
-            var matcher = new L33tMatcher(new List<DictionaryMatcher> { TestDictionary1, TestDictionary2 });
+            var matcher = new L33tMatcher(new List<IMatcher> { TestDictionary1, TestDictionary2 });
 
             var expected = new List<DictionaryMatch>
             {

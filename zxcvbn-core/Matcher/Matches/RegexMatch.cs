@@ -4,7 +4,7 @@
     /// <summary>
     /// Matches found by the dictionary matcher contain some additional information about the matched word.
     /// </summary>
-    public class RegexMatch : Match
+    internal class RegexMatch : Match
     {
         public RegexMatch()
         {

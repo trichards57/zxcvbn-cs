@@ -11,7 +11,7 @@ namespace Zxcvbn.Matcher
     /// this cannot be calculated automatically from the regex pattern it must be provided. It can be provided per-character or per-match. Per-match will
     /// result in every match having the same entropy (lg cardinality) whereas per-character will depend on the match length (lg cardinality ^ length)</para>
     /// </summary>
-    public class RegexMatcher : IMatcher
+    internal class RegexMatcher : IMatcher
     {
         private readonly string _matcherName;
         private readonly Regex _matchRegex;

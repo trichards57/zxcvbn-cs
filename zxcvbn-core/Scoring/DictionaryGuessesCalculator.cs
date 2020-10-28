@@ -4,7 +4,7 @@ using Zxcvbn.Matcher.Matches;
 
 namespace Zxcvbn.Scoring
 {
-    public class DictionaryGuessesCalculator
+    internal class DictionaryGuessesCalculator
     {
         public static double CalculateGuesses(DictionaryMatch match)
         {
