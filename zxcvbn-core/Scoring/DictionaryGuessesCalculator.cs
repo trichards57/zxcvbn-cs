@@ -16,7 +16,7 @@ namespace Zxcvbn.Scoring
             return match.BaseGuesses * match.UppercaseVariations * match.L33tVariations * reversedVariations;
         }
 
-        private static long L33tVariations(DictionaryMatch match)
+        internal static long L33tVariations(DictionaryMatch match)
         {
             if (!match.L33t)
                 return 1;
@@ -44,7 +44,7 @@ namespace Zxcvbn.Scoring
             return variations;
         }
 
-        private static long UppercaseVariations(string token)
+        internal static long UppercaseVariations(string token)
         {
             if (token.All(c => char.IsLower(c)) || token.ToLower() == token)
                 return 1;
