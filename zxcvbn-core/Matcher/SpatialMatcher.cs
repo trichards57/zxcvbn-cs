@@ -1,12 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Zxcvbn.Matcher.Matches;
 
 namespace Zxcvbn.Matcher
 {
+    // Instances of Point or Pair in the standard library are in UI assemblies, so define our own version to reduce dependencies
+    internal struct Point
+    {
+        public Point(int x, int y)
+        {
+            X = x;
+            Y = y;
+        }
+
+        public int X { get; }
+        public int Y { get; }
+
+        public override string ToString()
+        {
+            return "{" + X + ", " + Y + "}";
+        }
+    }
+
     /// <inheritdoc />
     /// <summary>
     /// <para>A matcher that checks for keyboard layout patterns (e.g. 78523 on a keypad, or plkmn on a QWERTY keyboard).</para>
@@ -161,24 +178,6 @@ namespace Zxcvbn.Matcher
             }
 
             return matches;
-        }
-
-        // Instances of Point or Pair in the standard library are in UI assemblies, so define our own version to reduce dependencies
-        private struct Point
-        {
-            public Point(int x, int y)
-            {
-                X = x;
-                Y = y;
-            }
-
-            public int X { get; }
-            public int Y { get; }
-
-            public override string ToString()
-            {
-                return "{" + X + ", " + Y + "}";
-            }
         }
     }
 
