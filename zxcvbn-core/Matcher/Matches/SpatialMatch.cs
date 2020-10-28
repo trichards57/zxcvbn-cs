@@ -4,7 +4,7 @@
     /// <summary>
     /// A match made with the <see cref="T:Zxcvbn.Matcher.SpatialMatcher" />. Contains additional information specific to spatial matches.
     /// </summary>
-    internal class SpatialMatch : Match
+    public class SpatialMatch : Match
     {
         /// <summary>
         /// The name of the keyboard layout used to make the spatial match

@@ -1,6 +1,6 @@
 ﻿namespace Zxcvbn.Matcher.Matches
 {
-    internal class BruteForceMatch : Match
+    public class BruteForceMatch : Match
     {
     }
 }

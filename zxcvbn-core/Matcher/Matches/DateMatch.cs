@@ -4,7 +4,7 @@
     /// <summary>
     /// A match found by the date matcher
     /// </summary>
-    internal class DateMatch : Match
+    public class DateMatch : Match
     {
         /// <summary>
         /// The detected day

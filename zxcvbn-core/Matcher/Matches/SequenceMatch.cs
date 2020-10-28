@@ -4,7 +4,7 @@
     /// <summary>
     /// A match made using the <see cref="T:Zxcvbn.Matcher.SequenceMatcher" /> containing some additional sequence information.
     /// </summary>
-    internal class SequenceMatch : Match
+    public class SequenceMatch : Match
     {
         /// <summary>
         /// Whether the match was found in ascending order (cdefg) or not (zyxw)
