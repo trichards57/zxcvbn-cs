@@ -15,9 +15,9 @@ namespace Zxcvbn.Matcher
         private const string ShiftedRegex = "[~!@#$%^&*()_+QWERTYUIOP{}|ASDFGHJKL:\"ZXCVBNM<>?]";
 
         /// <summary>
-        /// Gets or sets the spatial graphs to match against.
+        /// Gets the spatial graphs to match against.
         /// </summary>
-        internal static ReadOnlyCollection<SpatialGraph> SpatialGraphs { get; set; } = GenerateSpatialGraphs();
+        internal static ReadOnlyCollection<SpatialGraph> SpatialGraphs { get; } = GenerateSpatialGraphs();
 
         /// <summary>
         /// Find spatial matches in <paramref name="password"/>.

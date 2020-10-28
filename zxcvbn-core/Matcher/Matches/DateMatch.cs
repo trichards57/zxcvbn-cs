@@ -16,6 +16,9 @@
         /// </summary>
         public int Month { get; internal set; }
 
+        /// <summary>
+        /// Gets the name of the pattern matcher used to generate this match.
+        /// </summary>
         public override string Pattern => "date";
 
         /// <summary>

@@ -13,7 +13,7 @@ namespace Zxcvbn
         public IList<string> Suggestions { get; internal set; }
 
         /// <summary>
-        /// Gets or sets the warning that should be the headline for the user.
+        /// Gets the warning that should be the headline for the user.
         /// </summary>
         public string Warning { get; internal set; }
     }

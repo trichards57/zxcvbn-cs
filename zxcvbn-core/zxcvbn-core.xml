@@ -1,0 +1,977 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>zxcvbn-core</name>
+    </assembly>
+    <members>
+        <member name="T:Zxcvbn.AttackTimes">
+            <summary>
+            A summary of the attack times for the password.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.AttackTimes.CrackTimesDisplay">
+            <summary>
+            Gets or sets the display version of the crack times.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.AttackTimes.CrackTimesSeconds">
+            <summary>
+            Gets or sets the numerical version of the crack times.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.AttackTimes.Score">
+            <summary>
+            Gets or sets the overall score.
+            </summary>
+        </member>
+        <member name="T:Zxcvbn.Core">
+            <summary>
+            Estimates the strength of passwords.
+            </summary>
+        </member>
+        <member name="M:Zxcvbn.Core.EvaluatePassword(System.String,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Perform the password matching on the given password and user inputs.
+            </summary>
+            <param name="password">The password to assess.</param>
+            <param name="userInputs">Optionally, an enumarable of user data.</param>
+            <returns>Result for the password.</returns>
+        </member>
+        <member name="M:Zxcvbn.Core.GetAllMatches(System.String,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Gets all matches associated with a password.
+            </summary>
+            <param name="token">The password to assess.</param>
+            <param name="userInputs">The user input dictionary.</param>
+            <returns>An enumerable of relevant matches.</returns>
+        </member>
+        <member name="T:Zxcvbn.CrackTimes">
+            <summary>
+            Represents the time needed to crack the password under different conditions.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.CrackTimes.OfflineFastHashing1e10PerSecond">
+            <summary>
+            Gets the time if offline hashing at 1e10 per second.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.CrackTimes.OfflineSlowHashing1e4PerSecond">
+            <summary>
+            Gets the time if offline hashing at 1e4 per second.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.CrackTimes.OnlineNoThrottling10PerSecond">
+            <summary>
+            Gets the time if online attempting the password at 10 per second.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.CrackTimes.OnlineThrottling100PerHour">
+            <summary>
+            Gets the time if online attempting the password at 100 per hour.
+            </summary>
+        </member>
+        <member name="T:Zxcvbn.CrackTimesDisplay">
+            <summary>
+            Represents the time needed to crack the password under different conditions.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.CrackTimesDisplay.OfflineFastHashing1e10PerSecond">
+            <summary>
+            Gets the time if offline hashing at 1e10 per second.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.CrackTimesDisplay.OfflineSlowHashing1e4PerSecond">
+            <summary>
+            Gets the time if offline hashing at 1e4 per second.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.CrackTimesDisplay.OnlineNoThrottling10PerSecond">
+            <summary>
+            Gets the time if online attempting the password at 10 per second.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.CrackTimesDisplay.OnlineThrottling100PerHour">
+            <summary>
+            Gets the time if online attempting the password at 100 per hour.
+            </summary>
+        </member>
+        <member name="T:Zxcvbn.DefaultMatcherFactory">
+            <summary>
+            Creates the default matchers.
+            </summary>
+        </member>
+        <member name="M:Zxcvbn.DefaultMatcherFactory.CreateMatchers(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Gets all of the built in matchers, as well as matchers for the custom dictionaries.
+            </summary>
+            <param name="userInputs">Enumerable of user information.</param>
+            <returns>Enumerable of matchers to use.</returns>
+        </member>
+        <member name="T:Zxcvbn.Feedback">
+            <summary>
+            Generates feedback based on the match results.
+            </summary>
+        </member>
+        <member name="M:Zxcvbn.Feedback.GetFeedback(System.Int32,System.Collections.Generic.IEnumerable{Zxcvbn.Matcher.Matches.Match})">
+            <summary>
+            Gets feedback based on the provided score and matches.
+            </summary>
+            <param name="score">The score to assess.</param>
+            <param name="sequence">The sequence of matches to assess.</param>
+            <returns>Any warnings and suggestiongs about the password matches.</returns>
+        </member>
+        <member name="T:Zxcvbn.FeedbackItem">
+            <summary>
+            Represents feedback that can be presented to the user.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.FeedbackItem.Suggestions">
+            <summary>
+            Gets the list of suggestions that can be presented.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.FeedbackItem.Warning">
+            <summary>
+            Gets the warning that should be the headline for the user.
+            </summary>
+        </member>
+        <member name="T:Zxcvbn.Matcher.DateMatcher">
+             <summary>
+             Attempts to match a string with a date.
+             </summary>
+             <remarks>
+             A date is recognised if it is:
+             <list type="bullet">
+             <item>Any 3 tuple that starts or ends with a 2- or 4- digit year</item>
+             <item>With 2 or 0 separator characters</item>
+             <item>May be zero padded</item>
+             <item>Has a month between 1 and 12</item>
+             <item>Has a day between 1 and 31</item>
+             </list>
+            
+             This isn't true date parsing.  Invalid dates like 31 February will be allowed.
+             </remarks>
+        </member>
+        <member name="P:Zxcvbn.Matcher.DateMatcher.ReferenceYear">
+            <summary>
+            Gets the reference year used to check for recent dates.
+            </summary>
+        </member>
+        <member name="M:Zxcvbn.Matcher.DateMatcher.MatchPassword(System.String)">
+            <summary>
+            Find date matches in <paramref name="password" />.
+            </summary>
+            <param name="password">The passsord to check.</param>
+            <returns>An enumerable of date matches.</returns>
+        </member>
+        <member name="T:Zxcvbn.Matcher.DictionaryMatcher">
+            <summary>
+            Attempts to match a string with a list of words.
+            </summary>
+            <remarks>
+            This matcher reads in a list of words (in frequency order) either from a built in resource, an external file
+            or a list of strings.  These must be in decreasing frequency order and contain one word per line with no additional information.
+            </remarks>
+        </member>
+        <member name="M:Zxcvbn.Matcher.DictionaryMatcher.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Zxcvbn.Matcher.DictionaryMatcher"/> class.
+            </summary>
+            <param name="name">The name provided to the dictionary used.</param>
+            <param name="wordListPath">The filename of the dictionary (full or relative path) or name of built-in dictionary.</param>
+        </member>
+        <member name="M:Zxcvbn.Matcher.DictionaryMatcher.#ctor(System.String,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Zxcvbn.Matcher.DictionaryMatcher"/> class.
+            Creates a new dictionary matcher from the passed in word list. If there is any frequency order then they should be in
+            decreasing frequency order.
+            </summary>
+            <param name="name">The name provided to the dictionary used.</param>
+            <param name="wordList">The words to add to the dictionary.</param>
+        </member>
+        <member name="M:Zxcvbn.Matcher.DictionaryMatcher.MatchPassword(System.String)">
+            <summary>
+            Find dictionary matches in <paramref name="password"/>.
+            </summary>
+            <param name="password">The password to check.</param>
+            <returns>An enumerable of dictionary matches.</returns>
+        </member>
+        <member name="M:Zxcvbn.Matcher.DictionaryMatcher.BuildRankedDictionary(System.String)">
+             <summary>
+             Loads the file <paramref name="wordListFile"/>.
+             </summary>
+            
+             If the file is embedded in the assembly, this is loaded, otherwise <paramref name="wordListFile"/> is treated as a file path.
+             <param name="wordListFile">Path to word list.</param>
+             <returns>A dictionary of the words and their associated rank.</returns>
+        </member>
+        <member name="T:Zxcvbn.Matcher.IMatcher">
+            <summary>
+            Represents a class that can look for matches in a password.
+            </summary>
+        </member>
+        <member name="M:Zxcvbn.Matcher.IMatcher.MatchPassword(System.String)">
+            <summary>
+            Find matches in <paramref name="password"/>.
+            </summary>
+            <param name="password">The password to check.</param>
+            <returns>An enumerable of the matches.</returns>
+        </member>
+        <member name="T:Zxcvbn.Matcher.L33tMatcher">
+            <summary>
+            Attempts to match a string with a list of words, considering common l33t substitutions.
+            </summary>
+        </member>
+        <member name="M:Zxcvbn.Matcher.L33tMatcher.#ctor(System.Collections.Generic.IEnumerable{Zxcvbn.Matcher.IMatcher})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Zxcvbn.Matcher.L33tMatcher"/> class.
+            Create a l33t matcher that applies substitutions and then matches agains the passed in list of dictionary matchers.
+            </summary>
+            <param name="dictionaryMatchers">The list of dictionary matchers to check transformed passwords against.</param>
+        </member>
+        <member name="M:Zxcvbn.Matcher.L33tMatcher.#ctor(Zxcvbn.Matcher.DictionaryMatcher)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Zxcvbn.Matcher.L33tMatcher"/> class.
+            Create a l33t matcher that applies substitutions and then matches agains a single dictionary matcher.
+            </summary>
+            <param name="dictionaryMatcher">The dictionary matcher to check transformed passwords against.</param>
+        </member>
+        <member name="P:Zxcvbn.Matcher.L33tMatcher.L33tTable">
+            <summary>
+            Gets or sets the table of l33t transforms.
+            </summary>
+        </member>
+        <member name="M:Zxcvbn.Matcher.L33tMatcher.MatchPassword(System.String)">
+            <summary>
+            Find l33t dictionary matches in <paramref name="password"/>.
+            </summary>
+            <param name="password">The password to check.</param>
+            <returns>An enumerable of dictionary matches.</returns>
+        </member>
+        <member name="M:Zxcvbn.Matcher.L33tMatcher.EnumerateSubtitutions(System.Collections.ObjectModel.ReadOnlyDictionary{System.Char,System.Char[]})">
+            <summary>
+            Enumerates the subtitutions in the provided table.
+            </summary>
+            <param name="table">The table to get the enumerations from.</param>
+            <returns>The enumeration of possible substitutions.</returns>
+        </member>
+        <member name="M:Zxcvbn.Matcher.L33tMatcher.RelevantL33tSubtable(System.String)">
+            <summary>
+            Prunes the L33T subtable to only the relevant bits.
+            </summary>
+            <param name="password">The password to consider.</param>
+            <returns>The pruned l33t table.</returns>
+        </member>
+        <member name="T:Zxcvbn.Matcher.LooseDate">
+            <summary>
+            Represents a possible date without the limitations of DateTime.
+            </summary>
+        </member>
+        <member name="M:Zxcvbn.Matcher.LooseDate.#ctor(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Zxcvbn.Matcher.LooseDate"/> struct.
+            </summary>
+            <param name="year">The year.</param>
+            <param name="month">The month.</param>
+            <param name="day">The day.</param>
+        </member>
+        <member name="P:Zxcvbn.Matcher.LooseDate.Day">
+            <summary>
+            Gets the day in the date.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Matcher.LooseDate.Month">
+            <summary>
+            Gets the month in the date.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Matcher.LooseDate.Year">
+            <summary>
+            Gets the year in the date.
+            </summary>
+        </member>
+        <member name="T:Zxcvbn.Matcher.Matches.BruteForceMatch">
+            <summary>
+            A match used to evaluate the brute-force strength of a password.
+            </summary>
+            <seealso cref="T:Zxcvbn.Matcher.Matches.Match" />
+        </member>
+        <member name="P:Zxcvbn.Matcher.Matches.BruteForceMatch.Pattern">
+            <summary>
+            Gets the name of the pattern matcher used to generate this match.
+            </summary>
+        </member>
+        <member name="T:Zxcvbn.Matcher.Matches.DateMatch">
+            <summary>
+            A match identified as a possible date.
+            </summary>
+            <seealso cref="T:Zxcvbn.Matcher.Matches.Match" />
+        </member>
+        <member name="P:Zxcvbn.Matcher.Matches.DateMatch.Day">
+            <summary>
+            Gets the detected day.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Matcher.Matches.DateMatch.Month">
+            <summary>
+            Gets the detected month.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Matcher.Matches.DateMatch.Pattern">
+            <summary>
+            Gets the name of the pattern matcher used to generate this match.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Matcher.Matches.DateMatch.Separator">
+            <summary>
+            Gets the separator detected in the date.
+            </summary>
+            <remarks>
+            If there is no separator then this will be an empty string.
+            </remarks>
+        </member>
+        <member name="P:Zxcvbn.Matcher.Matches.DateMatch.Year">
+            <summary>
+            Gets the detected year.
+            </summary>
+        </member>
+        <member name="T:Zxcvbn.Matcher.Matches.DictionaryMatch">
+            <summary>
+            A match identified as being in one of the provided dictionaries.
+            </summary>
+            <seealso cref="T:Zxcvbn.Matcher.Matches.Match" />
+        </member>
+        <member name="P:Zxcvbn.Matcher.Matches.DictionaryMatch.BaseGuesses">
+            <summary>
+            Gets the base guesses associated with the matched word.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Matcher.Matches.DictionaryMatch.DictionaryName">
+            <summary>
+            Gets the name of the dictionary containing the matched word.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Matcher.Matches.DictionaryMatch.L33t">
+            <summary>
+            Gets a value indicating whether the matched word was found with l33t spelling.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Matcher.Matches.DictionaryMatch.L33tVariations">
+            <summary>
+            Gets the number of L33T variations associated with this match.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Matcher.Matches.DictionaryMatch.MatchedWord">
+            <summary>
+            Gets the dictionary word matched to.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Matcher.Matches.DictionaryMatch.Pattern">
+            <summary>
+            Gets the name of the pattern matcher used to generate this match.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Matcher.Matches.DictionaryMatch.Rank">
+            <summary>
+            Gets the rank of the matched word in the dictionary.
+            </summary>
+            <remarks>
+            The most frequent word is has a rank of 1, with less frequent words having higher ranks.
+            </remarks>
+        </member>
+        <member name="P:Zxcvbn.Matcher.Matches.DictionaryMatch.Reversed">
+            <summary>
+            Gets a value indicating whether the matched word was reversed.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Matcher.Matches.DictionaryMatch.Sub">
+            <summary>
+            Gets the l33t character mappings that are in use for this match.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Matcher.Matches.DictionaryMatch.UppercaseVariations">
+            <summary>
+            Gets the number of uppercase variations associated with this match.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Matcher.Matches.DictionaryMatch.L33tSubs">
+            <summary>
+            Gets or sets the l33t character mappings that are in use for this match.
+            </summary>
+            <remarks>
+            Modifiable version of Sub.
+            </remarks>
+        </member>
+        <member name="T:Zxcvbn.Matcher.Matches.Match">
+            <summary>
+            A match identified by zxcvbn.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Matcher.Matches.Match.Guesses">
+            <summary>
+            Gets the number of guesses associated with this match.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Matcher.Matches.Match.GuessesLog10">
+            <summary>
+            Gets log10(number of guesses) associated with this match.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Matcher.Matches.Match.i">
+            <summary>
+            Gets the start index in the password string of the matched token.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Matcher.Matches.Match.j">
+            <summary>
+            Gets the end index in the password string of the matched token.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Matcher.Matches.Match.Pattern">
+            <summary>
+            Gets the name of the pattern matcher used to generate this match.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Matcher.Matches.Match.Token">
+            <summary>
+            Gets the portion of the password that was matched.
+            </summary>
+        </member>
+        <member name="T:Zxcvbn.Matcher.Matches.RegexMatch">
+            <summary>
+            A match identified as matching one of the provided regular expressions.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Matcher.Matches.RegexMatch.Pattern">
+            <summary>
+            Gets the name of the pattern matcher used to generate this match.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Matcher.Matches.RegexMatch.RegexName">
+            <summary>
+            Gets the name of the regex that matched.
+            </summary>
+        </member>
+        <member name="T:Zxcvbn.Matcher.Matches.RepeatMatch">
+            <summary>
+            A match identified as containing some repeated details.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Matcher.Matches.RepeatMatch.BaseGuesses">
+            <summary>
+            Gets the base number guesses associated with the base matches.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Matcher.Matches.RepeatMatch.BaseMatches">
+            <summary>
+            Gets the base matches that are repeated.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Matcher.Matches.RepeatMatch.BaseToken">
+            <summary>
+            Gets the base repeated token.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Matcher.Matches.RepeatMatch.Pattern">
+            <summary>
+            Gets the name of the pattern matcher used to generate this match.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Matcher.Matches.RepeatMatch.RepeatCount">
+            <summary>
+            Gets the number of times the base token is repeated.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Matcher.Matches.RepeatMatch.BaseMatchItems">
+            <summary>
+             Gets or sets the base matches that are repeated.
+            </summary>
+            <remarks>
+            The editable backing of BaseMatches.
+            </remarks>
+        </member>
+        <member name="T:Zxcvbn.Matcher.Matches.SequenceMatch">
+            <summary>
+            A match identified as a predictable sequence of characters.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Matcher.Matches.SequenceMatch.Ascending">
+            <summary>
+            Gets a value indicating whether the match was found in ascending order (cdefg) or not (zyxw).
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Matcher.Matches.SequenceMatch.Pattern">
+            <summary>
+            Gets the name of the pattern matcher used to generate this match.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Matcher.Matches.SequenceMatch.SequenceName">
+            <summary>
+            Gets the name of the sequence that the match was found in.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Matcher.Matches.SequenceMatch.SequenceSpace">
+            <summary>
+            Gets the size of the sequence the pattern was found in.
+            </summary>
+        </member>
+        <member name="T:Zxcvbn.Matcher.Matches.SpatialMatch">
+            <summary>
+            A match identified as a sequence of keys on a recognised keyboard.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Matcher.Matches.SpatialMatch.Graph">
+            <summary>
+            Gets The name of the keyboard layout used to make the spatial match.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Matcher.Matches.SpatialMatch.Pattern">
+            <summary>
+            Gets the name of the pattern matcher used to generate this match.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Matcher.Matches.SpatialMatch.ShiftedCount">
+            <summary>
+            Gets the number of shifted characters matched in the pattern.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Matcher.Matches.SpatialMatch.Turns">
+            <summary>
+            Gets the number of turns made.
+            </summary>
+        </member>
+        <member name="T:Zxcvbn.Matcher.Point">
+            <summary>
+            A local implementation of Point to avoid referring to the graphical libraries.
+            </summary>
+        </member>
+        <member name="M:Zxcvbn.Matcher.Point.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Zxcvbn.Matcher.Point"/> struct.
+            </summary>
+            <param name="x">The x coordinate.</param>
+            <param name="y">The y coordinate.</param>
+        </member>
+        <member name="P:Zxcvbn.Matcher.Point.X">
+            <summary>
+            Gets the x coordinate of the point.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Matcher.Point.Y">
+            <summary>
+            Gets the y coordinate of the point.
+            </summary>
+        </member>
+        <member name="T:Zxcvbn.Matcher.RegexMatcher">
+            <summary>
+            Attempts to match a string with a pre-defined regular expressions.
+            </summary>
+        </member>
+        <member name="M:Zxcvbn.Matcher.RegexMatcher.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Zxcvbn.Matcher.RegexMatcher"/> class.
+            Create a new regex pattern matcher.
+            </summary>
+            <param name="pattern">The regex pattern to match.</param>
+            <param name="matcherName">The name to give this matcher ('pattern' in resulting matches).</param>
+        </member>
+        <member name="M:Zxcvbn.Matcher.RegexMatcher.#ctor(System.Text.RegularExpressions.Regex,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Zxcvbn.Matcher.RegexMatcher"/> class.
+            Create a new regex pattern matcher.
+            </summary>
+            <param name="matchRegex">The regex object used to perform matching.</param>
+            <param name="matcherName">The name to give this matcher ('pattern' in resulting matches).</param>
+        </member>
+        <member name="M:Zxcvbn.Matcher.RegexMatcher.MatchPassword(System.String)">
+            <summary>
+            Find regex matches in <paramref name="password" />.
+            </summary>
+            <param name="password">The password to check.</param>
+            <returns>An enumerable of regex matches.</returns>
+        </member>
+        <member name="T:Zxcvbn.Matcher.RepeatMatcher">
+            <summary>
+            Attempts to match repeated characters in the string.
+            </summary>
+            <remarks>
+            Repeats must be more than two characters long to count.
+            </remarks>
+        </member>
+        <member name="M:Zxcvbn.Matcher.RepeatMatcher.MatchPassword(System.String)">
+            <summary>
+            Find repeat matches in <paramref name="password" />.
+            </summary>
+            <param name="password">The password to check.</param>
+            <returns>An enumerable of repeat matches.</returns>
+        </member>
+        <member name="T:Zxcvbn.Matcher.ReverseDictionaryMatcher">
+            <summary>
+            Attempts to match a reversed string with a list of words.
+            </summary>
+            <seealso cref="T:Zxcvbn.Matcher.DictionaryMatcher" />
+        </member>
+        <member name="M:Zxcvbn.Matcher.ReverseDictionaryMatcher.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Zxcvbn.Matcher.ReverseDictionaryMatcher"/> class.
+            </summary>
+            <param name="name">The name provided to the dictionary used.</param>
+            <param name="wordListPath">The filename of the dictionary (full or relative path) or name of built-in dictionary.</param>
+        </member>
+        <member name="M:Zxcvbn.Matcher.ReverseDictionaryMatcher.MatchPassword(System.String)">
+            <summary>
+            Find reversed dictionary matches in <paramref name="password"/>.
+            </summary>
+            <param name="password">The password to check.</param>
+            <returns>An enumerable of dictionary matches.</returns>
+        </member>
+        <member name="T:Zxcvbn.Matcher.SequenceMatcher">
+            <summary>
+            Attempts to match a string with a sequence of characters.
+            </summary>
+        </member>
+        <member name="M:Zxcvbn.Matcher.SequenceMatcher.MatchPassword(System.String)">
+            <summary>
+            Find sequence matches in <paramref name="password" />.
+            </summary>
+            <param name="password">The password to check.</param>
+            <returns>An enumerable of sequence matches.</returns>
+        </member>
+        <member name="T:Zxcvbn.Matcher.SpatialGraph">
+            <summary>
+            A graph detailing how keys are arranged on a typical keyboard.
+            </summary>
+        </member>
+        <member name="M:Zxcvbn.Matcher.SpatialGraph.#ctor(System.String,System.String,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Zxcvbn.Matcher.SpatialGraph"/> class with the given name
+            and based on the given layout.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="layout">The layout.</param>
+            <param name="slanted">if set to <c>true</c> the keys are slanted.</param>
+        </member>
+        <member name="P:Zxcvbn.Matcher.SpatialGraph.AdjacencyGraph">
+            <summary>
+            Gets the generated adjacency graph.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Matcher.SpatialGraph.Name">
+            <summary>
+            Gets the name of the generated graph.
+            </summary>
+        </member>
+        <member name="T:Zxcvbn.Matcher.SpatialMatcher">
+            <summary>
+            Attempts to match a string against common keyboard layout patterns, considering shifted characters and changes in direction.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Matcher.SpatialMatcher.SpatialGraphs">
+            <summary>
+            Gets the spatial graphs to match against.
+            </summary>
+        </member>
+        <member name="M:Zxcvbn.Matcher.SpatialMatcher.MatchPassword(System.String)">
+            <summary>
+            Find spatial matches in <paramref name="password"/>.
+            </summary>
+            <param name="password">The password to check.</param>
+            <returns>An enumerable of spatial matches.</returns>
+        </member>
+        <member name="T:Zxcvbn.MostGuessableMatchResult">
+            <summary>
+            Represents the most guessable match provided.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.MostGuessableMatchResult.Guesses">
+            <summary>
+            Gets or sets the guesses the match is estimated to need.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.MostGuessableMatchResult.Password">
+            <summary>
+            Gets or sets the password being assessed.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.MostGuessableMatchResult.Score">
+            <summary>
+            Gets or sets the score associated with the most guessable match.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.MostGuessableMatchResult.Sequence">
+            <summary>
+            Gets or sets the matches identified.
+            </summary>
+        </member>
+        <member name="T:Zxcvbn.OptimalValues">
+            <summary>
+            Represents the optimal value when assessing the most guessible.
+            </summary>
+        </member>
+        <member name="M:Zxcvbn.OptimalValues.#ctor(System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Zxcvbn.OptimalValues"/> class.
+            </summary>
+            <param name="length">The length of the password being assessed.</param>
+        </member>
+        <member name="P:Zxcvbn.OptimalValues.G">
+            <summary>
+            Gets or sets the overall metric for the best guess.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.OptimalValues.M">
+            <summary>
+            Gets or sets the best match at a given length.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.OptimalValues.Pi">
+            <summary>
+            Gets or sets the the product term of the metric for the best guess.
+            </summary>
+        </member>
+        <member name="T:Zxcvbn.PasswordScoring">
+            <summary>
+            Some useful shared functions used for evaluating passwords.
+            </summary>
+        </member>
+        <member name="M:Zxcvbn.PasswordScoring.Binomial(System.Int32,System.Int32)">
+            <summary>
+            Caclulate binomial coefficient (i.e. nCk).
+            </summary>
+            <param name="n">n.</param>
+            <param name="k">k.</param>
+            <returns>Binomial coefficient.</returns>
+        </member>
+        <member name="M:Zxcvbn.PasswordScoring.EstimateGuesses(Zxcvbn.Matcher.Matches.Match,System.String)">
+            <summary>
+            Estimates the attempts required to guess the password.
+            </summary>
+            <param name="match">The match.</param>
+            <param name="password">The actual password.</param>
+            <returns>The guesses estimate.</returns>
+        </member>
+        <member name="M:Zxcvbn.PasswordScoring.MostGuessableMatchSequence(System.String,System.Collections.Generic.IEnumerable{Zxcvbn.Matcher.Matches.Match},System.Boolean)">
+            <summary>
+            Identifies the most guessable match in the sequence.
+            </summary>
+            <param name="password">The password.</param>
+            <param name="matches">The matches.</param>
+            <param name="excludeAdditive">if set to <c>true</c>, will exclude additive matches (for unit testing only).</param>
+            <returns>A summary on the most testable match.</returns>
+        </member>
+        <member name="T:Zxcvbn.Result">
+            <summary>
+            The results of zxcvbn's password analysis.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Result.CalcTime">
+            <summary>
+            Gets the number of milliseconds that zxcvbn took to calculate results for this password.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Result.CrackTime">
+            <summary>
+            Gets An estimation of the crack times for this password in seconds.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Result.CrackTimeDisplay">
+            <summary>
+            Gets a set of string for the crack times.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Result.Feedback">
+            <summary>
+            Gets the feedback for the user about their password.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Result.Guesses">
+            <summary>
+            Gets the number of guesses the password is estimated to need.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Result.GuessesLog10">
+            <summary>
+            Gets log10(the number of guesses) the password is estimated to need.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Result.MatchSequence">
+            <summary>
+            Gets the sequence of matches that were used to assess the password.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Result.Password">
+            <summary>
+            Gets the password that was used to generate these results.
+            </summary>
+        </member>
+        <member name="P:Zxcvbn.Result.Score">
+            <summary>
+            Gets a score from 0 to 4 (inclusive), with 0 being least secure and 4 being most secure, calculated from the nubmer of guesses estimated to be needed.
+            </summary>
+        </member>
+        <member name="T:Zxcvbn.Scoring.BruteForceGuessesCalculator">
+            <summary>
+            Estimates the number of attempts needed to brute-force the password.
+            </summary>
+        </member>
+        <member name="F:Zxcvbn.Scoring.BruteForceGuessesCalculator.MinSubmatchGuessesMultiCharacter">
+            <summary>
+            The minimum submatch guesses for a multi character string.
+            </summary>
+        </member>
+        <member name="F:Zxcvbn.Scoring.BruteForceGuessesCalculator.MinSubmatchGuessesSingleCharacter">
+            <summary>
+            The minimum submatch guesses for a single character.
+            </summary>
+        </member>
+        <member name="M:Zxcvbn.Scoring.BruteForceGuessesCalculator.CalculateGuesses(Zxcvbn.Matcher.Matches.BruteForceMatch)">
+            <summary>
+            Estimates the attempts required to guess the password.
+            </summary>
+            <param name="match">The match.</param>
+            <returns>The guesses estimate.</returns>
+        </member>
+        <member name="T:Zxcvbn.Scoring.DateGuessesCalculator">
+            <summary>
+            Estimates the number of attempts needed to guess the date.
+            </summary>
+        </member>
+        <member name="F:Zxcvbn.Scoring.DateGuessesCalculator.MinimumYearSpace">
+            <summary>
+            The minimum distance between the reference date and the provided date.
+            </summary>
+        </member>
+        <member name="M:Zxcvbn.Scoring.DateGuessesCalculator.CalculateGuesses(Zxcvbn.Matcher.Matches.DateMatch)">
+            <summary>
+            Estimates the attempts required to guess the password.
+            </summary>
+            <param name="match">The match.</param>
+            <returns>The guesses estimate.</returns>
+        </member>
+        <member name="T:Zxcvbn.Scoring.DictionaryGuessesCalculator">
+            <summary>
+            Estimates the number of attempts needed to dictionary search for the password.
+            </summary>
+        </member>
+        <member name="M:Zxcvbn.Scoring.DictionaryGuessesCalculator.CalculateGuesses(Zxcvbn.Matcher.Matches.DictionaryMatch)">
+            <summary>
+            Estimates the attempts required to guess the password.
+            </summary>
+            <param name="match">The match.</param>
+            <returns>The guesses estimate.</returns>
+        </member>
+        <member name="M:Zxcvbn.Scoring.DictionaryGuessesCalculator.L33tVariations(Zxcvbn.Matcher.Matches.DictionaryMatch)">
+            <summary>
+            Calculates the number of l33t variations in the word.
+            </summary>
+            <param name="match">The match.</param>
+            <returns>The number of possible variations.</returns>
+        </member>
+        <member name="M:Zxcvbn.Scoring.DictionaryGuessesCalculator.UppercaseVariations(System.String)">
+            <summary>
+            Calculates the number of uppercase variations in the word.
+            </summary>
+            <param name="token">The token.</param>
+            <returns>The number of possible variations.</returns>
+        </member>
+        <member name="T:Zxcvbn.Scoring.RegexGuessesCalculator">
+            <summary>
+            Estimates the number of attempts needed to guess the value picked out by regular expression.
+            </summary>
+        </member>
+        <member name="M:Zxcvbn.Scoring.RegexGuessesCalculator.CalculateGuesses(Zxcvbn.Matcher.Matches.RegexMatch)">
+            <summary>
+            Estimates the attempts required to guess the password.
+            </summary>
+            <param name="match">The match.</param>
+            <returns>The guesses estimate.</returns>
+        </member>
+        <member name="T:Zxcvbn.Scoring.RepeatGuessesCalculator">
+            <summary>
+            Estimates the number of attempts needed to guesses the number of repeats.
+            </summary>
+        </member>
+        <member name="M:Zxcvbn.Scoring.RepeatGuessesCalculator.CalculateGuesses(Zxcvbn.Matcher.Matches.RepeatMatch)">
+            <summary>
+            Estimates the attempts required to guess the password.
+            </summary>
+            <param name="match">The match.</param>
+            <returns>The guesses estimate.</returns>
+        </member>
+        <member name="T:Zxcvbn.Scoring.SequenceGuessesCalculator">
+            <summary>
+            Estimates the number of attempts needed to guess the sequence.
+            </summary>
+        </member>
+        <member name="M:Zxcvbn.Scoring.SequenceGuessesCalculator.CalculateGuesses(Zxcvbn.Matcher.Matches.SequenceMatch)">
+            <summary>
+            Estimates the attempts required to guess the password.
+            </summary>
+            <param name="match">The match.</param>
+            <returns>The guesses estimate.</returns>
+        </member>
+        <member name="T:Zxcvbn.Scoring.SpatialGuessesCalculator">
+            <summary>
+            Estimates the number of attempts needed to guess the spatial pattern.
+            </summary>
+        </member>
+        <member name="F:Zxcvbn.Scoring.SpatialGuessesCalculator.KeyboardAverageDegree">
+            <summary>
+            The average number of adjacent characters on a keyboard.
+            </summary>
+        </member>
+        <member name="F:Zxcvbn.Scoring.SpatialGuessesCalculator.KeyboardStartingPositions">
+            <summary>
+            The number of starting positions on a keyboard.
+            </summary>
+        </member>
+        <member name="F:Zxcvbn.Scoring.SpatialGuessesCalculator.KeypadAverageDegree">
+            <summary>
+            The average number of adjacent characters on a keypad.
+            </summary>
+        </member>
+        <member name="F:Zxcvbn.Scoring.SpatialGuessesCalculator.KeypadStartingPositions">
+            <summary>
+            The number of starting positions on a keypad.
+            </summary>
+        </member>
+        <member name="M:Zxcvbn.Scoring.SpatialGuessesCalculator.CalculateGuesses(Zxcvbn.Matcher.Matches.SpatialMatch)">
+            <summary>
+            Estimates the attempts required to guess the password.
+            </summary>
+            <param name="match">The match.</param>
+            <returns>The guesses estimate.</returns>
+        </member>
+        <member name="T:Zxcvbn.TimeEstimates">
+            <summary>
+            Estimates how long a password will take to crack under various conditions.
+            </summary>
+        </member>
+        <member name="M:Zxcvbn.TimeEstimates.EstimateAttackTimes(System.Double)">
+            <summary>
+            Calculates the estimated attack times.
+            </summary>
+            <param name="guesses">The number of guesses required.</param>
+            <returns>A summary of the estimated attack times.</returns>
+        </member>
+        <member name="T:Zxcvbn.Utility">
+            <summary>
+            A few useful extension methods used through the Zxcvbn project.
+            </summary>
+        </member>
+        <member name="M:Zxcvbn.Utility.GetEmbeddedResourceLines(System.String)">
+            <summary>
+            Returns a list of the lines of text from an embedded resource in the assembly.
+            </summary>
+            <param name="resourceName">The name of the resource to get the contents from.</param>
+            <returns>An enumerable of lines of text in the resource or null if the resource does not exist.</returns>
+        </member>
+        <member name="M:Zxcvbn.Utility.StringReverse(System.String)">
+            <summary>
+            Reverse a string in one call.
+            </summary>
+            <param name="str">String to reverse.</param>
+            <returns>String in reverse.</returns>
+        </member>
+    </members>
+</doc>

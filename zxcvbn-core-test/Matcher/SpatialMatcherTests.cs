@@ -59,11 +59,9 @@ namespace Zxcvbn.Tests.Matcher
         public void MatchesSpatialPatternSurroundedByNonSpatialPatterns()
         {
             var matcher = new SpatialMatcher();
-            SpatialMatcher.SpatialGraphs = SpatialMatcher.SpatialGraphs.Where(g => g.Name == "qwerty").ToList().AsReadOnly();
-
             var pattern = "6tfGHJ";
             var password = $"rz!{pattern}%z";
-            var result = matcher.MatchPassword(password).OfType<SpatialMatch>().ToList();
+            var result = matcher.MatchPassword(password).OfType<SpatialMatch>().Where(m => m.Graph == "qwerty").ToList();
 
             var expected = new[]
             {

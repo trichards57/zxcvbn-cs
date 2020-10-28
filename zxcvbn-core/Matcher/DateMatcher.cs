@@ -23,7 +23,6 @@ namespace Zxcvbn.Matcher
     ///
     /// This isn't true date parsing.  Invalid dates like 31 February will be allowed.
     /// </remarks>
-    /// </summary>
     internal class DateMatcher : IMatcher
     {
         private const int MaxYear = 2050;

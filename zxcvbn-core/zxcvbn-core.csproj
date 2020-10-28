@@ -23,6 +23,10 @@
     <RootNamespace>Zxcvbn</RootNamespace>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
+    <DocumentationFile>C:\Users\trich\Source\Repos\trichards57\zxcvbn-cs\zxcvbn-core\zxcvbn-core.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <EmbeddedResource Include="Dictionaries\*.lst" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
   </ItemGroup>
