@@ -9,28 +9,35 @@ namespace Zxcvbn.Tests.Matcher
 {
     public class DictionaryMatcherTests
     {
-        private readonly DictionaryMatcher _matcher1 = new DictionaryMatcher("d1", "test_dictionary_1.txt");
-        private readonly DictionaryMatcher _matcher2 = new DictionaryMatcher("d2", "test_dictionary_2.txt");
-        private readonly DictionaryMatcher _matcherTv = new DictionaryMatcher("us_tv_and_film", "us_tv_and_film.lst");
+        private readonly DictionaryMatcher matcher1 = new DictionaryMatcher("d1", "test_dictionary_1.txt");
+        private readonly DictionaryMatcher matcher2 = new DictionaryMatcher("d2", "test_dictionary_2.txt");
+        private readonly DictionaryMatcher matcherTv = new DictionaryMatcher("us_tv_and_film", "us_tv_and_film.lst");
 
-        [Theory, InlineData("q", "%"), InlineData("q", "qq"), InlineData("%%", "%"), InlineData("%%", "qq")]
+        [Theory]
+        [InlineData("q", "%")]
+        [InlineData("q", "qq")]
+        [InlineData("%%", "%")]
+        [InlineData("%%", "qq")]
         public void IdentifiesWordsSurroundedByNonWords(string prefix, string suffix)
         {
             var word = "asdf1234&*";
             var password = $"{prefix}{word}{suffix}";
             var result = RunMatches(password);
 
-            var expected = new[] { new DictionaryMatch
+            var expected = new[]
             {
-                DictionaryName = "d2",
-                i = prefix.Length,
-                j = prefix.Length+word.Length-1,
-                MatchedWord = word,
-                Rank = 5,
-                Reversed = false,
-                L33t = false,
-                Token = word
-            } };
+                new DictionaryMatch
+                {
+                    DictionaryName = "d2",
+                    i = prefix.Length,
+                    j = prefix.Length + word.Length - 1,
+                    MatchedWord = word,
+                    Rank = 5,
+                    Reversed = false,
+                    L33t = false,
+                    Token = word,
+                },
+            };
             result.Should().BeEquivalentTo(expected);
         }
 
@@ -39,47 +46,62 @@ namespace Zxcvbn.Tests.Matcher
         {
             var result = RunMatches("BoaRdZ");
 
-            var expected = new[] { new DictionaryMatch
+            var expected = new[]
             {
-                DictionaryName = "d1",
-                i = 0,
-                j = 4,
-                MatchedWord = "board",
-                Rank = 3,
-                Reversed = false,
-                L33t = false,
-                Token = "BoaRd"
-            } ,
-                new DictionaryMatch{
-                DictionaryName = "d2",
-                i = 5,
-                j = 5,
-                MatchedWord = "z",
-                Rank = 1,
-                Reversed = false,
-                L33t = false,
-                Token = "Z"
-            }};
+                new DictionaryMatch
+                {
+                    DictionaryName = "d1",
+                    i = 0,
+                    j = 4,
+                    MatchedWord = "board",
+                    Rank = 3,
+                    Reversed = false,
+                    L33t = false,
+                    Token = "BoaRd",
+                },
+                new DictionaryMatch
+                {
+                    DictionaryName = "d2",
+                    i = 5,
+                    j = 5,
+                    MatchedWord = "z",
+                    Rank = 1,
+                    Reversed = false,
+                    L33t = false,
+                    Token = "Z",
+                },
+            };
             result.Should().BeEquivalentTo(expected);
         }
 
-        [Theory, InlineData("mother", 2, "d1"), InlineData("board", 3, "d1"), InlineData("abcd", 4, "d1"), InlineData("cdef", 5, "d1"),
-         InlineData("z", 1, "d2"), InlineData("8", 2, "d2"), InlineData("99", 3, "d2"), InlineData("$", 4, "d2"), InlineData("asdf1234&*", 5, "d2")]
+        [Theory]
+        [InlineData("mother", 2, "d1")]
+        [InlineData("board", 3, "d1")]
+        [InlineData("abcd", 4, "d1")]
+        [InlineData("cdef", 5, "d1")]
+        [InlineData("z", 1, "d2")]
+        [InlineData("8", 2, "d2")]
+        [InlineData("99", 3, "d2")]
+        [InlineData("$", 4, "d2")]
+        [InlineData("asdf1234&*", 5, "d2")]
         public void MatchesAgainstAllWordsInProvidedDictionaries(string word, int rank, string dictionary)
         {
             var result = RunMatches(word);
 
-            var expected = new[] { new DictionaryMatch
+            var expected = new[]
             {
-                DictionaryName = dictionary,
-                i = 0,
-                j = word.Length-1,
-                MatchedWord = word,
-                Rank = rank,
-                Reversed = false,
-                L33t = false,
-                Token = word
-            } };
+                new DictionaryMatch
+                {
+                    DictionaryName = dictionary,
+                    i = 0,
+                    j = word.Length - 1,
+                    MatchedWord = word,
+                    Rank = rank,
+                    Reversed = false,
+                    L33t = false,
+                    Token = word,
+                },
+            };
             result.Should().BeEquivalentTo(expected);
         }
 
@@ -88,27 +110,31 @@ namespace Zxcvbn.Tests.Matcher
         {
             var result = RunMatches("abcdef");
 
-            var expected = new[] { new DictionaryMatch
+            var expected = new[]
             {
-                DictionaryName = "d1",
-                i = 0,
-                j = 3,
-                MatchedWord = "abcd",
-                Rank = 4,
-                Reversed = false,
-                L33t = false,
-                Token = "abcd"
-            } ,
-                new DictionaryMatch{
-                DictionaryName = "d1",
-                i = 2,
-                j = 5,
-                MatchedWord = "cdef",
-                Rank = 5,
-                Reversed = false,
-                L33t = false,
-                Token = "cdef"
-            }};
+                new DictionaryMatch
+                {
+                    DictionaryName = "d1",
+                    i = 0,
+                    j = 3,
+                    MatchedWord = "abcd",
+                    Rank = 4,
+                    Reversed = false,
+                    L33t = false,
+                    Token = "abcd",
+                },
+                new DictionaryMatch
+                {
+                    DictionaryName = "d1",
+                    i = 2,
+                    j = 5,
+                    MatchedWord = "cdef",
+                    Rank = 5,
+                    Reversed = false,
+                    L33t = false,
+                    Token = "cdef",
+                },
+            };
             result.Should().BeEquivalentTo(expected);
         }
 
@@ -138,36 +164,42 @@ namespace Zxcvbn.Tests.Matcher
         {
             var result = RunMatches("motherboard");
 
-            var expected = new[] { new DictionaryMatch
+            var expected = new[]
             {
-                DictionaryName = "d1",
-                i = 0,
-                j = 5,
-                MatchedWord = "mother",
-                Rank = 2,
-                Reversed = false,
-                L33t = false,
-                Token = "mother"
-            } ,
-                new DictionaryMatch{
-                DictionaryName = "d1",
-                i = 0,
-                j = 10,
-                MatchedWord = "motherboard",
-                Rank = 1,
-                Reversed = false,
-                L33t = false,
-                Token = "motherboard"
-            },new DictionaryMatch{
-                DictionaryName = "d1",
-                i = 6,
-                j = 10,
-                MatchedWord = "board",
-                Rank = 3,
-                Reversed = false,
-                L33t = false,
-                Token = "board"
-            }};
+                new DictionaryMatch
+                {
+                    DictionaryName = "d1",
+                    i = 0,
+                    j = 5,
+                    MatchedWord = "mother",
+                    Rank = 2,
+                    Reversed = false,
+                    L33t = false,
+                    Token = "mother",
+                },
+                new DictionaryMatch
+                {
+                    DictionaryName = "d1",
+                    i = 0,
+                    j = 10,
+                    MatchedWord = "motherboard",
+                    Rank = 1,
+                    Reversed = false,
+                    L33t = false,
+                    Token = "motherboard",
+                },
+                new DictionaryMatch
+                {
+                    DictionaryName = "d1",
+                    i = 6,
+                    j = 10,
+                    MatchedWord = "board",
+                    Rank = 3,
+                    Reversed = false,
+                    L33t = false,
+                    Token = "board",
+                },
+            };
 
             result.Should().BeEquivalentTo(expected);
         }
@@ -175,19 +207,22 @@ namespace Zxcvbn.Tests.Matcher
         [Fact]
         public void UsesTheDefaultDictionaries()
         {
-            var result = _matcherTv.MatchPassword("wow").OfType<DictionaryMatch>().ToList();
+            var result = matcherTv.MatchPassword("wow").OfType<DictionaryMatch>().ToList();
 
-            var expected = new[] { new DictionaryMatch
+            var expected = new[]
             {
-                DictionaryName = "us_tv_and_film",
-                i = 0,
-                j = 2,
-                MatchedWord = "wow",
-                Rank = 322,
-                Reversed = false,
-                L33t = false,
-                Token = "wow"
-            } };
+                new DictionaryMatch
+                {
+                    DictionaryName = "us_tv_and_film",
+                    i = 0,
+                    j = 2,
+                    MatchedWord = "wow",
+                    Rank = 322,
+                    Reversed = false,
+                    L33t = false,
+                    Token = "wow",
+                },
+            };
             result.Should().BeEquivalentTo(expected);
         }
 
@@ -198,7 +233,8 @@ namespace Zxcvbn.Tests.Matcher
 
             var result = matcher.MatchPassword("foobar").OfType<DictionaryMatch>().ToList();
 
-            var expected = new[] {
+            var expected = new[]
+            {
                 new DictionaryMatch
                 {
                     DictionaryName = "user_inputs",
@@ -208,7 +244,7 @@ namespace Zxcvbn.Tests.Matcher
                     Rank = 1,
                     Reversed = false,
                     L33t = false,
-                    Token = "foo"
+                    Token = "foo",
                 },
                 new DictionaryMatch
                 {
@@ -219,8 +255,8 @@ namespace Zxcvbn.Tests.Matcher
                     Rank = 2,
                     Reversed = false,
                     L33t = false,
-                    Token = "bar"
-                }
+                    Token = "bar",
+                },
             };
 
             result.Should().BeEquivalentTo(expected);
@@ -228,7 +264,7 @@ namespace Zxcvbn.Tests.Matcher
 
         private List<DictionaryMatch> RunMatches(string word)
         {
-            var result = _matcher1.MatchPassword(word).Concat(_matcher2.MatchPassword(word));
+            var result = matcher1.MatchPassword(word).Concat(matcher2.MatchPassword(word));
 
             return result.OfType<DictionaryMatch>().ToList();
         }

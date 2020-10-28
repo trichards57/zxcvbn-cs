@@ -18,7 +18,7 @@ namespace Zxcvbn.Tests.Scoring
                 Turns = 3,
                 ShiftedCount = 0,
                 i = 1,
-                j = 2
+                j = 2,
             };
 
             var l = match.Token.Length;
@@ -49,7 +49,7 @@ namespace Zxcvbn.Tests.Scoring
                 Turns = 1,
                 ShiftedCount = 2,
                 i = 1,
-                j = 2
+                j = 2,
             };
 
             var expected = SpatialGuessesCalculator.KeyboardStartingPositions * SpatialGuessesCalculator.KeyboardAverageDegree * (match.Token.Length - 1) * 21;
@@ -69,7 +69,7 @@ namespace Zxcvbn.Tests.Scoring
                 Turns = 1,
                 ShiftedCount = 6,
                 i = 1,
-                j = 2
+                j = 2,
             };
 
             var expected = SpatialGuessesCalculator.KeyboardStartingPositions * SpatialGuessesCalculator.KeyboardAverageDegree * (match.Token.Length - 1) * 2;
@@ -89,7 +89,7 @@ namespace Zxcvbn.Tests.Scoring
                 Turns = 1,
                 ShiftedCount = 0,
                 i = 1,
-                j = 2
+                j = 2,
             };
 
             var expected = SpatialGuessesCalculator.KeyboardStartingPositions * SpatialGuessesCalculator.KeyboardAverageDegree * (match.Token.Length - 1);
@@ -109,7 +109,7 @@ namespace Zxcvbn.Tests.Scoring
                 Turns = 1,
                 ShiftedCount = 0,
                 i = 1,
-                j = 2
+                j = 2,
             };
 
             var expected = SpatialGuessesCalculator.KeyboardStartingPositions * SpatialGuessesCalculator.KeyboardAverageDegree * (match.Token.Length - 1);

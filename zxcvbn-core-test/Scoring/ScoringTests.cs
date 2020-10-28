@@ -18,10 +18,10 @@ namespace Zxcvbn.Tests.Scoring
                 Day = 14,
                 Separator = "/",
                 i = 1,
-                j = 2
+                j = 2,
             };
 
-            var actual = PasswordScoring.EstimateGuesses(match, "");
+            var actual = PasswordScoring.EstimateGuesses(match, string.Empty);
             actual.Should().Be(1);
         }
     }

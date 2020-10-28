@@ -10,11 +10,11 @@ namespace Zxcvbn.Tests.Matcher
 {
     public class L33tMatcherTests
     {
-        private static DictionaryMatcher TestDictionary1 = new DictionaryMatcher("words", new[] { "aac", "", "password", "paassword", "asdf0" });
+        private static readonly DictionaryMatcher TestDictionary1 = new DictionaryMatcher("words", new[] { "aac", string.Empty, "password", "paassword", "asdf0" });
 
-        private static DictionaryMatcher TestDictionary2 = new DictionaryMatcher("words2", new[] { "cgo" });
+        private static readonly DictionaryMatcher TestDictionary2 = new DictionaryMatcher("words2", new[] { "cgo" });
 
-        private static ReadOnlyDictionary<char, char[]> TestL33tTable = new ReadOnlyDictionary<char, char[]>(new Dictionary<char, char[]>
+        private static readonly ReadOnlyDictionary<char, char[]> TestL33tTable = new ReadOnlyDictionary<char, char[]>(new Dictionary<char, char[]>
         {
             ['a'] = new[] { '4', '@' },
             ['c'] = new[] { '(', '{', '[', '<' },
@@ -28,7 +28,7 @@ namespace Zxcvbn.Tests.Matcher
             L33tMatcher.L33tTable = TestL33tTable;
             var matcher = new L33tMatcher(new List<IMatcher> { TestDictionary1, TestDictionary2 });
 
-            var result = matcher.MatchPassword("");
+            var result = matcher.MatchPassword(string.Empty);
             result.Should().BeEmpty();
         }
 
@@ -82,41 +82,51 @@ namespace Zxcvbn.Tests.Matcher
 
             actual = L33tMatcher.EnumerateSubtitutions(new ReadOnlyDictionary<char, char[]>(new Dictionary<char, char[]>
             {
-                {'a',new[]{'@'} }
+                { 'a', new[] { '@' } },
             }));
-            var expected = new List<Dictionary<char, char>>() {
-                new Dictionary<char, char>() {
-                    { '@', 'a' }
-                }
-            };
-            actual.Should().BeEquivalentTo(expected);
-
-            actual = L33tMatcher.EnumerateSubtitutions(new ReadOnlyDictionary<char, char[]>(new Dictionary<char, char[]>
+            var expected = new List<Dictionary<char, char>>()
             {
-                {'a',new[]{'@', '4'} }
-            }));
-            expected = new List<Dictionary<char, char>>() {
-                new Dictionary<char, char>() {
-                    { '@', 'a' } },
-                   new Dictionary<char, char>() { { '4', 'a' }
-                }
-            };
-            actual.Should().BeEquivalentTo(expected);
-
-            actual = L33tMatcher.EnumerateSubtitutions(new ReadOnlyDictionary<char, char[]>(new Dictionary<char, char[]>
-            {
-                {'a',new[]{'@', '4'} },
-                {'c',new[]{'('} }
-            }));
-            expected = new List<Dictionary<char, char>>() {
-                new Dictionary<char, char>() {
+                new Dictionary<char, char>()
+                {
                     { '@', 'a' },
-                    { '(', 'c' }
                 },
-                  new Dictionary<char, char>() {
+            };
+            actual.Should().BeEquivalentTo(expected);
+
+            actual = L33tMatcher.EnumerateSubtitutions(new ReadOnlyDictionary<char, char[]>(new Dictionary<char, char[]>
+            {
+                { 'a', new[] { '@', '4' } },
+            }));
+            expected = new List<Dictionary<char, char>>()
+            {
+                new Dictionary<char, char>()
+                {
+                    { '@', 'a' },
+                },
+                new Dictionary<char, char>()
+                {
                     { '4', 'a' },
-                    { '(', 'c' }
-                }
+                },
+            };
+            actual.Should().BeEquivalentTo(expected);
+
+            actual = L33tMatcher.EnumerateSubtitutions(new ReadOnlyDictionary<char, char[]>(new Dictionary<char, char[]>
+            {
+                { 'a', new[] { '@', '4' } },
+                { 'c', new[] { '(' } },
+            }));
+            expected = new List<Dictionary<char, char>>()
+            {
+                new Dictionary<char, char>()
+                {
+                    { '@', 'a' },
+                    { '(', 'c' },
+                },
+                new Dictionary<char, char>()
+                {
+                    { '4', 'a' },
+                    { '(', 'c' },
+                },
             };
             actual.Should().BeEquivalentTo(expected);
         }
@@ -141,9 +151,9 @@ namespace Zxcvbn.Tests.Matcher
                     Token = "p4ssword",
                     L33tSubs = new Dictionary<char, char>
                     {
-                        {'4','a' }
-                    }
-                }
+                        { '4', 'a' },
+                    },
+                },
             };
             var result = matcher.MatchPassword("p4ssword");
             result.Should().BeEquivalentTo(expected);
@@ -162,9 +172,9 @@ namespace Zxcvbn.Tests.Matcher
                     Token = "p@ssw0rd",
                     L33tSubs = new Dictionary<char, char>
                     {
-                        {'@','a' }, {'0','o' }
-                    }
-                }
+                        { '@', 'a' }, { '0', 'o' },
+                    },
+                },
             };
             result = matcher.MatchPassword("p@ssw0rd");
             result.Should().BeEquivalentTo(expected);
@@ -183,9 +193,9 @@ namespace Zxcvbn.Tests.Matcher
                     Token = "{G0",
                     L33tSubs = new Dictionary<char, char>
                     {
-                        {'{','c' }, {'0','o' }
-                    }
-                }
+                        { '{', 'c' }, { '0', 'o' },
+                    },
+                },
             };
             result = matcher.MatchPassword("aSdfO{G0asDfO");
             result.Should().BeEquivalentTo(expected);
@@ -211,9 +221,9 @@ namespace Zxcvbn.Tests.Matcher
                     Token = "@a(",
                     L33tSubs = new Dictionary<char, char>
                     {
-                        {'@','a' },
-                        {'(','c' }
-                    }
+                        { '@', 'a' },
+                        { '(', 'c' },
+                    },
                 },
                 new DictionaryMatch()
                 {
@@ -227,8 +237,8 @@ namespace Zxcvbn.Tests.Matcher
                     Token = "(go",
                     L33tSubs = new Dictionary<char, char>
                     {
-                        {'(','c' }
-                    }
+                        { '(', 'c' },
+                    },
                 },
                 new DictionaryMatch()
                 {
@@ -242,9 +252,9 @@ namespace Zxcvbn.Tests.Matcher
                     Token = "{G0",
                     L33tSubs = new Dictionary<char, char>
                     {
-                        {'{','c' }, {'0','o' }
-                    }
-                }
+                        { '{', 'c' }, { '0', 'o' },
+                    },
+                },
             };
             var result = matcher.MatchPassword("@a(go{G0");
             result.Should().BeEquivalentTo(expected);
@@ -255,7 +265,7 @@ namespace Zxcvbn.Tests.Matcher
         {
             L33tMatcher.L33tTable = TestL33tTable;
 
-            var actual = L33tMatcher.RelevantL33tSubtable("");
+            var actual = L33tMatcher.RelevantL33tSubtable(string.Empty);
             actual.Should().BeEmpty();
 
             actual = L33tMatcher.RelevantL33tSubtable("abcdefgo123578!#$&*)]}>");
@@ -266,7 +276,7 @@ namespace Zxcvbn.Tests.Matcher
 
             var expected = new Dictionary<char, char[]>
             {
-                { 'a', new[] { '4' } }
+                { 'a', new[] { '4' } },
             };
             actual = L33tMatcher.RelevantL33tSubtable("4");
             actual.Should().BeEquivalentTo(expected);

@@ -14,7 +14,7 @@ namespace Zxcvbn.Tests.Scoring
             var match = new DateMatch
             {
                 Token = "2010",
-                Separator = "",
+                Separator = string.Empty,
                 Year = 2010,
                 Month = 1,
                 Day = 1,
@@ -34,7 +34,7 @@ namespace Zxcvbn.Tests.Scoring
             var match = new DateMatch
             {
                 Token = "1923",
-                Separator = "",
+                Separator = string.Empty,
                 Year = 1923,
                 Month = 1,
                 Day = 1,
@@ -54,7 +54,7 @@ namespace Zxcvbn.Tests.Scoring
             var match = new DateMatch
             {
                 Token = "1923",
-                Separator = "",
+                Separator = string.Empty,
                 Year = 1923,
                 Month = 1,
                 Day = 1,

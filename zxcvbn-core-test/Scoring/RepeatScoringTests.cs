@@ -8,8 +8,12 @@ namespace Zxcvbn.Tests.Scoring
 {
     public class RepeatScoringTests
     {
-        [Theory, InlineData("aa", "a", 2), InlineData("999", "9", 3), InlineData("$$$$", "$", 4),
-            InlineData("abab", "ab", 2), InlineData("batterystaplebatterystaplebatterystaple", "batterystaple", 3)]
+        [Theory]
+        [InlineData("aa", "a", 2)]
+        [InlineData("999", "9", 3)]
+        [InlineData("$$$$", "$", 4)]
+        [InlineData("abab", "ab", 2)]
+        [InlineData("batterystaplebatterystaplebatterystaple", "batterystaple", 3)]
         public void CalculatesTheRightNumberOfGuesses(string token, string baseToken, int expectedRepeats)
         {
             var baseGuesses = PasswordScoring.MostGuessableMatchSequence(baseToken, Core.GetAllMatches(baseToken)).Guesses;
@@ -22,7 +26,7 @@ namespace Zxcvbn.Tests.Scoring
                 RepeatCount = expectedRepeats,
                 BaseMatchItems = new List<Match>(),
                 i = 1,
-                j = 2
+                j = 2,
             };
 
             var expected = baseGuesses * expectedRepeats;
@@ -42,7 +46,7 @@ namespace Zxcvbn.Tests.Scoring
                 BaseMatchItems = new List<Match>(),
                 RepeatCount = 2,
                 i = 1,
-                j = 2
+                j = 2,
             };
 
             var expected = RepeatGuessesCalculator.CalculateGuesses(match);

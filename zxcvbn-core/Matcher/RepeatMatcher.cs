@@ -27,11 +27,8 @@ namespace Zxcvbn.Matcher
 
             while (lastIndex < password.Length)
             {
-                var greedyLastIndex = lastIndex;
-                var lazyLastIndex = lastIndex;
-
-                var greedyMatch = Regex.Match(password.Substring(greedyLastIndex), greedy);
-                var lazyMatch = Regex.Match(password.Substring(lazyLastIndex), lazy);
+                var greedyMatch = Regex.Match(password.Substring(lastIndex), greedy);
+                var lazyMatch = Regex.Match(password.Substring(lastIndex), lazy);
 
                 if (!greedyMatch.Success) break;
 
@@ -49,8 +46,8 @@ namespace Zxcvbn.Matcher
                     baseToken = match.Groups[1].Value;
                 }
 
-                var i = match.Index;
-                var j = match.Index + match.Length - 1;
+                var i = lastIndex + match.Index;
+                var j = lastIndex + match.Index + match.Length - 1;
 
                 var baseAnalysis =
                     PasswordScoring.MostGuessableMatchSequence(baseToken, Core.GetAllMatches(baseToken));

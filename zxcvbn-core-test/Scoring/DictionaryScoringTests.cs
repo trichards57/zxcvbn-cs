@@ -20,7 +20,7 @@ namespace Zxcvbn.Tests.Scoring
                 j = 2,
                 L33t = false,
                 MatchedWord = "a",
-                Reversed = true
+                Reversed = true,
             };
 
             var expected = 32 * 2;
@@ -40,7 +40,7 @@ namespace Zxcvbn.Tests.Scoring
                 j = 2,
                 L33t = false,
                 MatchedWord = "a",
-                Reversed = false
+                Reversed = false,
             };
 
             var expected = 32 * DictionaryGuessesCalculator.UppercaseVariations(match.Token);
@@ -61,7 +61,7 @@ namespace Zxcvbn.Tests.Scoring
                 L33t = true,
                 MatchedWord = "a",
                 Reversed = false,
-                L33tSubs = new Dictionary<char, char> { { '@', 'a' } }
+                L33tSubs = new Dictionary<char, char> { { '@', 'a' } },
             };
 
             var expected = 32 * DictionaryGuessesCalculator.L33tVariations(match) * DictionaryGuessesCalculator.UppercaseVariations(match.Token);
@@ -82,7 +82,7 @@ namespace Zxcvbn.Tests.Scoring
                 L33t = true,
                 MatchedWord = "a",
                 Reversed = false,
-                L33tSubs = new Dictionary<char, char> { { '@', 'a' } }
+                L33tSubs = new Dictionary<char, char> { { '@', 'a' } },
             };
 
             var expected = 32 * DictionaryGuessesCalculator.L33tVariations(match);
@@ -96,7 +96,7 @@ namespace Zxcvbn.Tests.Scoring
             var expected = 1;
             var match = new DictionaryMatch
             {
-                Token = "",
+                Token = string.Empty,
                 Rank = 32,
                 DictionaryName = "dic",
                 i = 1,
@@ -104,7 +104,7 @@ namespace Zxcvbn.Tests.Scoring
                 L33t = false,
                 MatchedWord = "a",
                 Reversed = false,
-                L33tSubs = new Dictionary<char, char>()
+                L33tSubs = new Dictionary<char, char>(),
             };
             var actual = DictionaryGuessesCalculator.L33tVariations(match);
             actual.Should().Be(expected);
@@ -120,7 +120,7 @@ namespace Zxcvbn.Tests.Scoring
                 L33t = false,
                 MatchedWord = "a",
                 Reversed = false,
-                L33tSubs = new Dictionary<char, char>()
+                L33tSubs = new Dictionary<char, char>(),
             };
             actual = DictionaryGuessesCalculator.L33tVariations(match);
             actual.Should().Be(expected);
@@ -136,7 +136,7 @@ namespace Zxcvbn.Tests.Scoring
                 L33t = false,
                 MatchedWord = "a",
                 Reversed = false,
-                L33tSubs = new Dictionary<char, char>()
+                L33tSubs = new Dictionary<char, char>(),
             };
             actual = DictionaryGuessesCalculator.L33tVariations(match);
             actual.Should().Be(expected);
@@ -152,7 +152,7 @@ namespace Zxcvbn.Tests.Scoring
                 L33t = true,
                 MatchedWord = "a",
                 Reversed = false,
-                L33tSubs = new Dictionary<char, char>() { { '4', 'a' } }
+                L33tSubs = new Dictionary<char, char>() { { '4', 'a' } },
             };
             actual = DictionaryGuessesCalculator.L33tVariations(match);
             actual.Should().Be(expected);
@@ -168,7 +168,7 @@ namespace Zxcvbn.Tests.Scoring
                 L33t = true,
                 MatchedWord = "a",
                 Reversed = false,
-                L33tSubs = new Dictionary<char, char>() { { '4', 'a' } }
+                L33tSubs = new Dictionary<char, char>() { { '4', 'a' } },
             };
             actual = DictionaryGuessesCalculator.L33tVariations(match);
             actual.Should().Be(expected);
@@ -184,7 +184,7 @@ namespace Zxcvbn.Tests.Scoring
                 L33t = true,
                 MatchedWord = "a",
                 Reversed = false,
-                L33tSubs = new Dictionary<char, char>() { { '4', 'a' } }
+                L33tSubs = new Dictionary<char, char>() { { '4', 'a' } },
             };
             actual = DictionaryGuessesCalculator.L33tVariations(match);
             actual.Should().Be(expected);
@@ -200,7 +200,7 @@ namespace Zxcvbn.Tests.Scoring
                 L33t = true,
                 MatchedWord = "a",
                 Reversed = false,
-                L33tSubs = new Dictionary<char, char>() { { '8', 'b' } }
+                L33tSubs = new Dictionary<char, char>() { { '8', 'b' } },
             };
             actual = DictionaryGuessesCalculator.L33tVariations(match);
             actual.Should().Be(expected);
@@ -216,7 +216,7 @@ namespace Zxcvbn.Tests.Scoring
                 L33t = true,
                 MatchedWord = "a",
                 Reversed = false,
-                L33tSubs = new Dictionary<char, char>() { { '+', 't' } }
+                L33tSubs = new Dictionary<char, char>() { { '+', 't' } },
             };
             actual = DictionaryGuessesCalculator.L33tVariations(match);
             actual.Should().Be(expected);
@@ -232,7 +232,7 @@ namespace Zxcvbn.Tests.Scoring
                 L33t = true,
                 MatchedWord = "a",
                 Reversed = false,
-                L33tSubs = new Dictionary<char, char>() { { '4', 'a' }, { '8', 'b' } }
+                L33tSubs = new Dictionary<char, char>() { { '4', 'a' }, { '8', 'b' } },
             };
             actual = DictionaryGuessesCalculator.L33tVariations(match);
             actual.Should().Be(expected);
@@ -248,7 +248,7 @@ namespace Zxcvbn.Tests.Scoring
                 L33t = true,
                 MatchedWord = "a",
                 Reversed = false,
-                L33tSubs = new Dictionary<char, char>() { { '4', 'a' } }
+                L33tSubs = new Dictionary<char, char>() { { '4', 'a' } },
             };
             actual = DictionaryGuessesCalculator.L33tVariations(match);
             actual.Should().Be(expected);
@@ -264,7 +264,7 @@ namespace Zxcvbn.Tests.Scoring
                 L33t = true,
                 MatchedWord = "a",
                 Reversed = false,
-                L33tSubs = new Dictionary<char, char>() { { '4', 'a' } }
+                L33tSubs = new Dictionary<char, char>() { { '4', 'a' } },
             };
             actual = DictionaryGuessesCalculator.L33tVariations(match);
             actual.Should().Be(expected);
@@ -280,15 +280,25 @@ namespace Zxcvbn.Tests.Scoring
                 L33t = true,
                 MatchedWord = "a",
                 Reversed = false,
-                L33tSubs = new Dictionary<char, char>() { { '4', 'a' }, { '+', 't' } }
+                L33tSubs = new Dictionary<char, char>() { { '4', 'a' }, { '+', 't' } },
             };
             actual = DictionaryGuessesCalculator.L33tVariations(match);
             actual.Should().Be(expected);
         }
 
-        [Theory, InlineData("", 1), InlineData("a", 1), InlineData("A", 2),
-                InlineData("abcdef", 1), InlineData("Abcdef", 2), InlineData("abcdeF", 2), InlineData("ABCDEF", 2),
-        InlineData("aBcdef", 6), InlineData("aBcDef", 21), InlineData("ABCDEf", 6), InlineData("aBCDEf", 21), InlineData("ABCdef", 41)]
+        [Theory]
+        [InlineData("", 1)]
+        [InlineData("a", 1)]
+        [InlineData("A", 2)]
+        [InlineData("abcdef", 1)]
+        [InlineData("Abcdef", 2)]
+        [InlineData("abcdeF", 2)]
+        [InlineData("ABCDEF", 2)]
+        [InlineData("aBcdef", 6)]
+        [InlineData("aBcDef", 21)]
+        [InlineData("ABCDEf", 6)]
+        [InlineData("aBCDEf", 21)]
+        [InlineData("ABCdef", 41)]
         public void GetsCorrectUppercaseVariantsMultipler(string word, int expected)
         {
             var actual = DictionaryGuessesCalculator.UppercaseVariations(word);
@@ -309,7 +319,7 @@ namespace Zxcvbn.Tests.Scoring
                 L33t = true,
                 MatchedWord = "a",
                 Reversed = false,
-                L33tSubs = new Dictionary<char, char>() { { '4', 'a' } }
+                L33tSubs = new Dictionary<char, char>() { { '4', 'a' } },
             };
             var actual = DictionaryGuessesCalculator.L33tVariations(match);
             actual.Should().Be(expected);
@@ -327,7 +337,7 @@ namespace Zxcvbn.Tests.Scoring
                 j = 2,
                 L33t = false,
                 MatchedWord = "a",
-                Reversed = false
+                Reversed = false,
             };
 
             var expected = 32;
@@ -347,7 +357,7 @@ namespace Zxcvbn.Tests.Scoring
                 j = 2,
                 L33t = false,
                 MatchedWord = "a",
-                Reversed = false
+                Reversed = false,
             };
 
             var expected = 32;

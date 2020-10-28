@@ -7,8 +7,12 @@ namespace Zxcvbn.Tests.Scoring
 {
     public class SequenceScoringTests
     {
-        [Theory, InlineData("ab", true, 8), InlineData("XYZ", true, 78), InlineData("4567", true, 40),
-            InlineData("7654", false, 80), InlineData("ZYX", false, 24)]
+        [Theory]
+        [InlineData("ab", true, 8)]
+        [InlineData("XYZ", true, 78)]
+        [InlineData("4567", true, 40)]
+        [InlineData("7654", false, 80)]
+        [InlineData("ZYX", false, 24)]
         public void CalculatesTheCorrectNumberOfGuesses(string token, bool ascending, int expected)
         {
             var match = new SequenceMatch
@@ -18,7 +22,7 @@ namespace Zxcvbn.Tests.Scoring
                 i = 1,
                 j = 2,
                 SequenceName = "abc",
-                SequenceSpace = 1
+                SequenceSpace = 1,
             };
 
             var actual = SequenceGuessesCalculator.CalculateGuesses(match);
@@ -35,7 +39,7 @@ namespace Zxcvbn.Tests.Scoring
                 i = 1,
                 j = 2,
                 SequenceName = "abc",
-                SequenceSpace = 1
+                SequenceSpace = 1,
             };
 
             var actual = SequenceGuessesCalculator.CalculateGuesses(match);

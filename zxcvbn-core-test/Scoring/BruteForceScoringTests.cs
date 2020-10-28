@@ -15,8 +15,9 @@ namespace Zxcvbn.Tests.Scoring
             var worseMatch = CreateTestMatch(0, 9, 1);
             var bestMatch = CreateTestMatch(0, 9, 2);
 
-            var expected = new List<Match> {
-                 worseMatch
+            var expected = new List<Match>
+            {
+                 worseMatch,
             };
 
             var result = PasswordScoring.MostGuessableMatchSequence(password, new List<Match> { worseMatch, bestMatch }, true);
@@ -34,8 +35,9 @@ namespace Zxcvbn.Tests.Scoring
             var m1 = CreateTestMatch(0, 3, 2);
             var m2 = CreateTestMatch(4, 9, 1);
 
-            var expected = new List<Match> {
-                 m0
+            var expected = new List<Match>
+            {
+                 m0,
             };
 
             var result = PasswordScoring.MostGuessableMatchSequence(password, new List<Match> { m0, m1, m2 }, true);
@@ -43,8 +45,9 @@ namespace Zxcvbn.Tests.Scoring
 
             m0.Guesses = 5;
 
-            expected = new List<Match> {
-                 m1, m2
+            expected = new List<Match>
+            {
+                 m1, m2,
             };
 
             result = PasswordScoring.MostGuessableMatchSequence(password, new List<Match> { m0, m1, m2 }, true);
@@ -57,20 +60,23 @@ namespace Zxcvbn.Tests.Scoring
             var password = "0123456789";
             var existingMatch = CreateTestMatch(1, 8, 1);
 
-            var expected = new List<Match> {
-                 new BruteForceMatch {
+            var expected = new List<Match>
+            {
+                new BruteForceMatch
+                {
                     i = 0,
                     j = 0,
                     Token = "0",
-                    Guesses = 11
+                    Guesses = 11,
                 },
                 existingMatch,
-                  new BruteForceMatch {
+                new BruteForceMatch
+                {
                     i = 9,
                     j = 9,
                     Token = "9",
-                    Guesses = 11
-                }
+                    Guesses = 11,
+                },
             };
 
             var result = PasswordScoring.MostGuessableMatchSequence(password, new List<Match> { existingMatch }, true);
@@ -83,14 +89,16 @@ namespace Zxcvbn.Tests.Scoring
             var password = "0123456789";
             var existingMatch = CreateTestMatch(3, 9, 1);
 
-            var expected = new List<Match> {
-                 new BruteForceMatch {
+            var expected = new List<Match>
+            {
+                 new BruteForceMatch
+                 {
                     i = 0,
                     j = 2,
                     Token = "012",
-                    Guesses = 1000
-                },
-                existingMatch
+                    Guesses = 1000,
+                 },
+                 existingMatch,
             };
 
             var result = PasswordScoring.MostGuessableMatchSequence(password, new List<Match> { existingMatch }, true);
@@ -103,14 +111,16 @@ namespace Zxcvbn.Tests.Scoring
             var password = "0123456789";
             var existingMatch = CreateTestMatch(0, 5, 1);
 
-            var expected = new List<Match> {
+            var expected = new List<Match>
+            {
                 existingMatch,
-                new BruteForceMatch {
+                new BruteForceMatch
+                {
                     i = 6,
                     j = 9,
                     Token = "6789",
-                    Guesses = 10000
-                }
+                    Guesses = 10000,
+                },
             };
 
             var result = PasswordScoring.MostGuessableMatchSequence(password, new List<Match> { existingMatch }, true);
@@ -121,13 +131,16 @@ namespace Zxcvbn.Tests.Scoring
         public void MostGuessableMatchSequenceRetursnOneMatchForEmptySequence()
         {
             var password = "0123456789";
-            var expected = new List<Match> {
-                new BruteForceMatch {
-                i = 0,
-                j = 9,
-                Token = password,
-                Guesses = 10000000000
-            }};
+            var expected = new List<Match>
+            {
+                new BruteForceMatch
+                {
+                    i = 0,
+                    j = 9,
+                    Token = password,
+                    Guesses = 10000000000,
+                },
+            };
 
             var result = PasswordScoring.MostGuessableMatchSequence(password, Enumerable.Empty<Match>());
             result.Sequence.Should().BeEquivalentTo(expected);
@@ -144,7 +157,7 @@ namespace Zxcvbn.Tests.Scoring
                 Day = 1,
                 Month = 2,
                 Separator = "/",
-                Year = 3
+                Year = 3,
             };
         }
     }
