@@ -11,25 +11,6 @@ namespace Zxcvbn.Matcher
     /// </summary>
     internal class L33tMatcher : IMatcher
     {
-        /// <summary>
-        /// The table of l33t transforms.
-        /// </summary>
-        internal static ReadOnlyDictionary<char, char[]> L33tTable = new ReadOnlyDictionary<char, char[]>(new Dictionary<char, char[]>
-        {
-            ['a'] = new[] { '4', '@' },
-            ['b'] = new[] { '8' },
-            ['c'] = new[] { '(', '{', '[', '<' },
-            ['e'] = new[] { '3' },
-            ['g'] = new[] { '6', '9' },
-            ['i'] = new[] { '1', '!', '|' },
-            ['l'] = new[] { '1', '|', '7' },
-            ['o'] = new[] { '0' },
-            ['s'] = new[] { '$', '5' },
-            ['t'] = new[] { '+', '7' },
-            ['x'] = new[] { '%' },
-            ['z'] = new[] { '2' },
-        });
-
         private readonly IEnumerable<IMatcher> dictionaryMatchers;
 
         /// <summary>
@@ -51,6 +32,25 @@ namespace Zxcvbn.Matcher
             : this(new List<IMatcher> { dictionaryMatcher })
         {
         }
+
+        /// <summary>
+        /// Gets or sets the table of l33t transforms.
+        /// </summary>
+        internal static ReadOnlyDictionary<char, char[]> L33tTable { get; set; } = new ReadOnlyDictionary<char, char[]>(new Dictionary<char, char[]>
+        {
+            ['a'] = new[] { '4', '@' },
+            ['b'] = new[] { '8' },
+            ['c'] = new[] { '(', '{', '[', '<' },
+            ['e'] = new[] { '3' },
+            ['g'] = new[] { '6', '9' },
+            ['i'] = new[] { '1', '!', '|' },
+            ['l'] = new[] { '1', '|', '7' },
+            ['o'] = new[] { '0' },
+            ['s'] = new[] { '$', '5' },
+            ['t'] = new[] { '+', '7' },
+            ['x'] = new[] { '%' },
+            ['z'] = new[] { '2' },
+        });
 
         /// <summary>
         /// Find l33t dictionary matches in <paramref name="password"/>.

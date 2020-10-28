@@ -2,7 +2,7 @@
 using System.IO;
 using System.Reflection;
 
-namespace zxcvbn_core_list_builder
+namespace Zxcvbn.ListBuilder
 {
     internal class Program
     {

@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 
-namespace zxcvbn_core_list_builder
+namespace Zxcvbn.ListBuilder
 {
     internal static class ListBuilder
     {
@@ -11,7 +12,7 @@ namespace zxcvbn_core_list_builder
         /// Returns the maximum number of words for a dictionary.
         /// null means take everything.
         /// </summary>
-        private static readonly Dictionary<string, int?> _dictionaryLimits = new Dictionary<string, int?>
+        private static readonly ReadOnlyDictionary<string, int?> DictionaryLimits = new ReadOnlyDictionary<string, int?>(new Dictionary<string, int?>
         {
             { "us_tv_and_film", 30000 },
             { "english", 30000 },
@@ -19,14 +20,18 @@ namespace zxcvbn_core_list_builder
             { "surnames", 10000 },
             { "male_names", null },
             { "female_names", null },
-        };
+        });
 
         /// <summary>
         /// Filters the frequency lists to remove:
         /// - Tokens which are short and rare
         /// - Tokens that are already in another dictionary and a lower rank
-        /// - Tokens that end up beyond the end of the limits in <see cref="_dictionaryLimits"/>
+        /// - Tokens that end up beyond the end of the limits in <see cref="DictionaryLimits"/>.
         /// </summary>
+        /// <param name="frequencyLists">The list to filter.</param>
+        /// <returns>
+        /// The filtered output.
+        /// </returns>
         public static Dictionary<string, List<string>> FilterFrequencyLists(Dictionary<string, Dictionary<string, int>> frequencyLists)
         {
             var filteredTokenAndRank = new Dictionary<string, Dictionary<string, int>>();
@@ -53,7 +58,7 @@ namespace zxcvbn_core_list_builder
                         minimumValues[token] = new RankDictionaryName
                         {
                             Name = name,
-                            Rank = rank
+                            Rank = rank,
                         };
                     }
                     else
@@ -63,7 +68,7 @@ namespace zxcvbn_core_list_builder
                             minimumValues[token] = new RankDictionaryName
                             {
                                 Rank = rank,
-                                Name = name
+                                Name = name,
                             };
                         }
                     }
@@ -80,7 +85,7 @@ namespace zxcvbn_core_list_builder
 
                     if (token == "o")
                     {
-                        Console.Write("");
+                        Console.Write(string.Empty);
                     }
 
                     if (minimumValues[token].Name != name)
@@ -99,8 +104,8 @@ namespace zxcvbn_core_list_builder
                 var name = kvp.Key;
                 var values = kvp.Value;
                 var res = values.OrderBy(s => s.Value).Select(kvp => kvp.Key);
-                if (_dictionaryLimits[name].HasValue)
-                    res = res.Take(_dictionaryLimits[name].Value);
+                if (DictionaryLimits[name].HasValue)
+                    res = res.Take(DictionaryLimits[name].Value);
                 result[name] = res.ToList();
             }
 
@@ -114,7 +119,7 @@ namespace zxcvbn_core_list_builder
             foreach (var file in Directory.GetFiles(directory))
             {
                 var name = Path.GetFileNameWithoutExtension(file);
-                if (!_dictionaryLimits.ContainsKey(name))
+                if (!DictionaryLimits.ContainsKey(name))
                 {
                     Console.WriteLine($"Warning: {name} is in directory {directory} but was not expected.  Skipped.");
                     continue;
@@ -129,10 +134,11 @@ namespace zxcvbn_core_list_builder
                     var token = line.Split(" ")[0];
                     tokenToRank[token] = rank;
                 }
+
                 result[name] = tokenToRank;
             }
 
-            foreach (var expectedKey in _dictionaryLimits.Keys)
+            foreach (var expectedKey in DictionaryLimits.Keys)
             {
                 if (!result.ContainsKey(expectedKey))
                 {

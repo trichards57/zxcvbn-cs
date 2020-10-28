@@ -15,7 +15,7 @@ namespace Zxcvbn.Matcher
         private const string ShiftedRegex = "[~!@#$%^&*()_+QWERTYUIOP{}|ASDFGHJKL:\"ZXCVBNM<>?]";
 
         /// <summary>
-        /// Gets the spatial graphs to match against.
+        /// Gets or sets the spatial graphs to match against.
         /// </summary>
         internal static ReadOnlyCollection<SpatialGraph> SpatialGraphs { get; set; } = GenerateSpatialGraphs();
 
@@ -61,11 +61,13 @@ namespace Zxcvbn.Matcher
   0 .
 ";
 
-            return new List<SpatialGraph> { new SpatialGraph("qwerty", qwerty, true),
-                    new SpatialGraph("dvorak", dvorak, true),
-                    new SpatialGraph("keypad", keypad, false),
-                    new SpatialGraph("mac_keypad", macKeypad, false),
-                }.AsReadOnly();
+            return new List<SpatialGraph>
+            {
+                new SpatialGraph("qwerty", qwerty, true),
+                new SpatialGraph("dvorak", dvorak, true),
+                new SpatialGraph("keypad", keypad, false),
+                new SpatialGraph("mac_keypad", macKeypad, false),
+            }.AsReadOnly();
         }
 
         private static IEnumerable<Matches.Match> SpatialMatch(SpatialGraph graph, string password)
