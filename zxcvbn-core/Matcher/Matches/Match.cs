@@ -10,7 +10,7 @@ namespace Zxcvbn.Matcher.Matches
         /// <summary>
         /// Gets the number of guesses associated with this match.
         /// </summary>
-        public long Guesses { get; internal set; }
+        public double Guesses { get; internal set; }
 
         /// <summary>
         /// Gets log10(number of guesses) associated with this match.

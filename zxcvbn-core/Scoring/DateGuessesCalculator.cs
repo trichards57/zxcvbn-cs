@@ -19,11 +19,11 @@ namespace Zxcvbn.Scoring
         /// </summary>
         /// <param name="match">The match.</param>
         /// <returns>The guesses estimate.</returns>
-        public static long CalculateGuesses(DateMatch match)
+        public static double CalculateGuesses(DateMatch match)
         {
             var yearSpace = Math.Max(Math.Abs(match.Year - DateMatcher.ReferenceYear), MinimumYearSpace);
 
-            var guesses = yearSpace * 365;
+            var guesses = yearSpace * 365.0;
             if (!string.IsNullOrEmpty(match.Separator))
                 guesses *= 4;
 

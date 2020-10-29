@@ -11,7 +11,7 @@ namespace Zxcvbn
         /// <summary>
         /// Gets or sets the guesses the match is estimated to need.
         /// </summary>
-        public long Guesses { get; set; }
+        public double Guesses { get; set; }
 
         /// <summary>
         /// Gets or sets the password being assessed.

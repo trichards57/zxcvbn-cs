@@ -12,7 +12,7 @@ namespace Zxcvbn.Scoring
         /// </summary>
         /// <param name="match">The match.</param>
         /// <returns>The guesses estimate.</returns>
-        public static long CalculateGuesses(RepeatMatch match)
+        public static double CalculateGuesses(RepeatMatch match)
         {
             return match.BaseGuesses * match.RepeatCount;
         }

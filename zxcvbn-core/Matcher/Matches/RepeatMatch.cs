@@ -10,7 +10,7 @@ namespace Zxcvbn.Matcher.Matches
         /// <summary>
         /// Gets the base number guesses associated with the base matches.
         /// </summary>
-        public long BaseGuesses { get; internal set; }
+        public double BaseGuesses { get; internal set; }
 
         /// <summary>
         /// Gets the base matches that are repeated.

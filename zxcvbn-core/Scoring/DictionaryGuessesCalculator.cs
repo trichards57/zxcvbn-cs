@@ -14,7 +14,7 @@ namespace Zxcvbn.Scoring
         /// </summary>
         /// <param name="match">The match.</param>
         /// <returns>The guesses estimate.</returns>
-        public static long CalculateGuesses(DictionaryMatch match)
+        public static double CalculateGuesses(DictionaryMatch match)
         {
             match.BaseGuesses = match.Rank;
             match.UppercaseVariations = UppercaseVariations(match.Token);
@@ -29,12 +29,12 @@ namespace Zxcvbn.Scoring
         /// </summary>
         /// <param name="match">The match.</param>
         /// <returns>The number of possible variations.</returns>
-        internal static long L33tVariations(DictionaryMatch match)
+        internal static double L33tVariations(DictionaryMatch match)
         {
             if (!match.L33t)
                 return 1;
 
-            long variations = 1;
+            var variations = 1.0;
 
             foreach (var subbed in match.Sub.Keys)
             {
@@ -49,7 +49,7 @@ namespace Zxcvbn.Scoring
                 else
                 {
                     var p = Math.Min(u, s);
-                    long possibilities = 0;
+                    var possibilities = 0.0;
                     for (var i = 1; i <= p; i++)
                         possibilities += PasswordScoring.Binomial(u + s, i);
                     variations *= possibilities;
@@ -64,7 +64,7 @@ namespace Zxcvbn.Scoring
         /// </summary>
         /// <param name="token">The token.</param>
         /// <returns>The number of possible variations.</returns>
-        internal static long UppercaseVariations(string token)
+        internal static double UppercaseVariations(string token)
         {
             if (token.All(c => char.IsLower(c)) || token.ToLower() == token)
                 return 1;
@@ -76,7 +76,7 @@ namespace Zxcvbn.Scoring
 
             var u = token.Count(c => char.IsUpper(c));
             var l = token.Count(c => char.IsLower(c));
-            long variations = 0;
+            var variations = 0.0;
 
             for (var i = 1; i <= Math.Min(u, l); i++)
                 variations += PasswordScoring.Binomial(u + l, i);

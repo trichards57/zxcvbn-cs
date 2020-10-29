@@ -32,7 +32,7 @@ namespace Zxcvbn
         /// <summary>
         /// Gets the number of guesses the password is estimated to need.
         /// </summary>
-        public long Guesses { get; internal set; }
+        public double Guesses { get; internal set; }
 
         /// <summary>
         /// Gets log10(the number of guesses) the password is estimated to need.

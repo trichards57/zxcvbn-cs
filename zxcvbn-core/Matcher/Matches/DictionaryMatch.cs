@@ -12,7 +12,7 @@ namespace Zxcvbn.Matcher.Matches
         /// <summary>
         /// Gets the base guesses associated with the matched word.
         /// </summary>
-        public long BaseGuesses { get; internal set; }
+        public double BaseGuesses { get; internal set; }
 
         /// <summary>
         /// Gets the name of the dictionary containing the matched word.
@@ -27,7 +27,7 @@ namespace Zxcvbn.Matcher.Matches
         /// <summary>
         /// Gets the number of L33T variations associated with this match.
         /// </summary>
-        public long L33tVariations { get; internal set; }
+        public double L33tVariations { get; internal set; }
 
         /// <summary>
         /// Gets the dictionary word matched to.
@@ -60,7 +60,7 @@ namespace Zxcvbn.Matcher.Matches
         /// <summary>
         /// Gets the number of uppercase variations associated with this match.
         /// </summary>
-        public long UppercaseVariations { get; internal set; }
+        public double UppercaseVariations { get; internal set; }
 
         /// <summary>
         /// Gets or sets the l33t character mappings that are in use for this match.

@@ -146,7 +146,7 @@ namespace Zxcvbn.Tests.Scoring
             result.Sequence.Should().BeEquivalentTo(expected);
         }
 
-        private Match CreateTestMatch(int i, int j, long guesses)
+        private Match CreateTestMatch(int i, int j, double guesses)
         {
             return new DateMatch
             {

@@ -18,9 +18,9 @@ namespace Zxcvbn.Scoring
         /// </summary>
         /// <param name="match">The match.</param>
         /// <returns>The guesses estimate.</returns>
-        public static long CalculateGuesses(SequenceMatch match)
+        public static double CalculateGuesses(SequenceMatch match)
         {
-            int baseGuesses;
+            double baseGuesses;
 
             if (ObviousStartCharacters.Contains(match.Token[0]))
             {

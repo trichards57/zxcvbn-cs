@@ -19,12 +19,12 @@ namespace Zxcvbn
         /// <param name="n">n.</param>
         /// <param name="k">k.</param>
         /// <returns>Binomial coefficient.</returns>
-        public static long Binomial(int n, int k)
+        public static double Binomial(int n, int k)
         {
             if (k > n) return 0;
             if (k == 0) return 1;
 
-            long r = 1;
+            var r = 1.0;
             for (var d = 1; d <= k; ++d)
             {
                 r *= n;
@@ -41,18 +41,18 @@ namespace Zxcvbn
         /// <param name="match">The match.</param>
         /// <param name="password">The actual password.</param>
         /// <returns>The guesses estimate.</returns>
-        public static long EstimateGuesses(Match match, string password)
+        public static double EstimateGuesses(Match match, string password)
         {
             if (match.Guesses != 0)
                 return match.Guesses;
 
-            var minGuesses = 1;
+            var minGuesses = 1.0;
             if (match.Token.Length < password.Length)
             {
                 minGuesses = match.Token.Length == 1 ? BruteForceGuessesCalculator.MinSubmatchGuessesSingleCharacter : BruteForceGuessesCalculator.MinSubmatchGuessesMultiCharacter;
             }
 
-            long guesses = 0;
+            var guesses = 0.0;
 
             switch (match.Pattern)
             {
@@ -127,7 +127,7 @@ namespace Zxcvbn
             var optimalMatchSequence = Unwind(optimal, password.Length);
             var optimalL = optimalMatchSequence.Count;
 
-            long guesses;
+            double guesses;
 
             if (password.Length == 0)
                 guesses = 1;
@@ -162,11 +162,11 @@ namespace Zxcvbn
             }
         }
 
-        private static long Factorial(long n)
+        private static double Factorial(double n)
         {
             if (n < 2)
                 return 1;
-            var f = 1;
+            var f = 1.0;
 
             for (var i = 2; i <= n; i++)
                 f *= i;
@@ -222,7 +222,7 @@ namespace Zxcvbn
 
             var g = Factorial(l) * pi;
             if (!excludeAdditive)
-                g += (long)Math.Pow(MinimumGuessesBeforeGrowingSequence, l - 1);
+                g += Math.Pow(MinimumGuessesBeforeGrowingSequence, l - 1);
 
             foreach (var competingL in optimal.G[k].Keys)
             {

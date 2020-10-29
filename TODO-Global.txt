@@ -1,8 +1,0 @@
-﻿- Documentaion comments
-- Readme
-	- Especially about dictionary files
-- Licencing?
-- Check correspondence with JS version, esp:
-	- Date Checker seems to reject two digit years? (cf. check_date) -- confirm
-	- Date checker operates differently (i.e. it may return more matches in JS version) this should not affect end result -- confirm
-	- l33t matching is different here, test that I actually understand zxcvbn's implementation and that results are comparable.

@@ -15,7 +15,7 @@ namespace Zxcvbn.Scoring
         /// </summary>
         /// <param name="match">The match.</param>
         /// <returns>The guesses estimate.</returns>
-        public static long CalculateGuesses(RegexMatch match)
+        public static double CalculateGuesses(RegexMatch match)
         {
             switch (match.RegexName)
             {

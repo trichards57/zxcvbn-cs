@@ -13,7 +13,7 @@ namespace Zxcvbn.Scoring
         /// <summary>
         /// The average number of adjacent characters on a keyboard.
         /// </summary>
-        internal static readonly int KeyboardAverageDegree = (int)Math.Round(CalculateAverageDegree(SpatialMatcher.SpatialGraphs.First(s => s.Name == "qwerty")));
+        internal static readonly double KeyboardAverageDegree = (int)Math.Round(CalculateAverageDegree(SpatialMatcher.SpatialGraphs.First(s => s.Name == "qwerty")));
 
         /// <summary>
         /// The number of starting positions on a keyboard.
@@ -35,7 +35,7 @@ namespace Zxcvbn.Scoring
         /// </summary>
         /// <param name="match">The match.</param>
         /// <returns>The guesses estimate.</returns>
-        public static long CalculateGuesses(SpatialMatch match)
+        public static double CalculateGuesses(SpatialMatch match)
         {
             int s;
             double d;
@@ -50,7 +50,7 @@ namespace Zxcvbn.Scoring
                 d = KeypadAverageDegree;
             }
 
-            long guesses = 0;
+            double guesses = 0;
             var l = match.Token.Length;
             var t = match.Turns;
 
@@ -59,7 +59,7 @@ namespace Zxcvbn.Scoring
                 var possibleTurns = Math.Min(t, i - 1);
                 for (var j = 1; j <= possibleTurns; j++)
                 {
-                    guesses += PasswordScoring.Binomial(i - 1, j - 1) * s * (long)Math.Pow(d, j);
+                    guesses += PasswordScoring.Binomial(i - 1, j - 1) * s * Math.Pow(d, j);
                 }
             }
 
@@ -73,7 +73,7 @@ namespace Zxcvbn.Scoring
                 }
                 else
                 {
-                    long variations = 0;
+                    double variations = 0;
                     for (var i = 1; i <= Math.Min(shifted, unshifted); i++)
                     {
                         variations += PasswordScoring.Binomial(shifted + unshifted, i);
