@@ -8,7 +8,6 @@
     <PackageId>zxcvbn-core</PackageId>
     <PackageTags>password;strength;validation;zxcvbn</PackageTags>
     <PackageProjectUrl>https://github.com/trichards57/zxcvbn-cs</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/trichards57/zxcvbn-cs/blob/master/LICENSE</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/trichards57/zxcvbn-cs.git</RepositoryUrl>
   </PropertyGroup>
@@ -21,6 +20,7 @@
     <FileVersion>1.0.0</FileVersion>
     <PackageReleaseNotes>$commitMsg</PackageReleaseNotes>
     <RootNamespace>Zxcvbn</RootNamespace>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -44,5 +44,12 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 </Project>
