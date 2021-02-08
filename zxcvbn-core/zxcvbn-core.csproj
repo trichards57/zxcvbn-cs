@@ -21,6 +21,8 @@
     <PackageReleaseNotes>$commitMsg</PackageReleaseNotes>
     <RootNamespace>Zxcvbn</RootNamespace>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>zxcvbn.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

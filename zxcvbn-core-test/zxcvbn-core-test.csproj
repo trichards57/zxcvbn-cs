@@ -4,11 +4,16 @@
     <IsPackable>false</IsPackable>
     <AssemblyName>zxcvbn-core-test</AssemblyName>
     <RootNamespace>Zxcvbn.Tests</RootNamespace>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\zxcvbn-core\zxcvbn.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="TestResults\**" />
     <EmbeddedResource Remove="TestResults\**" />
     <None Remove="TestResults\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\zxcvbn-core\zxcvbn.snk" Link="zxcvbn.snk" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Appveyor.TestLogger" Version="2.0.0" />
