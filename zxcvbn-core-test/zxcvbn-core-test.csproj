@@ -4,6 +4,8 @@
     <IsPackable>false</IsPackable>
     <AssemblyName>zxcvbn-core-test</AssemblyName>
     <RootNamespace>Zxcvbn.Tests</RootNamespace>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>zxcvbn-strong-name-key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="TestResults\**" />
