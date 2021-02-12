@@ -10,9 +10,6 @@
     <PackageProjectUrl>https://github.com/trichards57/zxcvbn-cs</PackageProjectUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/trichards57/zxcvbn-cs.git</RepositoryUrl>
-  </PropertyGroup>
-
-  <PropertyGroup>
     <DebugType>full</DebugType>
     <DebugSymbols>True</DebugSymbols>
     <Version>1.0.0</Version>
@@ -21,21 +18,19 @@
     <PackageReleaseNotes>$commitMsg</PackageReleaseNotes>
     <RootNamespace>Zxcvbn</RootNamespace>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <DocumentationFile>$(TargetDir)zxcvbn-core.xml</DocumentationFile>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>zxcvbn-strong-name-key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>C:\Users\trich\Source\Repos\trichards57\zxcvbn-cs\zxcvbn-core\zxcvbn-core.xml</DocumentationFile>
+  <PropertyGroup Condition="'$(APPVEYOR)' == 'True'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-  </PropertyGroup>
-
   <ItemGroup>
     <EmbeddedResource Include="Dictionaries\*.lst" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -44,12 +39,10 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="..\LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
 </Project>
