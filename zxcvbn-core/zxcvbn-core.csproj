@@ -1,31 +1,29 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>C#/.NET port of Dan Wheeler/DropBox's Zxcvbn JS password strength estimation library.  Updated for .Net Core.</Description>
-    <Authors>mickford;Tony Richards (trichards57);Dan Wheeler;DropBox</Authors>
     <TargetFrameworks>netstandard2.0;net451;netstandard1.3</TargetFrameworks>
-    <AssemblyName>zxcvbn-core</AssemblyName>
     <PackageId>zxcvbn-core</PackageId>
-    <PackageTags>password;strength;validation;zxcvbn</PackageTags>
+    <Authors>mickford;Tony Richards (trichards57);Dan Wheeler;DropBox</Authors>
+    <Product>zxcvbn-core</Product>
+    <Description>C#/.NET port of Dan Wheeler/DropBox's Zxcvbn JS password strength estimation library.  Updated for .Net Core.</Description>
     <PackageProjectUrl>https://github.com/trichards57/zxcvbn-cs</PackageProjectUrl>
-    <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/trichards57/zxcvbn-cs.git</RepositoryUrl>
-    <DebugType>full</DebugType>
-    <DebugSymbols>True</DebugSymbols>
+    <PackageTags>password;strength;validation;zxcvbn</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>1.0.0</Version>
     <AssemblyVersion>1.0.0</AssemblyVersion>
     <FileVersion>1.0.0</FileVersion>
     <PackageReleaseNotes>$commitMsg</PackageReleaseNotes>
-    <RootNamespace>Zxcvbn</RootNamespace>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <Copyright>Copyright (c) 2012 Dropbox, Inc. Copyright (c) 2020-2021 Tony Richards</Copyright>
+    <RootNamespace>Zxcvbn</RootNamespace>
+    <DocumentationFile>$(TargetDir)zxcvbn-core.xml</DocumentationFile>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>zxcvbn-strong-name-key.snk</AssemblyOriginatorKeyFile>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <DocumentationFile>$(TargetDir)zxcvbn-core.xml</DocumentationFile>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>zxcvbn-strong-name-key.snk</AssemblyOriginatorKeyFile>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(APPVEYOR)' == 'True'">
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
