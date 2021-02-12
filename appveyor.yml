@@ -1,18 +1,24 @@
-version: 6.0.{build}
+version: 7.0.{build}
 image: Visual Studio 2019
-
-init:
-  - git config --global core.autocrlf true
 skip_tags: true
 configuration:
 - Release
 before_build:
   - cmd: dotnet restore
   - ps: .\prebuild.ps1
+dotnet_csproj:
+  patch: true
+  file: '**\*.csproj'
+  version: '{version}'
+  package_version: '{version}'
+  assembly_version: '7.0.0'
+  file_version: '{version}'
+  informational_version: '{version}'
 build:
   verbosity: minimal
-after_build:
-  - cmd: dotnet pack
+artifacts:
+- path: '**\zx*.nupkg'
+- path: '**\zx*.snupkg'
 before_test:
   - cmd: mkdir %APPVEYOR_BUILD_FOLDER%\reports\coverage\history
   - cmd: mkdir %APPVEYOR_BUILD_FOLDER%\tools
@@ -27,8 +33,6 @@ after_test:
 environment:
   COVERALLS_REPO_TOKEN:
     secure: iSoNwLqIwwMN/WHRx1cV7varflDclJFbg9SGrPrBzGYHJrMTXuk+h8hWfHajvaH/
-artifacts:
-- path: '**\zx*.nupkg'
 deploy:
 - provider: NuGet
   on:
@@ -36,14 +40,24 @@ deploy:
   api_key:
     secure: LjICYggAPKEdVdu+fHdsSJRMtLqW9CxgoFwMemSGZDivZB7mC9hE+fzHEfGXaFF5
   skip_symbols: false
-  artifact: /.*\.nupkg/
+  artifact: /.*(\.|\.s)nupkg/
 - provider: GitHub
   release: zxcvbn-cs-v$(appveyor_build_version)
   description: $(appveyor_repo_commit_message)
   auth_token:
     secure: cOfYjJ6LAVYHiIJibAcP2ulEHt+rot3CRpTVLICTaFEt/Y/nTV8dWSyfxOq5s7rg
-  artifact: /.*\.nupkg/
+  artifact: /.*(\.|\.s)nupkg/
   draft: false
   prerelease: false
   on:
     branch: master
+- provider: GitHub
+  release: zxcvbn-cs-v$(appveyor_build_version)-beta
+  description: $(appveyor_repo_commit_message)
+  auth_token:
+    secure: cOfYjJ6LAVYHiIJibAcP2ulEHt+rot3CRpTVLICTaFEt/Y/nTV8dWSyfxOq5s7rg
+  artifact: /.*(\.|\.s)nupkg/
+  draft: false
+  prerelease: true
+  on:
+    branch: new/*

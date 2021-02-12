@@ -16,17 +16,17 @@ namespace Zxcvbn
         {
             var crackTimesSeconds = new CrackTimes
             {
-                OfflineFastHashing1e10PerSecond = guesses / (100.0 / 3600),
-                OfflineSlowHashing1e4PerSecond = guesses / 10,
-                OnlineNoThrottling10PerSecond = guesses / 1e4,
-                OnlineThrottling100PerHour = guesses / 1e10,
+                OfflineFastHashing1e10PerSecond = guesses / 1e10,
+                OfflineSlowHashing1e4PerSecond = guesses / 1e4,
+                OnlineNoThrottling10PerSecond = guesses / 10,
+                OnlineThrottling100PerHour = guesses / (100.0 / 3600),
             };
             var crackTimesDisplay = new CrackTimesDisplay
             {
-                OfflineFastHashing1e10PerSecond = DisplayTime(guesses / (100.0 / 3600)),
-                OfflineSlowHashing1e4PerSecond = DisplayTime(guesses / 10),
-                OnlineNoThrottling10PerSecond = DisplayTime(guesses / 1e4),
-                OnlineThrottling100PerHour = DisplayTime(guesses / 1e10),
+                OfflineFastHashing1e10PerSecond = DisplayTime(crackTimesSeconds.OfflineFastHashing1e10PerSecond),
+                OfflineSlowHashing1e4PerSecond = DisplayTime(crackTimesSeconds.OfflineSlowHashing1e4PerSecond),
+                OnlineNoThrottling10PerSecond = DisplayTime(crackTimesSeconds.OnlineNoThrottling10PerSecond),
+                OnlineThrottling100PerHour = DisplayTime(crackTimesSeconds.OnlineThrottling100PerHour),
             };
 
             return new AttackTimes
