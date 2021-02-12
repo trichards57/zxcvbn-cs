@@ -25,6 +25,7 @@
     <DocumentationFile>$(TargetDir)zxcvbn-core.xml</DocumentationFile>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>zxcvbn-strong-name-key.snk</AssemblyOriginatorKeyFile>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(APPVEYOR)' == 'True'">
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
