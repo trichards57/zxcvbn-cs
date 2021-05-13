@@ -75,17 +75,21 @@ namespace Zxcvbn
                     else
                         warning = "This is a very common password";
                 }
-                else if (match.DictionaryName == "english" && isSoleMatch)
+                else
                 {
-                    warning = "A word by itself is easy to guess";
+                    warning = "This is similar to a commonly used password.";
                 }
-                else if (match.DictionaryName == "surnames" || match.DictionaryName == "male_names" || match.DictionaryName == "female_names")
-                {
-                    if (isSoleMatch)
-                        warning = "Names and surnames by themselves are easy to guess";
-                    else
-                        warning = "Common names and surnames are easy to guess";
-                }
+            }
+            else if (match.DictionaryName == "english" && isSoleMatch)
+            {
+                warning = "A word by itself is easy to guess";
+            }
+            else if (match.DictionaryName == "surnames" || match.DictionaryName == "male_names" || match.DictionaryName == "female_names")
+            {
+                if (isSoleMatch)
+                    warning = "Names and surnames by themselves are easy to guess";
+                else
+                    warning = "Common names and surnames are easy to guess";
             }
 
             var suggestions = new List<string>();
