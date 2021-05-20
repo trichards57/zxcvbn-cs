@@ -190,6 +190,10 @@ namespace Zxcvbn
             var k = n - 1;
             var l = -1;
             var g = double.PositiveInfinity;
+            if (k < 0)
+            {
+                return optimalMatchSequence;
+            }
 
             foreach (var candidateL in optimal.G[k].Keys)
             {
